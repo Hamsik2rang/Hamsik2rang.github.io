@@ -4,34 +4,40 @@ url : "https://naye0ng.github.io"
 
 # Blog Settings
 theme_settings :
-  title : Grape Theme
-  favicon : assets/favicon.ico
+  title : Hamsik2rang's Blog
+  favicon : assets/favicons/favicon.ico
 
   # Profile Settings
   profile :
     image : assets/img/smile.png
-    username : Nayeong Kim
-    description : creator of Grape-Theme! Grape-Theme is my first jekyll theme and you can customize this theme easily.
+    username : Im Yongsik
+    description : A Student who along with Game dev
     experience :
-      - start : 2017-05-03
-        end : 2018-05-06
-        experience : company name, title
+      - start : 2016-03
+        end : 
+        experience : Enter KNU, Kongju nationa university
+      - start: 2020-01
+        end : 2020-12
+        experience : Vice president in Striking Arts - Game dev club in KNU
     skills : 
-      - skill : HTML5 & CSS
+      - skill : C
         value : 85  # Percent value
+      - skill : C++
+        value : 75
         
+      
   # Icons
   icons :
-    email:  # Full email address, e.g. "sample@google.com"
+    email:  lvhi7121@gmail.com # Full email address, e.g. "sample@google.com"
     linkedin:  # Full URL 
-    github: naye0ng
+    github: Hamsik2rang
     gitlab: 
     bitbucket: 
     google_plus:
     twitter:
-    youtube:
+    youtube: UCiAe__zoEwjE4s9f5YPKO0w
     facebook:
-    instagram:
+    instagram: that_was_sik
 
   # Disqus
   disqus_shortname :
@@ -44,6 +50,6 @@ paginate_path: "blog/page:num"
 sass:
   sass_dir: _sass
   style: :compressed
-gems: [jekyll-paginate]
+plugins: [jekyll-paginate]
 bootstrap:
   assets: true
