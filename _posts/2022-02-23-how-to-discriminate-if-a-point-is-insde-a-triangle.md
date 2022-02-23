@@ -57,7 +57,7 @@ $$
 
 
 $$
-P = (1-m-n)A + mB + nC\; (0 <= m,\,n<=1)
+P = (1-m-n)A + mB + nC\; (0 <= m+n<=1)
 $$
 
 
@@ -65,7 +65,7 @@ $$
 
 
 $$
-\overrightarrow{0}=(1-m-n){\overrightarrow{PA}}+m\overrightarrow{PB}+n\overrightarrow{PC}\; (0<=m\,,n<=1)
+\overrightarrow{0}=(1-m-n){\overrightarrow{PA}}+m\overrightarrow{PB}+n\overrightarrow{PC}\; (0<=m+n<=1)
 $$
 
 
@@ -120,7 +120,9 @@ $$
 
 <center>내적의 기하학적 의미</center>
 
-즉, $\overrightarrow{x} = (\overrightarrow{PA}_x, \overrightarrow{PB}_x, \overrightarrow{PC}_x)$ 와 $\overrightarrow{y} = (\overrightarrow{PA}_y + \overrightarrow{PB}_y + \overrightarrow{PC}_y )$ 두 벡터는 모두 $\overrightarrow{p} = (1, p, q)$에 **수직**이다!
+기하적으로 해석할 때, 두 벡터의 내적의 결과가 0이라면 두 벡터는 서로 수직이다.
+
+즉, $\overrightarrow{x} = (\overrightarrow{PA}_x, \overrightarrow{PB}_x, \overrightarrow{PC}_x)$ 와 $\overrightarrow{y} = (\overrightarrow{PA}_y, \overrightarrow{PB}_y, \overrightarrow{PC}_y )$ 두 벡터는 모두 $\overrightarrow{p} = (1, p, q)$에 **수직**이다!
 
 ![]({{ site.baseurl }}/assets/img/posts/2022-02-23/how-to-discriminate-if-a-point-is-insde-a-triangle/img-03.jpg)
 
