@@ -42,4 +42,8 @@
     content="{{ site.url }}/{% if page.image %}{{ page.image }}{% else %}{{ site.theme_settings.profile.image }}{% endif %}" />
 
   <title>{{ title }}</title>
+
+  {% if page.use_math %}
+  {% include mathjax_support.html %}
+  {% endif %}
 </head>

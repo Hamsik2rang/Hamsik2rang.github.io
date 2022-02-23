@@ -53,3 +53,10 @@ sass:
 plugins: [jekyll-paginate]
 bootstrap:
   assets: true
+
+# Conversion
+markdown: kramdown
+highlighter: rouge
+lsi: false
+excerpt_separator: "\n"
+incremental: false
