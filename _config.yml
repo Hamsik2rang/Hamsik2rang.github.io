@@ -40,7 +40,7 @@ theme_settings :
     instagram: t_was_sik
 
   # Disqus
-  disqus_shortname :
+  disqus_shortname : hamsik2rang
 
 # Pagination
 paginate: 5
