@@ -9,7 +9,7 @@ theme_settings :
 
   # Profile Settings
   profile :
-    image : assets/img/smile.png
+    image : assets/img/profile.jpg
     username : Im Yongsik
     description : A Student who along with Game dev
     experience :
