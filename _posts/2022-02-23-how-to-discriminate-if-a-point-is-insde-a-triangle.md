@@ -14,8 +14,6 @@ use_math: True
 
 삼각형 자체는 선분을 그리는 함수를 이용해 간단하게 그릴 수도 있지만, 삼각형 내부를 임의의 색으로 칠한다면 그렇게 단순하게 해결할 수가 없는데, 이때 삼각형을 구성하는 세 꼭지점(vertex)을 이용해 임의의 점이 삼각형의 내/외부 중 어디에 위치하는지 판단하는 방법을 알아보자.
 
-This formula $f(x) = x^2$ is an example
-
 ## 1. 무게중심(Barycentric)
 
 임의의 삼각형이 있을 때 삼각형의 **무게 중심 $P$** 는 다음과 같다.
@@ -30,7 +28,7 @@ $$
 \frac{1}{3}\overrightarrow{A} + \frac{1}{3}\overrightarrow{B} + 
 \frac{1}{3}\overrightarrow{C}
 $$
-  
+
 
 간단하게 이를 증명하는 방법은 다음과 같다. 
 
