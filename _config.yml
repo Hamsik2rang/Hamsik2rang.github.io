@@ -15,7 +15,7 @@ theme_settings :
     experience :
       - start : 2016-03
         end : 
-        experience : Enter KNU, Kongju nationa university
+        experience : Enter KNU, Kongju Nationa University
       - start: 2020-01
         end : 2020-12
         experience : Vice president in Striking Arts - Game dev club in KNU
@@ -43,7 +43,7 @@ theme_settings :
     instagram: t_was_sik
 
   # Disqus
-  disqus_shortname :
+  disqus_shortname : hamsik2rang
 
 # Pagination
 paginate: 5
