@@ -19,6 +19,9 @@ theme_settings :
       - start: 2020-01
         end : 2020-12
         experience : Vice president in Striking Arts - Game dev club in KNU
+      - start: 2020-11
+        end : 2020-11
+        experience: Top prize at the Capstone Project of the Department of Software at KNU
     skills : 
       - skill : C
         value : 85  # Percent value
