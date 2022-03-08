@@ -30,9 +30,9 @@
 - project :
     print : True # If 'False' is selected, it will not be displayed in 'home.html > aside > .proj-content'. 
     modal : True # If 'True' is selected, modal can open in 'portfolio.html'. 
-    url :  https://github.com/Hamsik2rang/Software-Rasterizer# Full URL
+    url :  https://github.com/Hamsik2rang/Software-Renderer# Full URL
     image : # path: assets/project/
     date : 2022.01 - Developing
-    title : Software Rasterizer
-    summary : Software Rasterizer using C++, DirectDraw and WinAPI
-    description : This project is that Implement C++ Software rasterizer from scratch except use DirectDraw for Bit blit.
+    title : Software Renderer
+    summary : Software Renderer using C++, DirectDraw and WinAPI
+    description : This project is that Implement C++ Software renderer from scratch except use DirectDraw for Bit blit.
