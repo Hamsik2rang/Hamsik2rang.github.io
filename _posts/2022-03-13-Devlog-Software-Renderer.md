@@ -38,7 +38,7 @@ use_math: True
 
 #### 1.1 임의의 물체가 카메라에 너무 가까이 있을 시 드로우하는 과정에서 버벅임이 발생한다.
 
-우선 물체가 카메라의 위치에 가까워질수록 드로우 부하가 발생하는 부분은 발생을 확인하는 순간에도
+우선 물체가 카메라의 위치에 가까워질수록 드로우 부하가 발생하는 부분은 발생을 확인하는 순간
 
 > '별도의 Clipping이 없어 Viewport밖의 물체까지 그려내느라 많은 비용이 소모되는 것이 아닐까?'
 
@@ -54,7 +54,7 @@ Viewport밖의 물체를 그려내는 연산을 제외하기 위해 Rasterizer �
 
 <br/>
 
-그리고 이 외에도 단순히 화면 밖의 정점까지 그린다는 것만으로 이렇게 큰 부하가 걸리는 것을 통해 추가적인 개선 요소를 파악할 수 있었는데, 현재 프로젝트에서 삼각형을 그려내는 코드는 삼각형의 세 정점을 기준으로 Fragment Box를 구해낸 다음, Box의 안에 존재하는 모든 Fragment들에 삼각형의 내/외부 판별을 하기 때문이라는 것을 예측할 수 있었다.
+그리고 이 외에도 단순히 화면 밖의 정점까지 그린다는 것만으로 이렇게 큰 부하가 걸린다는 것을 통해 추가적인 개선 요소를 파악할 수 있었는데, 현재 프로젝트에서 삼각형을 그려내는 코드는 삼각형의 세 정점을 기준으로 Fragment Box를 구해낸 다음, Box의 안에 존재하는 모든 Fragment들에 삼각형의 내/외부 판별을 하고 있는데, 바로 이 비효율적인 연산 때문에도 부하가 어느정도 증가했다는 것을 예측할 수 있었다.
 
 따라서 기존의 방법 대신 Scan Conversion을 이용한 프래그먼트 처리를 구현하는 것이 좋겠다는 [계획](https://github.com/Hamsik2rang/Software-Renderer/issues/7)을 세웠다.
 
@@ -78,9 +78,9 @@ Viewport밖의 물체를 그려내는 연산을 제외하기 위해 Rasterizer �
 
 <center>$$R = \left[
 \begin{matrix}
-1 & 0 & 0 & 0\\
-0 & cos\theta_x & -sin\theta_x & 0\\
-0 & sin\theta_x & cos\theta_x & 0\\
+cos\theta_x & -sin\theta_x & 0 & 0\\
+sin\theta_x & cos\theta_x & 0 & 0\\
+0 & 0 & 1 & 0\\
 0 & 0 & 0 & 1
 \end{matrix}
 \right]
@@ -101,23 +101,26 @@ cos\theta_y & 0 & sin\theta_y & 0\\
 \end{matrix}
 \right]$$</center>
 
+
 이다.
 
-마우스의 움직임이 입력될 때 마다 x/y좌표의 변화량을 누적한 후, 렌더 루프가 수행될 때 누적된 변화량만큼 pitch/yaw 회전각을 부여해 카메라의 $AT$을 $EYE$를 기준으로 회전시킨다. 이후 $Normalize(EYE - AT)$을 카메라의 $z$축 정규기저로 지정한 후 직교화 과정을 거쳐 카메라의 정규직교기저를 수정한다.
+마우스의 움직임이 입력될 때 마다 $x, y$좌표의 변화량을 누적한 후, 렌더 루프가 수행될 때 누적된 변화량만큼 pitch/yaw 회전각을 부여해 카메라의 $AT$을 $EYE$를 기준으로 회전시킨다. 
+
+이후 $Normalize(EYE - AT)$을 카메라의 $z$축 정규기저로 지정한 후 직교화 과정을 거쳐 카메라의 정규직교기저를 수정한다.
 
 <br/>
 
 식으로 표현하면 다음과 같다.
 
-<center>$n = \frac{\overrightarrow{EYE}-\overrightarrow{AT}}{|\overrightarrow{EYE} - \overrightarrow{AT}|}$</center>
+<center>$\overrightarrow{n} = \frac{\overrightarrow{EYE}-\overrightarrow{AT}}{|\overrightarrow{EYE} - \overrightarrow{AT}|}$</center>
 
-<center>$u = \frac{\overrightarrow{UP}\times\overrightarrow{u}}{|\overrightarrow{UP}\times\overrightarrow{u}|}$</center>
+<center>$u = \frac{\overrightarrow{UP}\times\overrightarrow{n}}{|\overrightarrow{UP}\times\overrightarrow{n}|}$</center>
 
 <center>$v = \overrightarrow{n}\times\overrightarrow{u}$</center>
 
 <br/>
 
-이후 테스트를 진행하는데, 어느 정도 회전하는 순간 카메라 시점이 갑자기 튀어버리는 현상이 발생했다. 원인을 이해를 못해 애를 많이 먹었는데, 카메라의 기저 좌표 로그를 찍어본 결과 어느 이상 카메라를 회전하면 기저 성분들이 NAN으로 바뀌어버리는 것을 확인할 수 있었다.
+이후 테스트를 진행하는데, 어느 정도 회전하는 순간 카메라 시점이 갑자기 튀어버리는 현상이 발생했다. 원인을 파악하지 못해 애를 많이 먹었는데, 카메라의 기저 좌표 로그를 찍어 유심히 살펴 본 결과 어느 이상 카메라를 회전하면 기저 성분들이 **NAN(Not A Number)**으로 바뀌어버리는 것을 확인할 수 있었다.
 
 <br/>
 
@@ -125,6 +128,7 @@ cos\theta_y & 0 & sin\theta_y & 0\\
 
 {%highlight cpp%}
 
+// Error Code
 template <typename T>
 Vector3D<T> Normalize() 
 {
@@ -134,27 +138,41 @@ Vector3D<T> Normalize()
 	return* this;
 }
 
+// After Fix
+template <typaname T>
+Vector3d<T> Normalize()
+{
+ 	*this /= norm();
+ 	return *this;
+}
+
+
+
+
+
 {%endhighlight%}
 
 대신 이를 통해 배운 것들도 많았는데, 처음에 원인을 제대로 인식하지 못해 뻘짓을 하면서 웹에서 정보를 찾아다니다 보니 다양한 지식을 얻을 수 있었다.
 
 <br/>
 
-카메라 뿐만 아니라 반복된 행렬 연산 과정에서 부동소수 오차 누적에 의한 오류*-이를 drift라 부른다-*에 대한 지식이나, 많은 연산을 필요로 하는 대신 방향 벡터에 적은 양의 삼각함수 계산을 통해 새 기저를 구해내는 방법 등이 그것이다.
+카메라 뿐만 아니라 반복된 행렬 연산 과정에서 부동소수 오차 누적에 의한 오류*-이를 drift라 부른다-*에 대한 지식이나, 많은 연산을 필요로 하는 회전 행렬의 연속곱 대신 방향 벡터에 적은 양의 삼각함수 계산을 통해 새 기저를 구해내는 방법 등이 그것이다.
 
 특히 두 번째, 행렬 대신 삼각함수 연산만을 통해 기저를 회전시키는 방법이 현재 방법보다 더 적은 연산량을 필요로 하는 것을 파악하고 카메라 회전 구현 방식을 해당 방식으로 수정하였다.
 
 <br/>
 
-현재 카메라는 문제 없이 이동/회전이 가능하며, 추후 쿼터니언을 이용해 회전하는 방법이나 유니티 엔전의 Scene view처럼 우클릭 한 상태에서만 카메라가 이동/회전하도록, 그리고 Raycast를 이용해 Mouse Picking등이 가능하도록 기능을 추가할 예정이다.
+현재 카메라는 문제 없이 이동/회전이 가능하며, 추후 쿼터니언을 이용해 회전하는 방법이나 유니티 엔전의 Scene view처럼 우클릭 한 상태에서만 카메라가 이동/회전하도록, 그리고 Ray와 충돌처리를 이용한 Mouse Picking등이 가능하도록 기능을 추가할 예정이다.
 
 ## 2. WARNING
 
 #### 2.1 특정 헤더 파일을 여러 곳에서 선언 시 `#pragma once`전처리문을 명시하였음에도 중복 선언 이슈가 발생한다.
 
-이 부분은 매우 간단히 해결하였는데, 해당 헤더 파일이 `*.hpp`파일이었고, 프로젝트에서 `*.hpp`는 `*.h`와 달리 헤더에 구현(함수 정의)이 존재하는 파일들이다.
+이 부분은 매우 간단히 해결하였는데, 해당 헤더 파일이 `*.hpp`파일이었고, 본 프로젝트에서 `*.hpp`는 `*.h`와 달리 헤더에 구현(함수 정의)이 존재하는 파일들이다.
 
-문제가 생기는 `*.hpp`에서 정의된 일반 함수가 inline으로 선언되어 있지 않아 둘 이상의 다른 파일에서 동시에 헤더 선언 시 중복 정의(처음엔 이슈를 명확히 정의하지 못해 중복 '선언' 문제인 줄 알았다)가 일어나는 것이었다.
+즉, 문제가 생기는 헤더 파일은 그 안에 함수의 선언과 정의가 모두 존재하였다.
+
+원인은 문제가 생기는 `*.hpp`에서 정의된 일반 함수가 `inline`으로 선언되어 있지 않아 둘 이상의 다른 파일에서 동시에 헤더 선언 시 중복 정의(처음엔 이슈를 명확히 정의하지 못해 중복 '선언' 문제인 줄 알았다)가 일어나는 것이었다.
 
 <br/>
 
@@ -168,9 +186,9 @@ Vector3D<T> Normalize()
 
 <br/>
 
-그러나 본 프로젝트에선 3D 모델을 위해 `wavefront obj`포맷 파일을 이용할 것이므로 Index Buffer(폴리곤 정보)를 이용한 드로우가 가능해야 했다.
+그러나 본 프로젝트에선 3D 모델을 위해 [`*.obj`](https://en.wikipedia.org/wiki/Wavefront_.obj_file)포맷 파일을 이용할 것이므로 Index Buffer(폴리곤 정보)를 이용한 드로우가 가능해야 했다.
 
-다행히 이를 구현하는 것은 너무 쉬웠다. 마지막 드로우 시에 Vertex Buffer의 정점을 순서대로 3개씩 꺼내지 않고 Index Buffer의 정보를 3개씩 꺼내 해당 인덱스의 정점을 그리면 되기 때문이다.
+다행히 이를 구현하는 것은 너무 쉬웠다. 마지막 드로우 시에 Vertex Buffer의 정점을 순서대로 3개씩 처리하지 않고 Index Buffer의 정보를 3개씩 꺼내 해당 인덱스의 정점을 이용해 그리면 되었기 때문이다.
 
 #### 3.2. Input 데이터를 처리하는 별도의 객체를 설계 및 구현
 
