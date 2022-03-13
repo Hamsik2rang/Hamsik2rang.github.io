@@ -1,5 +1,20 @@
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
+ CommonHTML: {
+    scale: 85
+  },
+  "HTML-CSS": {
+    scale: 85
+  },
+  NativeMML: {
+    scale: 85
+  },
+  SVG: {
+    scale: 85
+  },
+  PreviewHTML: {
+    scale: 85
+  },
  TeX: {
    equationNumbers: {
      autoNumber: "AMS"
@@ -10,7 +25,6 @@ MathJax.Hub.Config({
     displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
     processEscapes: true,
   },
-  "HTML-CSS": {scale: 10},
 });
 MathJax.Hub.Register.MessageHook("Math Processing Error",function (message) {
    alert("Math Processing Error: "+message[1]);
