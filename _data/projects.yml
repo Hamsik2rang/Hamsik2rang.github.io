@@ -35,4 +35,4 @@
     date : 2022.01 - Developing
     title : Software Renderer
     summary : Software Renderer using C++, DirectDraw and WinAPI
-    description : This project is that Implement C++ Software renderer from scratch except use DirectDraw for Bit blit.
+    description : This project is that Implement C++ 3D Software Renderer from scratch except use DirectDraw for Bit blit.
