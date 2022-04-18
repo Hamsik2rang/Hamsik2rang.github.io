@@ -66,7 +66,9 @@ int main()
 
 ![]({{site.baseurl}}/assets/img/posts/2022-04-17/How-to-implement-friend-template-function/img01.jpg)
 
->**LNK1120**: 1 unresolved externals
+>--------------------------------------------------------------------------------------
+>
+>**LNK1120**: 1 unresolved externals  
 >**LNK2019**:	unresolved external symbol "bool const __cdecl operator!=(class Test<int> const &,class Test<int> const &)" (??9@YA?B_NAEBV?$Test@H@@0@Z) referenced in function main
 
 처음에는 '클래스 안에 선언된 friend함수에 탬플릿 지정이 되어있지 않아서 그런가' 하는 생각으로 해당 선언 코드를 다음과 같이 수정했다.
@@ -78,6 +80,7 @@ class Test
 {
     //...
     
+
     template <typename T>
     friend const bool operator!=(const Test<T>& lhs, const Test<T>& rhs);
 }
@@ -111,13 +114,15 @@ class Test
 
 {%endhighlight%}
 
+>----------------
+>
 >**C2572**: 'operator !=': redefinition of default argumeht: parameter 2
 
 ## 2. 원인
 
 첫 번째 링크 에러의 경우 확인할 수 없는 외부 기호라는 에러가 나왔는데, 이는 **컴파일러가 friend 선언 구문을 읽을 때 해당 함수를 탬플릿 함수로 인지하지 못하기 때문에 일어나는 에러**이다.
 
-즉, 클래스 내부의 friend선언 함수는 비 탬플릿 함수이고, 클래스 정의 밑에 선언된 `bool operator*=` 함수는 탬플릿 함수이니 서로 다른 함수로 인식한다는 의미이다.
+즉, 클래스 내부의 friend선언 함수는 Non-template 함수이고, 클래스 정의 밑에 선언된 `const bool operator*=` 함수는 template 함수이니 서로 다른 함수로 인식한다는 의미이다.
 
 그래서 첫 번째 해결책(friend 선언에도 탬플릿 인자를 명시)으로 효과를 볼 수 있었던 것이나, 이 경우 **재정의 에러가 또 발생**한다는 문제가 있었다.
 
@@ -128,7 +133,7 @@ class Test
 1. friend로 선언하고자 하는 함수를 클래스보다 **먼저** 선언(forward declaration)하고, 클래스 안의 friend 선언에 탬플릿 함수임을 나타낼 수 있는 `<>`기호를 추가한다.
 2. friend함수를 클래스 안에서 아예 정의해버린다.
 
- ### 3.1.  전방 선언과 탬플릿 명시를 하는 방법
+### 3.1.  전방 선언과 탬플릿 명시를 하는 방법
 
 우선 클래스 선언 앞에 friend로 지정할 함수를 먼저 선언한다.
 
@@ -180,6 +185,6 @@ class Test
 
 ## 5. 참고
 
-https://isocpp.org/wiki/faq/templates#template-friends
+[isocpp.org](https://isocpp.org/wiki/faq/templates#template-friends)
 
-https://stackoverflow.com/questions/3989678/c-template-friend-operator-overloading
+[stackoverflow - template friend operator overloading](https://stackoverflow.com/questions/3989678/c-template-friend-operator-overloading)
