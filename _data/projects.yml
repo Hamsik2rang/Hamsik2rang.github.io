@@ -4,9 +4,19 @@
     url :  https://github.com/Hamsik2rang/Kepler # Full URL
     image : # path: assets/project/
     date : 2022.04 - Developing
-    title : Kepler Engine
+    title : Kepler
     summary : Game Engine for Windows10, based on DirectX11
     description : Kepler is a Game Engine based on DirectX11 for Windows. OpenGL and DirectX12 will be supported later.
+
+- project :
+    print : True # If 'False' is selected, it will not be displayed in 'home.html > aside > .proj-content'. 
+    modal : True # If 'True' is selected, modal can open in 'portfolio.html'. 
+    url :  https://github.com/Hamsik2rang/KeplerMath # Full URL
+    image : # path: assets/project/
+    date : 2022.05
+    title : KeplerMath
+    summary : Math Library for Kepler
+    description : Math library for Kepler Game Engine. support Vector, Matrix, Quaternion, Transformation, Interpolation, etc.
 
 - project :
     print : True # If 'False' is selected, it will not be displayed in 'home.html > aside > .proj-content'. 
