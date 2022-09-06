@@ -255,9 +255,9 @@ $$ pq=(v_p,w_p )(v_q,w_q )=(v_p×v_q+w_p v_q+w_q v_p,w_p w_q-v_p∙v_q) $$
 
 이외에도 쿼터니언의 곱에 대한 항등원과 역원은 다음과 같다
 
-$$ Identity = (\textbf{ ( \textbf{0}, 1)} $$
+$$ Identity = { ( \textbf{0}, 1)} $$
 
-$$ Inverse = \textbf{p*} / |\textbf{p}|$$
+$$ Inverse = \frac{\textbf{p*}}{|\textbf{p}|}$$
 
 ## 4. 쿼터니언과 회전
 
@@ -285,7 +285,7 @@ $$ \textbf{r} = (sin\theta \cdot \textbf{u}, cos\theta) $$
 
 따라서 회전을 위한 쿼터니언곱은 회전할 벡터의 왼쪽에 회전각의 **절반**을 표현하는 쿼터니언과, 오른쪽에 그 켤레를 함께 곱하여 수행한다.
 
-$$ \textbf{v}' = \hat q \textbf{v} \hat q* $$
+$$ \textbf{v}' = \hat{\textbf{q}} \textbf{v} \hat{\textbf{q}}* $$
 
 손으로 연산을 한 번 해보면 정확히 그 결과의 스칼라가 0이고, 벡터가 완벽히 회전된 상태임을 확인할 수 있다.
 
@@ -295,7 +295,7 @@ $$ \textbf{v}' = \hat q \textbf{v} \hat q* $$
 
 $$\textbf{q} = (sin(\pi/8) \cdot \textbf{u}, cos(\pi/8))$$
 
-$$ \textbf{v}' = \textbf{q} \textbf{v} \textbf{q*} $$
+$$ \textbf{v}' = \hat{\textbf{q}} \textbf{v} \hat{\textbf{q}}* $$
 
 ## 5. 구면 선형 보간(Slerp)
 
