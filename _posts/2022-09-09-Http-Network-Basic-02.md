@@ -122,16 +122,18 @@ HTTP Method는 다음 종류가 존재한다.
 당시 웹 환경은 텍스트 파일 위주의 리소스 전송이 이루어졌기 때문인데, 현대의 웹 환경에서는 이와 같은 설계가 단점으로 작용하는 경우가 더 많다. 사진이나 동영상과 같은 큰 파일을 전송하기도 하고, 여러 번의 리퀘스트를 연속적으로 서버에 날리기도 한다. 이 경우 매 리퀘스트마다 TCP 체결과 해제를 반복하는 구조는 매우 느린 통신 속도를 유발하게 된다.
 
 <p align="center">
-    <img src="{{site.baseurl}}/assets/img/posts/2022-09-08/Http-Network-Basic-02/img01.JPG">
+    <img src="{{site.baseurl}}/assets/img/posts/2022-09-09/Http-Network-Basic-02/img01.jpg">
 </p>
+
 이러한 단점을 해소하기 위해 HTTP 1.1버전 이후로는 **지속 연결(Persistent Connections)**이라는 개념이 추가되었다. 이는 클라이언트나 서버 어느 한 쪽이 명시적으로 연결 종료를 선언하지 않는 이상 TCP 커넥션을 유지하는 기술이다.
 
 <br>
 
 지속 연결 사양이 추가된 서버와 클라이언트는 다음과 같은 형태로 통신하게 된다.
 <p align="center">
-    <img src="{{site.baseurl}}/assets/img/posts/2022-09-08/Http-Network-Basic-02/img02.JPG">
+    <img src="{{site.baseurl}}/assets/img/posts/2022-09-09/Http-Network-Basic-02/img02.jpg">
 </p>
+
 
 서버의 부하가 늘어나지만 TCP커넥션의 연결/종료로 반복되는 오버헤드(Overhead)를 감소시킬 수 있게 되었으며, 하드웨어의 발전 덕분에 서버의 부하 증가로 인해 발생하는 리스크도 많이 줄게 되었기 때문에 현재에는 거의 모든 서버와 클라이언트에 지속 연결 사양이 추가되어 있다.
 
