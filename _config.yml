@@ -1,41 +1,43 @@
 # Site Settings
 baseurl: ""
-url : "https://Hamsik2rang.github.io"
+url: "https://Hamsik2rang.github.io"
 
 # Blog Settings
-theme_settings :
-  title : Hamsik2rang's Blog
-  favicon : assets/favicons/favicon.ico
+theme_settings:
+  title: Hamsik2rang's Blog
+  favicon: assets/favicons/favicon.ico
 
   # Profile Settings
-  profile :
-    image : assets/img/profile.jpg
-    username : Im Yongsik
-    description : A Student who along with Game dev
-    experience :
-      - start : 2016-03
-        end : 
-        experience : Enter KNU, Kongju Nationa University
+  profile:
+    image: assets/img/profile.jpg
+    username: Im Yongsik
+    description: A Student who along with Game dev and Computer Graphics
+    experience:
+      - start: 2016-03
+        end:
+        experience: Enter KNU, Kongju National University
+      - start: 2019-03
+        end:
+        experience: Re-Enter KNU, Kongju National University
       - start: 2020-01
-        end : 2020-12
-        experience : Vice president in Striking Arts - Game dev club in KNU
+        end: 2020-12
+        experience: Vice president in Striking Arts - Game Dev Club in KNU
       - start: 2020-11
-        end : 2020-11
+        end: 2020-11
         experience: Top prize at the Capstone Project of the Department of Software at KNU
-    skills : 
-      - skill : C
-        value : 85  # Percent value
-      - skill : C++
-        value : 75
-        
-      
+    skills:
+      - skill: C
+        value: 85 # Percent value
+      - skill: C++
+        value: 75
+
   # Icons
-  icons :
-    email:  lvhi7121@gmail.com # Full email address, e.g. "sample@google.com"
-    linkedin:  # Full URL 
+  icons:
+    email: lvhi7121@gmail.com # Full email address, e.g. "sample@google.com"
+    linkedin: # Full URL
     github: Hamsik2rang
-    gitlab: 
-    bitbucket: 
+    gitlab:
+    bitbucket:
     google_plus:
     twitter:
     youtube: UCiAe__zoEwjE4s9f5YPKO0w
@@ -43,7 +45,7 @@ theme_settings :
     instagram: t_was_sik
 
   # Disqus
-  disqus_shortname : hamsik2rang
+  disqus_shortname: hamsik2rang
 
 # Pagination
 paginate: 5
