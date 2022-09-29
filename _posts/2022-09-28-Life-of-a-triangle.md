@@ -120,4 +120,4 @@ Fermi는 이와 같은 완전 병렬 연산을 위해 **Giga Thread Engine**을 
 
 여기까지 마치면 드디어 프레임버퍼에 특정 픽셀에 대한 값이 쓰여지게 되고, 모든 픽셀들에 적절한 값이 쓰이면 한 프레임에 대한 이미지 생성이 완료된다.
 
-참고: [NVIDIA - Life-of-a-triangle](ref: https://developer.nvidia.com/content/life-triangle-nvidias-logical-pipeline)
+참고: [NVIDIA - Life-of-a-triangle](https://developer.nvidia.com/content/life-triangle-nvidias-logical-pipeline)
