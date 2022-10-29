@@ -2,7 +2,7 @@
 layout: post
 title: 지난 날들을 돌아보며
 subtitle: 회고의 시간
-tags: [Algorithm]
+tags: [Devlog]
 author: Im Yongsik
 comments: True
 use_math: False
