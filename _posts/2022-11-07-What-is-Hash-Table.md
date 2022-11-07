@@ -2,7 +2,7 @@
 layout: post
 title: 해시 테이블에 대해 알아보자
 subtitle: Hash table의 개념을 알아보자.
-tags: [Computer Architecture, Cpp]
+tags: [Data Structure, Cpp]
 author: Im Yongsik
 comments: True
 use_math: True
