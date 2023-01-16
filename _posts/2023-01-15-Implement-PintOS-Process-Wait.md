@@ -18,7 +18,8 @@ use_math: True
 
 기존 `process_wait()`과 `process_exit()`은 아래와 같이 구현되어 있었다.
 
-```c
+{%highlight c%}
+
 /* process_wait() */
 int process_wait(tid_t child_tid UNUSED)
 {
@@ -53,23 +54,26 @@ void process_exit(void)
     {
         close(fd);
     }
-
+    
     /* Deallocate File Descriptor Table */
     palloc_free_multiple(cur->fdt, FDT_PAGES);
     file_close(cur->running_f);
-
+    
     sema_up(&cur->sema_for_wait);
     sema_down(&cur->sema_for_free);
-
+    
     process_cleanup();
 }
-```
+
+{%endhighlight%}
 
 여기서 문제가 되는 코드는 `process_exit()`의
 
-```c
+{%highlight c%}
+
 sema_down(&cur->sema_for_free);
-```
+
+{%endhighlight%}
 
 이다.
 
@@ -79,13 +83,14 @@ sema_down(&cur->sema_for_free);
 
 따라서 이를 위해선 문제가 되는 `sema_down()`과 `sema_up()`을 호출하지 않아야 하므로 아래와 같은 코드가 되어야 한다.
 
-```c
+{%highlight c%}
+
 /* process_wait() */
 int process_wait(tid_t child_tid UNUSED)
 {
     /* XXX: Hint) The pintos exit if process_wait (initd), we recommend you
      * XXX:       to add infinite loop here before
-     * XXX:       implementing the process_wait. */
+          * XXX:       implementing the process_wait. */
 
     struct thread* curr = thread_current();
     struct thread* child = get_child(child_tid);
@@ -104,29 +109,32 @@ void process_exit(void)
 {
     struct thread* cur = thread_current();
     /* TODO: Your code goes here.
+
      * TODO: Implement process termination message (see
-     * TODO: project2/process_termination.html).
-     * TODO: We recommend you to implement process resource cleanup here. */
+          * TODO: project2/process_termination.html).
+          * TODO: We recommend you to implement process resource cleanup here. */
 
     // 프로세스의 모든 열린 파일 close
     for (int fd = 0; fd < OPEN_MAX, fd++;)
     {
         close(fd);
     }
-
+    
     /* Deallocate File Descriptor Table */
     palloc_free_multiple(cur->fdt, FDT_PAGES);
     file_close(cur->running_f);
-
+    
     sema_up(&cur->sema_for_wait);
-
+    
     process_cleanup();
 }
-```
+
+{%endhighlight%}
 
 그런데 이렇게 두 번째 세마포를 사용하지 않으면 발생하는 또 다른 문제가 있다(사실 이 문제 때문에 두 번째 세마포`sema_for_free`를 사용했다).
 
-```
+{%highlight c%}
+
 /* process_wait() */
 {
 	//...
@@ -135,7 +143,8 @@ void process_exit(void)
     list_remove(&child->child_elem); // Warning!
     return child_exit_status;
 }
-```
+
+{%endhighlight%}
 
 바로 child thread가 `process_exit()`이후 제거되게 되면 `list_remove(&child->child_elem)`의 child 포인터가 댕글링 포인터가 된다는 점이다.
 
@@ -143,7 +152,8 @@ void process_exit(void)
 
 따라서 이를 해소하기 위해서 댕글링 포인터가 발생할 가능성을 완전히 배제하기 위해 부모가 child pointer를 관리하지 않도록 수정했고, 대신 child의 tid와 exit_status를 리스트 형태로 가지도록 하였다.
 
-```c
+{%highlight c%}
+
 struct child_info_t
 {
     tid_t tid;
@@ -151,13 +161,15 @@ struct child_info_t
     struct semaphore sema_for_wait;
     struct list_elem elem;
 };
-```
+
+{%endhighlight%}
 
 또, `sync_read`나 `sync_write`등의 테스트를 통과하기 위해 각 자식 정보마다 고유의 `sema_for_wait`을 가지도록 했다.
 
 그리고 해당 구조체를 위한 인터페이스들을 정의해 주었다.
 
-```c
+{%highlight c%}
+
 /////////////// declaration ///////////////
 void add_child(struct thread* parent, tid_t child_tid);
 void set_exit_status(struct thread* parent, tid_t child_tid, int exit_status);
@@ -229,11 +241,13 @@ void delete_child(struct thread* parent, tid_t child_tid)
         }
     }
 }
-```
+
+{%endhighlight%}
 
 이후 `process_wait()` 과 `process_exit()`을 아래와 같이 수정해준다.
 
-```c
+{%highlight c%}
+
 int process_wait(tid_t child_tid UNUSED)
 {
     struct thread* curr = thread_current();
@@ -257,15 +271,16 @@ void process_exit(void)
     {
         close(fd);
     }
-
+    
     /* Deallocate File Descriptor Table */
     palloc_free_multiple(cur->fdt, FDT_PAGES);
     file_close(cur->running_f);
     struct child_info_t* info = get_child_info(cur->parent, cur->tid);
     sema_up(&info->sema_for_wait);
-
+    
     process_cleanup();
 }
-```
+
+{%endhighlight%}
 
 이외에도 `syscall.c`등에서 시스템 콜 함수들을 조금씩 바꾸어야 하는데, 그 부분은 간단하므로 생략한다.
