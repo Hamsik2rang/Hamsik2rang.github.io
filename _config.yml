@@ -16,15 +16,15 @@ theme_settings:
       - start: 2016-03
         end:
         experience: Enter KNU, Kongju National University
-      - start: 2019-03
-        end:
-        experience: Re-Enter KNU, Kongju National University
       - start: 2020-01
         end: 2020-12
         experience: Vice president in Striking Arts - Game Dev Club in KNU
       - start: 2020-11
         end: 2020-11
         experience: Top prize at the Capstone Project of the Department of Software at KNU
+      - start: 2023-02
+        end:
+        experience: Join Com2us
     skills:
       - skill: C
         value: 85 # Percent value
