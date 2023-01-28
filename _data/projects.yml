@@ -1,58 +1,29 @@
-- project :
-    print : True # If 'False' is selected, it will not be displayed in 'home.html > aside > .proj-content'. 
-    modal : True # If 'True' is selected, modal can open in 'portfolio.html'. 
-    url :  https://github.com/Hamsik2rang/Kepler # Full URL
-    image : # path: assets/project/
-    date : 2022.04 - Developing
-    title : Kepler
-    summary : Game Engine for Windows10, based on DirectX11
-    description : Kepler is a Game Engine based on DirectX11 for Windows. OpenGL and DirectX12 will be supported later.
+- project:
+    print: True # If 'False' is selected, it will not be displayed in 'home.html > aside > .proj-content'.
+    modal: True # If 'True' is selected, modal can open in 'portfolio.html'.
+    url: https://github.com/Hamsik2rang/Kepler # Full URL
+    image: # path: assets/project/
+    date: 2022.04 - Developing
+    title: Kepler
+    summary: Game Engine for Windows10, based on DirectX11
+    description: Kepler is a Game Engine based on DirectX11 for Windows. OpenGL and DirectX12 will be supported later.
 
-- project :
-    print : True # If 'False' is selected, it will not be displayed in 'home.html > aside > .proj-content'. 
-    modal : True # If 'True' is selected, modal can open in 'portfolio.html'. 
-    url :  https://github.com/Hamsik2rang/KeplerMath # Full URL
-    image : # path: assets/project/
-    date : 2022.05
-    title : KeplerMath
-    summary : Math Library for Kepler
-    description : Math library for Kepler Game Engine. support Vector, Matrix, Quaternion, Transformation, Interpolation, etc.
+- project:
+    print: True # If 'False' is selected, it will not be displayed in 'home.html > aside > .proj-content'.
+    modal: True # If 'True' is selected, modal can open in 'portfolio.html'.
+    url: https://github.com/Hamsik2rang/KeplerMath # Full URL
+    image: # path: assets/project/
+    date: 2022.05
+    title: KeplerMath
+    summary: Math Library for Kepler
+    description: Math library for Kepler Game Engine. support Vector, Matrix, Quaternion, Transformation, Interpolation, etc.
 
-- project :
-    print : True # If 'False' is selected, it will not be displayed in 'home.html > aside > .proj-content'. 
-    modal : True # If 'True' is selected, modal can open in 'portfolio.html'. 
-    url : https://github.com/hamsik2rang/IOCP # Full URL
-    image :  # path: assets/project/
-    date : 2022.01 - Developing
-    title : IOCP Chatting Server
-    summary : IOCP Chatting Server using C++
-    description : This Project will be module as a 3D Network Shooting game.
-    contents :
-        # - title : 1. 블로그 첫 화면 구성
-        #   image : home.png
-        #   description : <li>Responsive Layout</li>
-        #     <li>User Profile</li> 
-        #     <li>Tags</li> 
-        #     <li>Projects</li> 
-        #     <li>Pagination</li>
-        # - title : 2. 태그 페이지
-        #   image : tags.png
-        #   description : <li>Responsive Layout</li> 
-        #     <li>Tags</li> 
-        # - title : 3. 남은 개발 과제
-        #   image :
-        #   description : <li>project 부분 디자인 변경</li>
-        #     <li>favicon.ico, search 기능</li>
-        #     <li>OG Tag 추가</li>
-        #     <li>profile 이미지 효과</li>
-        #     <li>gem 배포</li> 
-
-- project :
-    print : True # If 'False' is selected, it will not be displayed in 'home.html > aside > .proj-content'. 
-    modal : True # If 'True' is selected, modal can open in 'portfolio.html'. 
-    url :  https://github.com/Hamsik2rang/Software-Renderer # Full URL
-    image : # path: assets/project/
-    date : 2022.01 - Developing
-    title : Software Renderer
-    summary : Software Renderer using C++, DirectDraw and WinAPI
-    description : This project is that Implement C++ 3D Software Renderer from scratch except use DirectDraw for Bit blit.
+- project:
+    print: True # If 'False' is selected, it will not be displayed in 'home.html > aside > .proj-content'.
+    modal: True # If 'True' is selected, modal can open in 'portfolio.html'.
+    url: https://github.com/Hamsik2rang/Software-Renderer # Full URL
+    image: # path: assets/project/
+    date: 2022.01 - Developing
+    title: Software Renderer
+    summary: Software Renderer using C++, DirectDraw and WinAPI
+    description: This project is that Implement C++ 3D Software Renderer from scratch except use DirectDraw for Bit blit.
