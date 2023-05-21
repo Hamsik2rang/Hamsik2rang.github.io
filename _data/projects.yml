@@ -6,7 +6,7 @@
     date: 2022.04 - Developing
     title: Kepler
     summary: Game Engine for Windows10, based on DirectX11
-    description: Kepler is a Game Engine based on DirectX11 for Windows. OpenGL and DirectX12 will be supported later.
+    description: Kepler is a Game Engine based on DirectX11 for Windows. OpenGL, Vulkan and DirectX12 will be supported later.
 
 - project:
     print: True # If 'False' is selected, it will not be displayed in 'home.html > aside > .proj-content'.
