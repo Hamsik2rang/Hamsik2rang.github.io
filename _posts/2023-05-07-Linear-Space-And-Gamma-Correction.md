@@ -2,7 +2,7 @@
 layout: post
 title: Linear Space와 Gamma Space
 subtitle: Gamma Correction에 대한 정확한 이해를 해보자
-tags: [Graphicss]
+tags: [Graphics]
 author: Im Yongsik
 comments: True
 use_math: True
