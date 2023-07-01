@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 하반기 계획
+title: 2023년 하반기 계획
 subtitle: 상반기에 한 일 회고 및 하반기 계획
 tags: [Blog]
 author: Im Yongsik
