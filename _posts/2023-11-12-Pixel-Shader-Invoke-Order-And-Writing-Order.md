@@ -2,7 +2,7 @@
 layout: post
 title: 임의의 드로우콜에서 픽셀이 겹치면 어떻게 될까?
 subtitle: Pixel Shader의 실행 순서와 Framebuffer 쓰기 순서
-tags: [Computer Graphics]
+tags: [Graphics]
 author: Im Yongsik
 comments: True
 use_math: True
