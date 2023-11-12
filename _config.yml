@@ -30,6 +30,12 @@ theme_settings:
         value: 85 # Percent value
       - skill: C++
         value: 75
+      - skill: C#
+        value: 60
+      - skill: Vulkan
+        value: 70
+      - skill: Metal
+        value: 60
 
   # Icons
   icons:
