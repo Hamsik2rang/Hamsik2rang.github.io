@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313/apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    BOJ - Lunch Concert(21618) | Hamsik2rang&#39;s blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/_posts_backup/2022-03-22-boj-solve-21618/"/>
+
+<meta property="og:url" content="http://localhost:1313/_posts_backup/2022-03-22-boj-solve-21618/">
+  <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
+  <meta property="og:title" content="BOJ - Lunch Concert(21618)">
+  <meta property="og:description" content="0. 문제#문제 링크
+1. 풀이#학생들이 점심을 먹기 위해 일렬로 서 있을 때 줄 안의 특정 지점에서 콘서트를 열면 모든 학생들이 콘서트를 구경하러 오게 되는데, 이 때 모든 학생들이 콘서트에 참가하기 위해 최소한으로 움직일 수 있는 콘서트 지점을 구하는 문제이다.
+따라서, 만약 줄 안에 학생이 단 한 명만 있다면 그 학생이 콘서트를 들을 수 있는 범위 안에서 콘서트를 열면 학생이 전혀 움직일 필요가 없으므로 이동거리가 최소($0$)가 되어 정답이 되는 것이다.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="_posts_backup">
+    <meta property="article:tag" content="Algorithm">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">Hamsik2rang&#39;s blog</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+<div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/_posts_backup/">_Posts_backups</a><span class="breadcrumbs-separator">/</span>
+        <a href="/_posts_backup/2022-03-22-boj-solve-21618/">BOJ - Lunch Concert(21618)</a></div>
+
+
+<div >
+  <article>
+    <header class="single-intro-container">
+        
+        <h1 class="single-title">BOJ - Lunch Concert(21618)</h1>
+        
+        <div class="single-subsummary">
+          
+          <div>
+            
+            <p class="author">Im Yongsik </p>
+            
+            <p class="single-date">
+            </p>
+          </div>
+        </div>
+        
+    </header>
+    
+    <div class="single-content">
+      <h2 class="heading" id="0-문제">
+  0. 문제
+  <a class="anchor" href="#0-%eb%ac%b8%ec%a0%9c">#</a>
+</h2>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-22/BOJ-Solve-21618/img01.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<p><a href="https://www.acmicpc.net/problem/21618"><strong>문제 링크</strong></a></p>
+<h2 class="heading" id="1-풀이">
+  1. 풀이
+  <a class="anchor" href="#1-%ed%92%80%ec%9d%b4">#</a>
+</h2>
+<p>학생들이 점심을 먹기 위해 일렬로 서 있을 때 줄 안의 특정 지점에서 콘서트를 열면 모든 학생들이 콘서트를 구경하러 오게 되는데, 이 때 모든 학생들이 콘서트에 참가하기 위해 최소한으로 움직일 수 있는 콘서트 지점을 구하는 문제이다.</p>
+<p>따라서, 만약 줄 안에 학생이 단 한 명만 있다면 그 학생이 콘서트를 들을 수 있는 범위 안에서 콘서트를 열면 학생이 전혀 움직일 필요가 없으므로 이동거리가 최소($0$)가 되어 정답이 되는 것이다.</p>
+<p>콘서트를 개최하는 위치 $P$ 와 $P$ 에서 콘서트를 열었을 때 학생들이 이동해야 하는 거리 총합을 함수  $f(P)$ 로 표현할 수 있는데, 이렇게 표현하게 되면 문제의 조건을 함수 그래프로 그려낼 수 있다.</p>
+<p>예를 들어, 문제의 첫 번째 예시는 다음처럼 나타낼 수 있다.</p>
+<blockquote>
+<p>1<br>
+0 1000 0</p></blockquote>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-22/BOJ-Solve-21618/img03.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<p>학생이 단 한 명이고, 해당 학생이 콘서트를 들을 수 있는 범위가 $0$이기 때문에 학생이 위치한 바로 그 지점에서 콘서트를 열면 이동 거리 합이 $0$이 되므로 정답이 된다.</p>
+<!-- raw HTML omitted -->
+<p>동일한 방식으로 두 번째 예시는 다음처럼 나타낼 수 있다.</p>
+<blockquote>
+<p>2<br>
+10 4 3<br>
+20 4 2</p></blockquote>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-22/BOJ-Solve-21618/img04.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<p>두 번째 예시에선 학생이 두 명이고, 각각 $10$ 과 $20$ 에 위치하는데, 공교롭게도 $f(13)$과 $f(16)$이 같이 최솟값을 가진다.</p>
+<p>따라서 이 문제는 함수 $f(P)$를 구해 해당 함수의 최솟값을 출력하면 되는 문제이다.</p>
+<p>이렇게 최솟값이 존재하는 함수(대표적으로 이차 함수)의 최솟값을 구해내고자 하는 경우 <a href="https://www.geeksforgeeks.org/ternary-search/"><strong>삼분 탐색(Ternary Search)</strong></a> 가 유용하게 이용된다.</p>
+<p><strong>이분 탐색</strong>이 <strong>범위를 절반씩 줄여 나가면서 원하는 지점을 탐색하는 알고리즘</strong>이라면, <strong>삼분 탐색</strong>은 <strong>범위를 $\frac{1}{3}$씩 줄여 나가면서 원하는 지점을 탐색</strong>한다.</p>
+<!-- raw HTML omitted -->
+<p>간단히 예를 들자면</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-22/BOJ-Solve-21618/img05.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<p>임의의 최솟값이 존재하는 함수 $g(x)$가 다음과 같을 때, 범위 $x$를 $\frac{1}{3}$씩 나누어 준다.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-22/BOJ-Solve-21618/img06.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<p>이후 $g(leftmid)$와 $g(rightmid)$를 비교해 $g(leftmid)$가 더 크다면 <code>end</code>를 <code>right-mid</code>로, 그렇지 않다면 <code>start</code>를 <code>left-mid</code>로 옮긴다.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-22/BOJ-Solve-21618/img07.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<p>이후, 위 알고리즘을 반복한다.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-22/BOJ-Solve-21618/img08.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-22/BOJ-Solve-21618/img09.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<!-- raw HTML omitted -->
+<p>삼분 탐색을 알고 있던 사람이라면 위 설명을 듣고 의아할 수 있는데, 일반적인 삼분 탐색(함숫값을 찾는 것이 아닌 정렬된 데이터에서 값을 찾는 용도)의 경우 <code>left-mid</code> 와 <code>right-mid</code> 가 같은 값을 가질 경우 <code>start</code>, <code>end</code> 모두를 수정하지만, 이 문제는 $g(x)$가 정렬되어 있지 않기 때문에 다음과 같은 반례가 있을 수 있다.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-22/BOJ-Solve-21618/img10.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<p>마찬가지로, 최솟값이 유일하지 않을 수 있다는 반례 때문에 일반적인 삼분 탐색처럼 <code>start</code>가 <code>end</code>보다 작거나 같은 동안 탐색을 계속 반복하는 방식은 무한 루프를 유발할 수 있다(두 학생이 $30$과 $31$에 서 있다고 상상해 보자). 그러므로 최솟값을 찾을 수 있을 정도의 충분한 횟수만큼만 삼분 탐색을 반복하도록 루프를 설정해야 한다.</p>
+<h2 class="heading" id="2-코드">
+  2. 코드
+  <a class="anchor" href="#2-%ec%bd%94%eb%93%9c">#</a>
+</h2>
+<p>{%highlight cpp%}</p>
+<p>#define _CRT_SECURE_NO_WARNINGS
+#include <!-- raw HTML omitted -->
+#include <!-- raw HTML omitted --></p>
+<p>using namespace std;</p>
+<p>constexpr int MAXN = 200'001;
+constexpr int MAXD = 1e9;</p>
+<p>int n;
+int p[MAXN];
+int w[MAXN];
+int d[MAXN];</p>
+<p>long long calc(int x)
+{
+long long sum = 0;
+for (int i = 0; i &lt; n; i++)
+{
+if (abs(x - p[i]) &lt;= d[i])
+{
+continue;
+}
+long long hearingDist = min(abs((x - d[i]) - p[i]), abs((x + d[i]) - p[i]));
+sum += hearingDist * (long long)w[i];
+}
+return sum;
+}</p>
+<p>int main()
+{
+ios::sync_with_stdio(false);
+cin.tie(nullptr);
+//freopen(&ldquo;input.txt&rdquo;, &ldquo;r&rdquo;, stdin);</p>
+<pre><code>cin &gt;&gt; n;
+int s = MAXD;
+int e = 0;
+for (int i = 0; i &lt; n; i++)
+{
+	cin &gt;&gt; p[i] &gt;&gt; w[i] &gt;&gt; d[i];
+	s = min(s, p[i]);
+	e = max(e, p[i]);
+}
+if (n == 1)
+{
+	cout &lt;&lt; 0;
+	return 0;
+}
+
+long long sum = 1e18;
+for(int i=0;i&lt;60;i++)
+{
+	int delta = (e - s) / 3;
+	int l = s + delta;
+	int r = e - delta;
+
+	long long lr = calc(l);
+	long long rr = calc(r);
+	sum = min(lr, sum);
+	sum = min(rr, sum);
+	if (lr &gt; rr)
+	{
+		s = l;
+	}
+	else
+	{
+		e = r;
+	}
+}
+cout &lt;&lt; sum;
+
+return 0;
+</code></pre>
+<p>}</p>
+<p>{%endhighlight%}</p>
+<h2 class="heading" id="3-결과">
+  3. 결과
+  <a class="anchor" href="#3-%ea%b2%b0%ea%b3%bc">#</a>
+</h2>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-22/BOJ-Solve-21618/img02.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+
+    </div>
+  </article>
+
+  
+
+  
+
+  
+  
+
+<div class="single-pagination">
+    <hr />
+
+    <div class="flexnowrap">
+
+        <div class="single-pagination-prev">
+            
+            <div class="single-pagination-container-prev">
+                <div class="single-pagination-text">←</div>
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2022-03-13-boj-solve-11000/">
+                        BOJ - 강의실 배정(11000)
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="single-pagination-next">
+            
+            <div class="single-pagination-container-next">
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2022-03-18-boj-solve-1005/">
+                        BOJ - ACM Craft (1005)
+                    </a>
+                </div>
+                <div class="single-pagination-text">→</div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <hr />
+</div>
+
+
+
+  
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+    
+    
+
+
+
+
+
+    
+
+
+
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>

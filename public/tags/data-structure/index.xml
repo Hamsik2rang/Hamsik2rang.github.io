@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Data Structure on Hamsik2rang&#39;s blog</title>
+    <link>http://localhost:1313/tags/data-structure/</link>
+    <description>Recent content in Data Structure on Hamsik2rang&#39;s blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="http://localhost:1313/tags/data-structure/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>해시 테이블에 대해 알아보자</title>
+      <link>http://localhost:1313/_posts_backup/2022-11-07-what-is-hash-table/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/_posts_backup/2022-11-07-what-is-hash-table/</guid>
+      <description>&lt;h2 class=&#34;heading&#34; id=&#34;1-테이블-구조란&#34;&gt;&#xD;&#xA;  1. 테이블 구조란?&#xD;&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#1-%ed%85%8c%ec%9d%b4%eb%b8%94-%ea%b5%ac%ec%a1%b0%eb%9e%80&#34;&gt;#&lt;/a&gt;&#xD;&#xA;&lt;/h2&gt;&#xD;&#xA;&lt;p&gt;일반적으로 현실에서 데이터를 저장하고 저장된 데이터를 참조할 때, 단순히 나열된 데이터를 이용하는 것 보다 표 형식의 데이터를 이용하는 것이 효율적이다.&lt;/p&gt;&#xA;&lt;blockquote&gt;&#xA;&lt;p&gt;201600001 가가가 201600002 가가각 &amp;hellip; 201608432 홍길동 &amp;hellip;&lt;/p&gt;&#xA;&lt;p&gt;보다&lt;/p&gt;&#xA;&#xD;&#xA;&lt;div class=&#34;table-outer&#34;&gt;&#xD;&#xA;    &lt;table&gt;&#xD;&#xA;        &lt;thead&gt;&#xD;&#xA;            &lt;tr&gt;&#xD;&#xA;                &lt;th&gt;학번&lt;/th&gt;&#xD;&#xA;                &lt;th&gt;이름&lt;/th&gt;&#xD;&#xA;            &lt;/tr&gt;&#xD;&#xA;        &lt;/thead&gt;&#xD;&#xA;        &lt;tbody&gt;&#xD;&#xA;            &lt;tr&gt;&#xD;&#xA;                &lt;td&gt;201600001&lt;/td&gt;&#xD;&#xA;                &lt;td&gt;가가가&lt;/td&gt;&#xD;&#xA;            &lt;/tr&gt;&#xD;&#xA;            &lt;tr&gt;&#xD;&#xA;                &lt;td&gt;201600002&lt;/td&gt;&#xD;&#xA;                &lt;td&gt;가가각&lt;/td&gt;&#xD;&#xA;            &lt;/tr&gt;&#xD;&#xA;            &lt;tr&gt;&#xD;&#xA;                &lt;td&gt;&amp;hellip;&lt;/td&gt;&#xD;&#xA;                &lt;td&gt;&amp;hellip;&lt;/td&gt;&#xD;&#xA;            &lt;/tr&gt;&#xD;&#xA;            &lt;tr&gt;&#xD;&#xA;                &lt;td&gt;201608432&lt;/td&gt;&#xD;&#xA;                &lt;td&gt;홍길동&lt;/td&gt;&#xD;&#xA;            &lt;/tr&gt;&#xD;&#xA;            &lt;tr&gt;&#xD;&#xA;                &lt;td&gt;&amp;hellip;&lt;/td&gt;&#xD;&#xA;                &lt;td&gt;&amp;hellip;&lt;/td&gt;&#xD;&#xA;            &lt;/tr&gt;&#xD;&#xA;        &lt;/tbody&gt;&#xD;&#xA;    &lt;/table&gt;&#xD;&#xA;&lt;/div&gt;&lt;p&gt;가 더 직관적이고 효율적이다&lt;/p&gt;&lt;/blockquote&gt;&#xA;&lt;p&gt;이러한 &lt;strong&gt;&amp;lsquo;표&amp;rsquo;&lt;/strong&gt; 를 영어로 &lt;strong&gt;Table&lt;/strong&gt;이라 하는데, 컴퓨터과학에서는 이를 한층 더 추상화하여 &lt;strong&gt;Key-Value쌍으로 저장된 모든 데이터&lt;/strong&gt;를 &lt;strong&gt;테이블(Table) 또는 맵(Map)&lt;/strong&gt; 구조라 한다(혹은 &lt;strong&gt;사전 구조 - Dictionary&lt;/strong&gt; 라고도 한다).&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

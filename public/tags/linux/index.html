@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313/apple-touch-icon.png">
+
+<link rel="alternate" type="application/rss+xml" href="http://localhost:1313/tags/linux/index.xml" title="Hamsik2rang's blog">
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    Linux | Hamsik2rang&#39;s blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/tags/linux/"/>
+
+<meta property="og:url" content="http://localhost:1313/tags/linux/">
+  <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
+  <meta property="og:title" content="Linux">
+  <meta property="og:description" content="A Tech Blog">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="website">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">Hamsik2rang&#39;s blog</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+<div class="list-container">
+
+    <div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/tags/">Tags</a><span class="breadcrumbs-separator">/</span>
+        <a href="/tags/linux/">Linux</a></div>
+
+    <h1>Linux</h1>
+    
+
+    
+
+    
+    
+    
+    
+
+    
+
+    
+
+    
+    <div class="post-line">
+
+    
+    
+    
+    
+
+    <p class="line-date">1 Jan 0001 </p>
+
+    <div>
+        <p class="line-title">
+            <a href="/_posts_backup/2022-01-26-print-wchar-string-in-linux/">
+                Linux에서 wchar 문자열 출력하기
+            </a>
+        </p>
+
+        
+        <p class="line-summary"> <h2 class="heading" id="0-서론">
+  0. 서론
+  <a class="anchor" href="#0-%ec%84%9c%eb%a1%a0">#</a>
+</h2>
+<p>최근 리눅스에서 소켓 프로그래밍을 진행하면서 출력과 관련해 막히는 부분이 있었습니다. wchar_t 문자 배열로 표현되는 한글 문자열의 출력과 관련된 부분이었는데, 이를 해결하게 되어 해결법을 공유하고자 합니다.</p>
+<h3 class="heading" id="1-한글이-으로-출력돼요">
+  1. 한글이 &ldquo;????&hellip;&ldquo;으로 출력돼요!
+  <a class="anchor" href="#1-%ed%95%9c%ea%b8%80%ec%9d%b4-%ec%9c%bc%eb%a1%9c-%ec%b6%9c%eb%a0%a5%eb%8f%bc%ec%9a%94">#</a>
+</h3>
+<p>다음 코드가 있다고 하자.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#57606a">#include</span> <span style="color:#57606a">&lt;iostream&gt;</span><span style="color:#57606a">
+</span></span></span><span style="display:flex;"><span><span style="color:#57606a">#include</span> <span style="color:#57606a">&lt;cwchar&gt;</span><span style="color:#57606a">
+</span></span></span><span style="display:flex;"><span><span style="color:#57606a"></span>
+</span></span><span style="display:flex;"><span><span style="color:#cf222e">int</span> <span style="color:#6639ba">main</span><span style="color:#1f2328">(</span><span style="color:#cf222e">int</span> argc<span style="color:#1f2328">,</span> <span style="color:#cf222e">char</span><span style="color:#0550ae">**</span> argv<span style="color:#1f2328">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#1f2328">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#cf222e">wchar_t</span> test_str<span style="color:#1f2328">[](</span><span style="color:#0a3069">L</span><span style="color:#0a3069">&#34;오늘 점심은 샌드위치&#34;</span><span style="color:#1f2328">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    std<span style="color:#0550ae">::</span>wcout <span style="color:#0550ae">&lt;&lt;</span> test_str<span style="color:#1f2328">;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#57606a">// or 
+</span></span></span><span style="display:flex;"><span><span style="color:#57606a"></span>    <span style="color:#57606a">// wprintf(L&#34;%S&#34;, test_str);
+</span></span></span><span style="display:flex;"><span><span style="color:#57606a"></span>    <span style="color:#57606a">// note. 리눅스는 wchar를 위한 포매팅 인자로 &#39;대문자 S&#39;를 전달함.
+</span></span></span><span style="display:flex;"><span><span style="color:#57606a"></span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#cf222e">return</span> <span style="color:#0550ae">0</span><span style="color:#1f2328">;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#1f2328">}</span>
+</span></span></code></pre></div><p>만약 출력 결과가 다음처럼 나타난다면</p> </p>
+        
+    </div>
+</div>
+    
+
+    
+
+    
+
+</div>
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+    
+    
+
+
+
+
+
+    
+
+
+
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>

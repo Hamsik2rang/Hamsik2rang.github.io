@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313/apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    C&#43;&#43; 최적화 - part 3 | Hamsik2rang&#39;s blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/_posts_backup/2023-07-07-cpp-optimization-part-3/"/>
+
+<meta property="og:url" content="http://localhost:1313/_posts_backup/2023-07-07-cpp-optimization-part-3/">
+  <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
+  <meta property="og:title" content="C&#43;&#43; 최적화 - part 3">
+  <meta property="og:description" content="0. 정리#성능은 반드시 측정해야 한다.
+테스트 가능한 예측을 만들고 “적어둔다”
+테스트 과정에서 발생하는 코드의 변경 사항을 기록한다.
+10/90법칙(전체 코드의 10%가 전체 실행 시간의 90%를 소비한다는 법칙)을 기억하라
+명령문이 메모리를 몇 번 읽고 쓰는지를 셈으로써 문장의 비용을 추정할 수 있다.
+Windows의 clock() 함수는 신뢰할 수 있는 1밀리초 틱을 제공하며, Windows 8 이상에서는 GetSystemTimePreciseAsFileTime()함수가 1마이크로초 미만 틱을 제공한다.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="_posts_backup">
+    <meta property="article:tag" content="Cpp">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">Hamsik2rang&#39;s blog</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+<div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/_posts_backup/">_Posts_backups</a><span class="breadcrumbs-separator">/</span>
+        <a href="/_posts_backup/2023-07-07-cpp-optimization-part-3/">C&#43;&#43; 최적화 - part 3</a></div>
+
+
+<div >
+  <article>
+    <header class="single-intro-container">
+        
+        <h1 class="single-title">C&#43;&#43; 최적화 - part 3</h1>
+        
+        <div class="single-subsummary">
+          
+          <div>
+            
+            <p class="author">Im Yongsik </p>
+            
+            <p class="single-date">
+            </p>
+          </div>
+        </div>
+        
+    </header>
+    
+    <div class="single-content">
+      <h1 class="heading" id="0-정리">
+  0. 정리
+  <a class="anchor" href="#0-%ec%a0%95%eb%a6%ac">#</a>
+</h1>
+<ul>
+<li>
+<p>성능은 반드시 측정해야 한다.</p>
+</li>
+<li>
+<p>테스트 가능한 예측을 만들고 &ldquo;적어둔다&rdquo;</p>
+</li>
+<li>
+<p>테스트 과정에서 발생하는 코드의 변경 사항을 기록한다.</p>
+</li>
+<li>
+<p>10/90법칙(전체 코드의 10%가 전체 실행 시간의 90%를 소비한다는 법칙)을 기억하라</p>
+</li>
+<li>
+<p>명령문이 메모리를 몇 번 읽고 쓰는지를 셈으로써 문장의 비용을 추정할 수 있다.</p>
+</li>
+<li>
+<p>Windows의 <code>clock()</code> 함수는 신뢰할 수 있는 1밀리초 틱을 제공하며, Windows 8 이상에서는 <code>GetSystemTimePreciseAsFileTime()</code>함수가 1마이크로초 미만 틱을 제공한다.</p>
+</li>
+</ul>
+
+    </div>
+  </article>
+
+  
+
+  
+
+  
+  
+
+<div class="single-pagination">
+    <hr />
+
+    <div class="flexnowrap">
+
+        <div class="single-pagination-prev">
+            
+            <div class="single-pagination-container-prev">
+                <div class="single-pagination-text">←</div>
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2023-07-07-cpp-optimization-part-4/">
+                        C&#43;&#43; 최적화 - part 4
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="single-pagination-next">
+            
+            <div class="single-pagination-container-next">
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2023-07-06-cpp-optimization-part-2/">
+                        C&#43;&#43; 최적화 - part 2
+                    </a>
+                </div>
+                <div class="single-pagination-text">→</div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <hr />
+</div>
+
+
+
+  
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+    
+    
+
+
+
+
+
+    
+
+
+
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>

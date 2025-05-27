@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313/apple-touch-icon.png">
+
+<link rel="alternate" type="application/rss+xml" href="http://localhost:1313/tags/c/index.xml" title="Hamsik2rang's blog">
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    C | Hamsik2rang&#39;s blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/tags/c/"/>
+
+<meta property="og:url" content="http://localhost:1313/tags/c/">
+  <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
+  <meta property="og:title" content="C">
+  <meta property="og:description" content="A Tech Blog">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="website">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">Hamsik2rang&#39;s blog</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+<div class="list-container">
+
+    <div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/tags/">Tags</a><span class="breadcrumbs-separator">/</span>
+        <a href="/tags/c/">C</a></div>
+
+    <h1>C</h1>
+    
+
+    
+
+    
+    
+    
+    
+
+    
+
+    
+
+    
+    <div class="post-line">
+
+    
+    
+    
+    
+
+    <p class="line-date">1 Jan 0001 </p>
+
+    <div>
+        <p class="line-title">
+            <a href="/_posts_backup/2022-12-07-implement-malloc-lab/">
+                Malloc-lab 구현하기
+            </a>
+        </p>
+
+        
+        <p class="line-summary"> <h2 class="heading" id="malloc-lab-구현하기">
+  Malloc-lab 구현하기
+  <a class="anchor" href="#malloc-lab-%ea%b5%ac%ed%98%84%ed%95%98%ea%b8%b0">#</a>
+</h2>
+<h3 class="heading" id="0-서론">
+  0. 서론
+  <a class="anchor" href="#0-%ec%84%9c%eb%a1%a0">#</a>
+</h3>
+<p>Malloc-lab은 C언어에서 사용되는 <code>malloc</code>, <code>free</code>, <code>realloc</code>을 직접 구현해 보는 과제이다.</p>
+<p>이는 메모리 할당자와 가상 메모리에 대한 이해를 필요로 하는데, 컴퓨터시스템 9장을 읽어가며 진행했다.</p>
+<p>과제를 통해 얻어가야 할 내용은 다음과 같다.</p>
+<ul>
+<li>가상 메모리의 개념과 중요성 이해하기</li>
+<li>메모리 할당자의 개념과 할당 방식, 구현 형태 이해하기</li>
+<li>패딩, 단편화 등과 같이 메모리 할당자를 구현하면서 만날 수 있는 이슈들에 대해 이해하기</li>
+</ul>
+<h3 class="heading" id="1-주소-공간">
+  1. 주소 공간
+  <a class="anchor" href="#1-%ec%a3%bc%ec%86%8c-%ea%b3%b5%ea%b0%84">#</a>
+</h3>
+<p>모든 프로그램은 메모리에 적재되어 프로세스가 될 때 자신만의 주소공간을 가진다. 주소공간은 해당 프로세스가 사용하는 격리된 메모리 공간을 의미하며, 일반적으로 한 프로세스가 다른 프로세스의 주소 공간을 건드릴 수 없다. 이를 통해 프로세스 간에 데이터를 보호할 수 있게 된다.</p> </p>
+        
+    </div>
+</div>
+    
+
+    
+
+    
+    <div class="post-line">
+
+    
+    
+    
+    
+
+    <p class="line-date">1 Jan 0001 </p>
+
+    <div>
+        <p class="line-title">
+            <a href="/_posts_backup/2023-01-15-implement-pintos-process-wait/">
+                PintOS process_wait 올바르게 구현하기
+            </a>
+        </p>
+
+        
+        <p class="line-summary"> <h2 class="heading" id="pintos에서-process_wait-올바르게-구현하기">
+  PintOS에서 process_wait 올바르게 구현하기
+  <a class="anchor" href="#pintos%ec%97%90%ec%84%9c-process_wait-%ec%98%ac%eb%b0%94%eb%a5%b4%ea%b2%8c-%ea%b5%ac%ed%98%84%ed%95%98%ea%b8%b0">#</a>
+</h2>
+<h3 class="heading" id="0-서론">
+  0. 서론
+  <a class="anchor" href="#0-%ec%84%9c%eb%a1%a0">#</a>
+</h3>
+<p>2주차에서 구현한 코드 중 <code>process_wait</code> 및 <code>process_exit</code>가 심각한 오류를 내포하고 있음을 발제를 통해 확인할 수 있었다. 이를 해소하기 위한 방법을 알아보자.</p>
+<h3 class="heading" id="1-기존-코드의-문제점">
+  1. 기존 코드의 문제점
+  <a class="anchor" href="#1-%ea%b8%b0%ec%a1%b4-%ec%bd%94%eb%93%9c%ec%9d%98-%eb%ac%b8%ec%a0%9c%ec%a0%90">#</a>
+</h3>
+<p>기존 <code>process_wait()</code>과 <code>process_exit()</code>은 아래와 같이 구현되어 있었다.</p>
+<p>{%highlight c%}</p>
+<p>/* process_wait() <em>/
+int process_wait(tid_t child_tid UNUSED)
+{
+/</em> XXX: Hint) The pintos exit if process_wait (initd), we recommend you
+* XXX:       to add infinite loop here before
+* XXX:       implementing the process_wait. */</p> </p>
+        
+    </div>
+</div>
+    
+
+    
+
+    
+
+</div>
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+    
+    
+
+
+
+
+
+    
+
+
+
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>

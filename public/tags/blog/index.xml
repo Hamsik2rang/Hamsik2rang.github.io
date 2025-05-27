@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blog on Hamsik2rang&#39;s blog</title>
+    <link>http://localhost:1313/tags/blog/</link>
+    <description>Recent content in Blog on Hamsik2rang&#39;s blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 12 Nov 2023 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hello Blog</title>
+      <link>http://localhost:1313/posts/hello-blog/</link>
+      <pubDate>Sun, 12 Nov 2023 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/hello-blog/</guid>
+      <description>Hugo test</description>
+    </item>
+    <item>
+      <title>2022년의 목표</title>
+      <link>http://localhost:1313/_posts_backup/2022-01-04-goal-of-2022/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/_posts_backup/2022-01-04-goal-of-2022/</guid>
+      <description>&lt;h2 class=&#34;heading&#34; id=&#34;0-서론&#34;&gt;&#xD;&#xA;  0. 서론&#xD;&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#0-%ec%84%9c%eb%a1%a0&#34;&gt;#&lt;/a&gt;&#xD;&#xA;&lt;/h2&gt;&#xD;&#xA;&lt;p&gt;많은 개발자들의 블로그를 보면 연말에 회고록을 작성하는 것을 볼 수 있다.&#xA;일 년의 마지막, 자신(또는 자신의 프로젝트)을 돌아보며 한 해를 정리하는 글들을 보며 나도 한 번 회고록을 작성해 볼까 하는 생각이 들었지만, 과연 2021년에 내가 돌아볼 수 있을 만한 일들을 했는지 의심스러웠다. 정확히는 회고할 만한 목표들이 있었는지가 의심스러웠던 것이다.&lt;/p&gt;&#xA;&lt;p&gt;지금까지 나는 썩 계획적인 삶을 살아오진 않았다. 구체적인 계획을 세우고 움직이기보다는 일단 가슴이 시키는 일들을 먼저 해 나가는 삶을 살았는데, 좋아하거나 흥미로운 일들을 해 나가는 것은 끊임없는 원동력을 제공한다는 장점이 있었지만 균형 있는 성장을 이루는 데에는 단점으로 작용하기도 했고 무엇보다 내 &amp;lsquo;전체적인&amp;rsquo; 삶을 돌아볼 수 없게 하는 요인이 되기도 했다. 그래서 올해는 너무 구체적이진 않더라도 한 해의 계획을 간단히 세워 보고 연말의 나에게 뒤를 돌아볼 기회를 주고자 한다.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>2023년 하반기 계획</title>
+      <link>http://localhost:1313/_posts_backup/2023-07-01-second-half-plan/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/_posts_backup/2023-07-01-second-half-plan/</guid>
+      <description>&lt;h1 class=&#34;heading&#34; id=&#34;0-서론&#34;&gt;&#xD;&#xA;  0. 서론&#xD;&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#0-%ec%84%9c%eb%a1%a0&#34;&gt;#&lt;/a&gt;&#xD;&#xA;&lt;/h1&gt;&#xD;&#xA;&lt;p&gt;벌써 한 해의 절반이 지나갔다. 이번 상반기는 다양한 일들이 있어서 정말 빠르게 시간이 지나갔다는 느낌을 많이 받았다(그리고 나이는 1살 어려졌다 ㅎ). 7월의 첫날을 기점으로 상반기에 한 일들을 회고해 보고 하반기에 할 일들에 대한 대략적인 계획을 잡아보려 한다.&lt;/p&gt;&#xA;&lt;h1 class=&#34;heading&#34; id=&#34;1-상반기에-한-일들&#34;&gt;&#xD;&#xA;  1. 상반기에 한 일들&#xD;&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#1-%ec%83%81%eb%b0%98%ea%b8%b0%ec%97%90-%ed%95%9c-%ec%9d%bc%eb%93%a4&#34;&gt;#&lt;/a&gt;&#xD;&#xA;&lt;/h1&gt;&#xD;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&#xA;&lt;p&gt;크래프톤 정글 1기 참여(수료 아님!)&lt;/p&gt;&#xA;&lt;p&gt;작년 10월부터 크래프톤 정글에 참여하면서 다양한 경험을 했다. 뛰어난 동료들과 함께 프로젝트를 진행하는 경험과 전산학 지식에 대한 학습에 매진할 수 있었다. 무엇보다 크래프톤의 장병규 의장님이나 김정한 원장님을 필두로 한 정글의 훌륭한 코치님들로부터 프로그래밍에 임하는 자세나 프로그래머로서의 나의 앞길을 바라보는 새로운 시각을 얻을 수 있었고, 이를 바탕으로&amp;hellip;&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>컴투스에 입사했습니다</title>
+      <link>http://localhost:1313/_posts_backup/2023-01-19-join-to-com2us/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/_posts_backup/2023-01-19-join-to-com2us/</guid>
+      <description>&lt;h3 class=&#34;heading&#34; id=&#34;0-서론&#34;&gt;&#xD;&#xA;  0. 서론&#xD;&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#0-%ec%84%9c%eb%a1%a0&#34;&gt;#&lt;/a&gt;&#xD;&#xA;&lt;/h3&gt;&#xD;&#xA;&lt;p&gt;이번에 정말 감사하게도 컴투스에 렌더링 엔진 프로그래머로 입사하게 되었습니다. 채용 프로세스 과정에서 여러 블로그 등을 통해 많은 도움을 얻게 되어, 조금이나마 저와 같은 처지의 다른 분들에게 도움을 드리고자 과정을 글로 적어봅니다.&lt;/p&gt;&#xA;&lt;h3 class=&#34;heading&#34; id=&#34;1-채용-공고-확인과-도전&#34;&gt;&#xD;&#xA;  1. 채용 공고 확인과 도전&#xD;&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#1-%ec%b1%84%ec%9a%a9-%ea%b3%b5%ea%b3%a0-%ed%99%95%ec%9d%b8%ea%b3%bc-%eb%8f%84%ec%a0%84&#34;&gt;#&lt;/a&gt;&#xD;&#xA;&lt;/h3&gt;&#xD;&#xA;&lt;p&gt;사실 원래 취업에 큰 뜻이 있지는 않았습니다. 현재 학부 2학년만을 마치고 휴학한 상태이다 보니 취업은 저와는 먼 이야기였습니다. 그런데 크래프톤 정글에서 공부하며 나도 한번쯤 실무를 겪어보고 싶다는 생각을 갖게 되었고, 마침 크래프톤 장병규 의장님과의 면담에서 의장님도 학교로 돌아가는 것 보다는 실무를 겪어보는 걸 추천한다고 말씀해주셔서 기왕 이렇게 된거 이력서 쓰는 연습이나 해보자는 마음으로 지원할 회사를 찾게 되었습니다.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

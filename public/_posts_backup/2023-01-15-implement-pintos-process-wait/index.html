@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313/apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    PintOS process_wait 올바르게 구현하기 | Hamsik2rang&#39;s blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/_posts_backup/2023-01-15-implement-pintos-process-wait/"/>
+
+<meta property="og:url" content="http://localhost:1313/_posts_backup/2023-01-15-implement-pintos-process-wait/">
+  <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
+  <meta property="og:title" content="PintOS process_wait 올바르게 구현하기">
+  <meta property="og:description" content="PintOS에서 process_wait 올바르게 구현하기#0. 서론#2주차에서 구현한 코드 중 process_wait 및 process_exit가 심각한 오류를 내포하고 있음을 발제를 통해 확인할 수 있었다. 이를 해소하기 위한 방법을 알아보자.
+1. 기존 코드의 문제점#기존 process_wait()과 process_exit()은 아래와 같이 구현되어 있었다.
+{%highlight c%}
+/* process_wait() / int process_wait(tid_t child_tid UNUSED) { / XXX: Hint) The pintos exit if process_wait (initd), we recommend you * XXX: to add infinite loop here before * XXX: implementing the process_wait. */">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="_posts_backup">
+    <meta property="article:tag" content="OS">
+    <meta property="article:tag" content="C">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">Hamsik2rang&#39;s blog</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+<div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/_posts_backup/">_Posts_backups</a><span class="breadcrumbs-separator">/</span>
+        <a href="/_posts_backup/2023-01-15-implement-pintos-process-wait/">PintOS process_wait 올바르게 구현하기</a></div>
+
+
+<div >
+  <article>
+    <header class="single-intro-container">
+        
+        <h1 class="single-title">PintOS process_wait 올바르게 구현하기</h1>
+        
+        <div class="single-subsummary">
+          
+          <div>
+            
+            <p class="author">Im Yongsik </p>
+            
+            <p class="single-date">
+            </p>
+          </div>
+        </div>
+        
+    </header>
+    
+    <div class="single-content">
+      <h2 class="heading" id="pintos에서-process_wait-올바르게-구현하기">
+  PintOS에서 process_wait 올바르게 구현하기
+  <a class="anchor" href="#pintos%ec%97%90%ec%84%9c-process_wait-%ec%98%ac%eb%b0%94%eb%a5%b4%ea%b2%8c-%ea%b5%ac%ed%98%84%ed%95%98%ea%b8%b0">#</a>
+</h2>
+<h3 class="heading" id="0-서론">
+  0. 서론
+  <a class="anchor" href="#0-%ec%84%9c%eb%a1%a0">#</a>
+</h3>
+<p>2주차에서 구현한 코드 중 <code>process_wait</code> 및 <code>process_exit</code>가 심각한 오류를 내포하고 있음을 발제를 통해 확인할 수 있었다. 이를 해소하기 위한 방법을 알아보자.</p>
+<h3 class="heading" id="1-기존-코드의-문제점">
+  1. 기존 코드의 문제점
+  <a class="anchor" href="#1-%ea%b8%b0%ec%a1%b4-%ec%bd%94%eb%93%9c%ec%9d%98-%eb%ac%b8%ec%a0%9c%ec%a0%90">#</a>
+</h3>
+<p>기존 <code>process_wait()</code>과 <code>process_exit()</code>은 아래와 같이 구현되어 있었다.</p>
+<p>{%highlight c%}</p>
+<p>/* process_wait() <em>/
+int process_wait(tid_t child_tid UNUSED)
+{
+/</em> XXX: Hint) The pintos exit if process_wait (initd), we recommend you
+* XXX:       to add infinite loop here before
+* XXX:       implementing the process_wait. */</p>
+<pre><code>struct thread* curr = thread_current();
+struct thread* child = get_child(child_tid);
+if (child == NULL)
+{
+    return -1;
+}
+sema_down(&amp;child-&gt;sema_for_wait);
+int child_exit_status = child-&gt;exit_status;
+list_remove(&amp;child-&gt;child_elem);
+sema_up(&amp;child-&gt;sema_for_free);
+return child_exit_status;
+</code></pre>
+<p>}</p>
+<p>/* process_exit() <em>/
+void process_exit(void)
+{
+struct thread</em> cur = thread_current();
+/* TODO: Your code goes here.
+* TODO: Implement process termination message (see
+* TODO: project2/process_termination.html).
+* TODO: We recommend you to implement process resource cleanup here. */</p>
+<pre><code>// 프로세스의 모든 열린 파일 close
+for (int fd = 0; fd &lt; OPEN_MAX, fd++;)
+{
+    close(fd);
+}
+
+/* Deallocate File Descriptor Table */
+palloc_free_multiple(cur-&gt;fdt, FDT_PAGES);
+file_close(cur-&gt;running_f);
+
+sema_up(&amp;cur-&gt;sema_for_wait);
+sema_down(&amp;cur-&gt;sema_for_free);
+
+process_cleanup();
+</code></pre>
+<p>}</p>
+<p>{%endhighlight%}</p>
+<p>여기서 문제가 되는 코드는 <code>process_exit()</code>의</p>
+<p>{%highlight c%}</p>
+<p>sema_down(&amp;cur-&gt;sema_for_free);</p>
+<p>{%endhighlight%}</p>
+<p>이다.</p>
+<p>위 코드에 의해 exit되는 process들은 전부 세마포의 값을 내리고 스스로 block상태가 되게 되는데, 만약 해당 프로세스의 부모 프로세스가 <code>wait()</code> 시스템 콜을 호출하지 않는다면 이들은 영원히 깨어나지 못하게 된다.</p>
+<p>즉, <code>sema_down()</code>은 항상 호출되는데 <code>sema_up()</code>은 조건부로 호출되므로 문제가 발생한다.</p>
+<p>따라서 이를 위해선 문제가 되는 <code>sema_down()</code>과 <code>sema_up()</code>을 호출하지 않아야 하므로 아래와 같은 코드가 되어야 한다.</p>
+<p>{%highlight c%}</p>
+<p>/* process_wait() <em>/
+int process_wait(tid_t child_tid UNUSED)
+{
+/</em> XXX: Hint) The pintos exit if process_wait (initd), we recommend you
+* XXX:       to add infinite loop here before
+* XXX:       implementing the process_wait. */</p>
+<pre><code>struct thread* curr = thread_current();
+struct thread* child = get_child(child_tid);
+if (child == NULL)
+{
+    return -1;
+}
+sema_down(&amp;child-&gt;sema_for_wait);
+int child_exit_status = child-&gt;exit_status;
+list_remove(&amp;child-&gt;child_elem);
+return child_exit_status;
+</code></pre>
+<p>}</p>
+<p>/* process_exit() <em>/
+void process_exit(void)
+{
+struct thread</em> cur = thread_current();
+/* TODO: Your code goes here.</p>
+<pre><code> * TODO: Implement process termination message (see
+      * TODO: project2/process_termination.html).
+      * TODO: We recommend you to implement process resource cleanup here. */
+
+// 프로세스의 모든 열린 파일 close
+for (int fd = 0; fd &lt; OPEN_MAX, fd++;)
+{
+    close(fd);
+}
+
+/* Deallocate File Descriptor Table */
+palloc_free_multiple(cur-&gt;fdt, FDT_PAGES);
+file_close(cur-&gt;running_f);
+
+sema_up(&amp;cur-&gt;sema_for_wait);
+
+process_cleanup();
+</code></pre>
+<p>}</p>
+<p>{%endhighlight%}</p>
+<p>그런데 이렇게 두 번째 세마포를 사용하지 않으면 발생하는 또 다른 문제가 있다(사실 이 문제 때문에 두 번째 세마포<code>sema_for_free</code>를 사용했다).</p>
+<p>{%highlight c%}</p>
+<p>/* process_wait() */
+{
+//&hellip;
+sema_down(&amp;child-&gt;sema_for_wait);
+int child_exit_status = child-&gt;exit_status;
+list_remove(&amp;child-&gt;child_elem); // Warning!
+return child_exit_status;
+}</p>
+<p>{%endhighlight%}</p>
+<p>바로 child thread가 <code>process_exit()</code>이후 제거되게 되면 <code>list_remove(&amp;child-&gt;child_elem)</code>의 child 포인터가 댕글링 포인터가 된다는 점이다.</p>
+<h3 class="heading" id="2-해결-방안">
+  2. 해결 방안
+  <a class="anchor" href="#2-%ed%95%b4%ea%b2%b0-%eb%b0%a9%ec%95%88">#</a>
+</h3>
+<p>따라서 이를 해소하기 위해서 댕글링 포인터가 발생할 가능성을 완전히 배제하기 위해 부모가 child pointer를 관리하지 않도록 수정했고, 대신 child의 tid와 exit_status를 리스트 형태로 가지도록 하였다.</p>
+<p>{%highlight c%}</p>
+<p>struct child_info_t
+{
+tid_t tid;
+int exit_status;
+struct semaphore sema_for_wait;
+struct list_elem elem;
+};</p>
+<p>{%endhighlight%}</p>
+<p>또, <code>sync_read</code>나 <code>sync_write</code>등의 테스트를 통과하기 위해 각 자식 정보마다 고유의 <code>sema_for_wait</code>을 가지도록 했다.</p>
+<p>그리고 해당 구조체를 위한 인터페이스들을 정의해 주었다.</p>
+<p>{%highlight c%}</p>
+<p>/////////////// declaration ///////////////
+void add_child(struct thread* parent, tid_t child_tid);
+void set_exit_status(struct thread* parent, tid_t child_tid, int exit_status);
+int get_exit_status(struct thread* parent, tid_t child_tid);
+struct child_info_t* get_child_info(struct thread* parent, tid_t child_tid);
+void delete_child(struct thread* parent, tid_t child_tid);</p>
+<p>/////////////// definition ///////////////
+void add_child(struct thread* parent, tid_t child_tid)
+{
+struct child_info_t* info = (struct child_info_t*)malloc(sizeof(struct child_info_t));
+info-&gt;tid = child_tid;
+sema_init(&amp;info-&gt;sema_for_wait, 0);
+list_push_back(&amp;parent-&gt;child_info_list, &amp;info-&gt;elem);
+}</p>
+<p>void set_exit_status(struct thread* parent, tid_t child_tid, int exit_status)
+{
+struct list_elem* e;
+for (e = list_begin(&amp;parent-&gt;child_info_list); e != list_end(&amp;parent-&gt;child_info_list); e = list_next(e))
+{
+struct child_info_t* info = list_entry(e, struct child_info_t, elem);
+if (info-&gt;tid == child_tid)
+{
+info-&gt;exit_status = exit_status;
+}
+}
+}</p>
+<p>int get_exit_status(struct thread* parent, tid_t child_tid)
+{
+struct list_elem* e;
+for (e = list_begin(&amp;parent-&gt;child_info_list); e != list_end(&amp;parent-&gt;child_info_list); e = list_next(e))
+{
+struct child_info_t* info = list_entry(e, struct child_info_t, elem);
+if (info-&gt;tid == child_tid)
+{
+return info-&gt;exit_status;
+}
+}</p>
+<pre><code>return 0;
+</code></pre>
+<p>}</p>
+<p>struct child_info_t* get_child_info(struct thread* parent, tid_t child_tid)
+{
+struct list_elem* e;
+for (e = list_begin(&amp;parent-&gt;child_info_list); e != list_end(&amp;parent-&gt;child_info_list); e = list_next(e))
+{
+struct child_info_t* info = list_entry(e, struct child_info_t, elem);
+if (info-&gt;tid == child_tid)
+{
+return info;
+}
+}</p>
+<pre><code>return NULL;
+</code></pre>
+<p>}</p>
+<p>void delete_child(struct thread* parent, tid_t child_tid)
+{
+struct list_elem* e;
+for (e = list_begin(&amp;parent-&gt;child_info_list); e != list_end(&amp;parent-&gt;child_info_list); e = list_next(e))
+{
+struct child_info_t* info = list_entry(e, struct child_info_t, elem);
+if (info-&gt;tid == child_tid)
+{
+list_remove(e);
+}
+}
+}</p>
+<p>{%endhighlight%}</p>
+<p>이후 <code>process_wait()</code> 과 <code>process_exit()</code>을 아래와 같이 수정해준다.</p>
+<p>{%highlight c%}</p>
+<p>int process_wait(tid_t child_tid UNUSED)
+{
+struct thread* curr = thread_current();
+struct child_info_t* info = NULL;
+if (!(info = get_child_info(curr, child_tid)))
+{
+return -1;
+}
+sema_down(&amp;info-&gt;sema_for_wait);
+int child_exit_status = get_exit_status(curr, child_tid);
+delete_child(curr, child_tid);
+return child_exit_status;
+}</p>
+<p>void process_exit(void)
+{
+struct thread* cur = thread_current();</p>
+<pre><code>// 프로세스의 모든 열린 파일 close
+for (int fd = 0; fd &lt; OPEN_MAX, fd++;)
+{
+    close(fd);
+}
+
+/* Deallocate File Descriptor Table */
+palloc_free_multiple(cur-&gt;fdt, FDT_PAGES);
+file_close(cur-&gt;running_f);
+struct child_info_t* info = get_child_info(cur-&gt;parent, cur-&gt;tid);
+sema_up(&amp;info-&gt;sema_for_wait);
+
+process_cleanup();
+</code></pre>
+<p>}</p>
+<p>{%endhighlight%}</p>
+<p>이외에도 <code>syscall.c</code>등에서 시스템 콜 함수들을 조금씩 바꾸어야 하는데, 그 부분은 간단하므로 생략한다.</p>
+
+    </div>
+  </article>
+
+  
+
+  
+
+  
+  
+
+<div class="single-pagination">
+    <hr />
+
+    <div class="flexnowrap">
+
+        <div class="single-pagination-prev">
+            
+            <div class="single-pagination-container-prev">
+                <div class="single-pagination-text">←</div>
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2022-10-06-what-is-simd/">
+                        SIMD에 대해 알아보자
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="single-pagination-next">
+            
+            <div class="single-pagination-container-next">
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2022-09-28-life-of-a-triangle/">
+                        Modern GPU에서 삼각형이 그려지는 과정
+                    </a>
+                </div>
+                <div class="single-pagination-text">→</div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <hr />
+</div>
+
+
+
+  
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+    
+    
+
+
+
+
+
+    
+
+
+
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>

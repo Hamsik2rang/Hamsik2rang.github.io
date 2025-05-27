@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313/apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    개발 일지 - 3월 2주차 | Hamsik2rang&#39;s blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/_posts_backup/2022-03-13-devlog-software-renderer/"/>
+
+<meta property="og:url" content="http://localhost:1313/_posts_backup/2022-03-13-devlog-software-renderer/">
+  <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
+  <meta property="og:title" content="개발 일지 - 3월 2주차">
+  <meta property="og:description" content="0. 서론#이번 주 초까지 가까운 물체의 렌더링 비용과 카메라 회전 개발에 애를 먹고 있었다. 정확히는 다음과 같은 이슈들이 존재했다.
+ERROR
+임의의 물체가 카메라에 너무 가까이 있을 시 드로우하는 과정에서 버벅임이 발생한다. 카메라 회전이 원하는 대로 정확히 이루어지지 않는다. 시점이 조금씩 멋대로 이동하거나 갑자기 화면이 튀는 현상이 발생한다. 시급하진 않지만 원인을 규명해야 할 자잘한 이슈는 다음이 있었다.
+WARNING
+특정 헤더 파일을 여러 곳에서 선언 시 #pragma once전처리문을 명시하였음에도 중복 선언 이슈가 발생한다. 그 외에도 구현해야 할 목표들은 다음이 있었다.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="_posts_backup">
+    <meta property="article:tag" content="Devlog">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">Hamsik2rang&#39;s blog</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+<div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/_posts_backup/">_Posts_backups</a><span class="breadcrumbs-separator">/</span>
+        <a href="/_posts_backup/2022-03-13-devlog-software-renderer/">개발 일지 - 3월 2주차</a></div>
+
+
+<div >
+  <article>
+    <header class="single-intro-container">
+        
+        <h1 class="single-title">개발 일지 - 3월 2주차</h1>
+        
+        <div class="single-subsummary">
+          
+          <div>
+            
+            <p class="author">Im Yongsik </p>
+            
+            <p class="single-date">
+            </p>
+          </div>
+        </div>
+        
+    </header>
+    
+    <div class="single-content">
+      <h2 class="heading" id="0-서론">
+  0. 서론
+  <a class="anchor" href="#0-%ec%84%9c%eb%a1%a0">#</a>
+</h2>
+<p>이번 주 초까지 가까운 물체의 렌더링 비용과 카메라 회전 개발에 애를 먹고 있었다. 정확히는 다음과 같은 이슈들이 존재했다.</p>
+<p><strong>ERROR</strong></p>
+<ul>
+<li>임의의 물체가 카메라에 너무 가까이 있을 시 드로우하는 과정에서 버벅임이 발생한다.</li>
+<li>카메라 회전이 원하는 대로 정확히 이루어지지 않는다. 시점이 조금씩 멋대로 이동하거나 갑자기 화면이 튀는 현상이 발생한다.</li>
+</ul>
+<!-- raw HTML omitted -->
+<p>시급하진 않지만 원인을 규명해야 할 자잘한 이슈는 다음이 있었다.</p>
+<p><strong>WARNING</strong></p>
+<ul>
+<li>특정 헤더 파일을 여러 곳에서 선언 시 <code>#pragma once</code>전처리문을 명시하였음에도 중복 선언 이슈가 발생한다.</li>
+</ul>
+<!-- raw HTML omitted -->
+<p>그 외에도 구현해야 할 목표들은 다음이 있었다.</p>
+<p><strong>FEATURE</strong></p>
+<ul>
+<li>Vertex Buffer만을 이용해 드로우하는 구조에서 Index Buffer를 이용한 드로우 방식을 구현</li>
+<li>Input 데이터를 처리하는 별도의 객체를 설계 및 구현</li>
+</ul>
+<h2 class="heading" id="1-error">
+  1. ERROR
+  <a class="anchor" href="#1-error">#</a>
+</h2>
+<h4 class="heading" id="11-임의의-물체가-카메라에-너무-가까이-있을-시-드로우하는-과정에서-버벅임이-발생한다">
+  1.1 임의의 물체가 카메라에 너무 가까이 있을 시 드로우하는 과정에서 버벅임이 발생한다.
+  <a class="anchor" href="#11-%ec%9e%84%ec%9d%98%ec%9d%98-%eb%ac%bc%ec%b2%b4%ea%b0%80-%ec%b9%b4%eb%a9%94%eb%9d%bc%ec%97%90-%eb%84%88%eb%ac%b4-%ea%b0%80%ea%b9%8c%ec%9d%b4-%ec%9e%88%ec%9d%84-%ec%8b%9c-%eb%93%9c%eb%a1%9c%ec%9a%b0%ed%95%98%eb%8a%94-%ea%b3%bc%ec%a0%95%ec%97%90%ec%84%9c-%eb%b2%84%eb%b2%85%ec%9e%84%ec%9d%b4-%eb%b0%9c%ec%83%9d%ed%95%9c%eb%8b%a4">#</a>
+</h4>
+<p>우선 물체가 카메라의 위치에 가까워질수록 드로우 부하가 발생하는 부분은 발생을 확인하는 순간</p>
+<blockquote>
+<p>&lsquo;별도의 Clipping이 없어 Viewport밖의 물체까지 그려내느라 많은 비용이 소모되는 것이 아닐까?&rsquo;</p></blockquote>
+<p>라는 생각을 했다.</p>
+<!-- raw HTML omitted -->
+<p>Viewport밖의 물체를 그려내는 연산을 제외하기 위해 Rasterizer 단계에서 Clip Space의 범위($-1&lt;=x&lt;=1, -1&lt;=y&lt;=1, 0&lt;=z&lt;=1$)를 넘어서는 정점들을 모두 걸러내는 간단한 Culling 코드를 작성하였다.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-13/Devlog-Software-Renderer/img01.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<p>그 결과 상당한 효율 향상이 있었다. 이를 통해 추후 Clipping과 Culling 알고리즘들을 활용해 부하를 해결할 수 있다는 확신을 얻었다.</p>
+<!-- raw HTML omitted -->
+<p>그리고 이 외에도 단순히 화면 밖의 정점까지 그린다는 것만으로 이렇게 큰 부하가 걸린다는 것을 통해 추가적인 개선 요소를 파악할 수 있었는데, 현재 프로젝트에서 삼각형을 그려내는 코드는 삼각형의 세 정점을 기준으로 Fragment Box를 구해낸 다음, Box의 안에 존재하는 모든 Fragment들에 삼각형의 내/외부 판별을 하고 있는데, 바로 이 비효율적인 연산 때문에도 부하가 어느정도 증가했다는 것을 예측할 수 있었다.</p>
+<p>따라서 기존의 방법 대신 Scan Conversion을 이용한 프래그먼트 처리를 구현하는 것이 좋겠다는 <a href="https://github.com/Hamsik2rang/Software-Renderer/issues/7">계획</a>을 세웠다.</p>
+<!-- raw HTML omitted -->
+<h4 class="heading" id="12-카메라-회전이-원하는-대로-정확히-이루어지지-않는다-시점이-조금씩-멋대로-이동하거나-갑자기-화면이-튀는-현상이-발생한다">
+  1.2 카메라 회전이 원하는 대로 정확히 이루어지지 않는다. 시점이 조금씩 멋대로 이동하거나 갑자기 화면이 튀는 현상이 발생한다.
+  <a class="anchor" href="#12-%ec%b9%b4%eb%a9%94%eb%9d%bc-%ed%9a%8c%ec%a0%84%ec%9d%b4-%ec%9b%90%ed%95%98%eb%8a%94-%eb%8c%80%eb%a1%9c-%ec%a0%95%ed%99%95%ed%9e%88-%ec%9d%b4%eb%a3%a8%ec%96%b4%ec%a7%80%ec%a7%80-%ec%95%8a%eb%8a%94%eb%8b%a4-%ec%8b%9c%ec%a0%90%ec%9d%b4-%ec%a1%b0%ea%b8%88%ec%94%a9-%eb%a9%8b%eb%8c%80%eb%a1%9c-%ec%9d%b4%eb%8f%99%ed%95%98%ea%b1%b0%eb%82%98-%ea%b0%91%ec%9e%90%ea%b8%b0-%ed%99%94%eb%a9%b4%ec%9d%b4-%ed%8a%80%eb%8a%94-%ed%98%84%ec%83%81%ec%9d%b4-%eb%b0%9c%ec%83%9d%ed%95%9c%eb%8b%a4">#</a>
+</h4>
+<!-- raw HTML omitted -->
+<p>우선 가장 먼저 카메라 회전을 오일러각 회전을 통해 구현했다.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>이므로</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>이다.</p>
+<p>마우스의 움직임이 입력될 때 마다 $x, y$좌표의 변화량을 누적한 후, 렌더 루프가 수행될 때 누적된 변화량만큼 pitch/yaw 회전각을 부여해 카메라의 $AT$을 $EYE$를 기준으로 회전시킨다.</p>
+<p>이후 $Normalize(EYE - AT)$을 카메라의 $z$축 정규기저로 지정한 후 직교화 과정을 거쳐 카메라의 정규직교기저를 수정한다.</p>
+<!-- raw HTML omitted -->
+<p>식으로 표현하면 다음과 같다.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>이후 테스트를 진행하는데, 어느 정도 회전하는 순간 카메라 시점이 갑자기 튀어버리는 현상이 발생했다. 원인을 파악하지 못해 애를 많이 먹었는데, 카메라의 기저 좌표 로그를 찍어 유심히 살펴 본 결과 어느 이상 카메라를 회전하면 기저 성분들이 **NAN(Not A Number)**으로 바뀌어버리는 것을 확인할 수 있었다.</p>
+<!-- raw HTML omitted -->
+<p>확인 결과 벡터의 정규화 함수에서 다음과 같은 치명적인 실수(확인하는 순간 너무 부끄러웠다..ㅠㅠ)를 한 걸 확인해서 수정하였고, 이후 카메라 시점이 갑자기 튀어버리는 현상은 사라졌다.</p>
+<p>{%highlight cpp%}</p>
+<p>// Error Code
+template <!-- raw HTML omitted -->
+Vector3D<!-- raw HTML omitted --> Normalize()
+{
+x /= norm();
+y /= norm();	// 이 시점에서 x의 값이 바뀌었기 때문에 새로운 norm()을 호출하면 정규성이 보장되지 않음.
+z /= norm();
+return* this;
+}</p>
+<p>// After Fix
+template <!-- raw HTML omitted -->
+Vector3d<!-- raw HTML omitted --> Normalize()
+{
+*this /= norm();
+return *this;
+}</p>
+<p>{%endhighlight%}</p>
+<p>대신 이를 통해 배운 것들도 많았는데, 처음에 원인을 제대로 인식하지 못해 뻘짓을 하면서 웹에서 정보를 찾아다니다 보니 다양한 지식을 얻을 수 있었다.</p>
+<!-- raw HTML omitted -->
+<p>카메라 뿐만 아니라 반복된 행렬 연산 과정에서 부동소수 오차 누적에 의한 오류*-이를 drift라 부른다-*에 대한 지식이나, 많은 연산을 필요로 하는 회전 행렬의 연속곱 대신 방향 벡터에 적은 양의 삼각함수 계산을 통해 새 기저를 구해내는 방법 등이 그것이다.</p>
+<p>특히 두 번째, 행렬 대신 삼각함수 연산만을 통해 기저를 회전시키는 방법이 현재 방법보다 더 적은 연산량을 필요로 하는 것을 파악하고 카메라 회전 구현 방식을 해당 방식으로 수정하였다.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-13/Devlog-Software-Renderer/img02.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<!-- raw HTML omitted -->
+<p>현재 카메라는 문제 없이 이동/회전이 가능하며, 추후 쿼터니언을 이용해 회전하는 방법이나 유니티 엔진의 Scene view처럼 우클릭 한 상태에서만 카메라가 이동/회전하도록, 그리고 Ray와 충돌처리를 이용한 Mouse Picking등이 가능하도록 기능을 추가할 예정이다.</p>
+<h2 class="heading" id="2-warning">
+  2. WARNING
+  <a class="anchor" href="#2-warning">#</a>
+</h2>
+<h4 class="heading" id="21-특정-헤더-파일을-여러-곳에서-선언-시-pragma-once전처리문을-명시하였음에도-중복-선언-이슈가-발생한다">
+  2.1 특정 헤더 파일을 여러 곳에서 선언 시 <code>#pragma once</code>전처리문을 명시하였음에도 중복 선언 이슈가 발생한다.
+  <a class="anchor" href="#21-%ed%8a%b9%ec%a0%95-%ed%97%a4%eb%8d%94-%ed%8c%8c%ec%9d%bc%ec%9d%84-%ec%97%ac%eb%9f%ac-%ea%b3%b3%ec%97%90%ec%84%9c-%ec%84%a0%ec%96%b8-%ec%8b%9c-pragma-once%ec%a0%84%ec%b2%98%eb%a6%ac%eb%ac%b8%ec%9d%84-%eb%aa%85%ec%8b%9c%ed%95%98%ec%98%80%ec%9d%8c%ec%97%90%eb%8f%84-%ec%a4%91%eb%b3%b5-%ec%84%a0%ec%96%b8-%ec%9d%b4%ec%8a%88%ea%b0%80-%eb%b0%9c%ec%83%9d%ed%95%9c%eb%8b%a4">#</a>
+</h4>
+<p>이 부분은 매우 간단히 해결하였는데, 해당 헤더 파일이 <code>*.hpp</code>파일이었고, 본 프로젝트에서 <code>*.hpp</code>는 <code>*.h</code>와 달리 헤더에 구현(함수 정의)이 존재하는 파일들이다.</p>
+<p>즉, 문제가 생기는 헤더 파일은 그 안에 함수의 선언과 정의가 모두 존재하였다.</p>
+<p>원인은 문제가 생기는 <code>*.hpp</code>에서 정의된 일반 함수가 <code>inline</code>으로 선언되어 있지 않아 둘 이상의 다른 파일에서 동시에 헤더 선언 시 중복 정의(처음엔 이슈를 명확히 정의하지 못해 중복 &lsquo;선언&rsquo; 문제인 줄 알았다)가 일어나는 것이었다.</p>
+<!-- raw HTML omitted -->
+<p>헤더에 클래스가 정의되어 있고 클래스 내부에 멤버 함수까지 정의한 경우 자동으로 <code>inline</code>선언이 된다는 것은 알고 있었는데, 그 역으로 <strong>헤더에 함수가 정의되는 경우 해당 함수를 반드시 <code>inline</code>으로 명시하거나 <code>templatize</code>해야 한다</strong>는 것을 이번에야 알았다.</p>
+<h2 class="heading" id="3-feature">
+  3. FEATURE
+  <a class="anchor" href="#3-feature">#</a>
+</h2>
+<h4 class="heading" id="31-vertex-buffer만을-이용해-드로우하는-구조에서-index-buffer를-이용한-드로우-방식을-구현">
+  3.1 Vertex Buffer만을 이용해 드로우하는 구조에서 Index Buffer를 이용한 드로우 방식을 구현
+  <a class="anchor" href="#31-vertex-buffer%eb%a7%8c%ec%9d%84-%ec%9d%b4%ec%9a%a9%ed%95%b4-%eb%93%9c%eb%a1%9c%ec%9a%b0%ed%95%98%eb%8a%94-%ea%b5%ac%ec%a1%b0%ec%97%90%ec%84%9c-index-buffer%eb%a5%bc-%ec%9d%b4%ec%9a%a9%ed%95%9c-%eb%93%9c%eb%a1%9c%ec%9a%b0-%eb%b0%a9%ec%8b%9d%ec%9d%84-%ea%b5%ac%ed%98%84">#</a>
+</h4>
+<p>지금까지는 일단 화면에 무언가를 띄우고, 카메라가 제대로 작동하는 데에 주력하느라 간단한 2차원 Plane이나 3차원 Cube를 띄울 수만 있으면 되었기 때문에 별도로 Index Buffer를 구현하지 않았다.</p>
+<!-- raw HTML omitted -->
+<p>그러나 본 프로젝트에선 3D 모델을 위해 <a href="https://en.wikipedia.org/wiki/Wavefront_.obj_file"><code>*.obj</code></a>포맷 파일을 이용할 것이므로 Index Buffer(폴리곤 정보)를 이용한 드로우가 가능해야 했다.</p>
+<p>다행히 이를 구현하는 것은 너무 쉬웠다. 마지막 드로우 시에 Vertex Buffer의 정점을 순서대로 3개씩 처리하지 않고 Index Buffer의 정보를 3개씩 꺼내 해당 인덱스의 정점을 이용해 그리면 되었기 때문이다.</p>
+<h4 class="heading" id="32-input-데이터를-처리하는-별도의-객체를-설계-및-구현">
+  3.2. Input 데이터를 처리하는 별도의 객체를 설계 및 구현
+  <a class="anchor" href="#32-input-%eb%8d%b0%ec%9d%b4%ed%84%b0%eb%a5%bc-%ec%b2%98%eb%a6%ac%ed%95%98%eb%8a%94-%eb%b3%84%eb%8f%84%ec%9d%98-%ea%b0%9d%ec%b2%b4%eb%a5%bc-%ec%84%a4%ea%b3%84-%eb%b0%8f-%ea%b5%ac%ed%98%84">#</a>
+</h4>
+<p>맨 처음엔 InputManager 정적 클래스를 구현해 처리하려 했지만, 해당 클래스가 모든 데이터와 함수를 static으로 관리하는 것이 캡슐화를 깨뜨리는 것으로 판단되어 Singleton 패턴을 이용한 일반 클래스로 설계하였다.</p>
+<p>InputManager를 구현하면서, 이와 같이 점점 많은 클래스들이 스크린 정보(스크린의 시작 좌표, 크기 등)를 필요로 하게 되어서 스크린과 관련된 정보를 관리하는 객체를 설계해야 할 것 같다고 느꼈다.</p>
+<h2 class="heading" id="4-결론">
+  4. 결론
+  <a class="anchor" href="#4-%ea%b2%b0%eb%a1%a0">#</a>
+</h2>
+<p>뭔가 조금씩 진행이 되는 것 같으면서도 갈 길이 멀다. 내일부턴 Buffer들을 독립 구조로 재설계한 후 텍스처링, 주사변환 등을 구현해 볼 생각이다.</p>
+
+    </div>
+  </article>
+
+  
+
+  
+
+  
+  
+
+<div class="single-pagination">
+    <hr />
+
+    <div class="flexnowrap">
+
+        <div class="single-pagination-prev">
+            
+            <div class="single-pagination-container-prev">
+                <div class="single-pagination-text">←</div>
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2022-03-21-devlog/">
+                        개발 일지 - 3월 3주차
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="single-pagination-next">
+            
+            <div class="single-pagination-container-next">
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2022-04-17-how-to-implement-friend-template-function/">
+                        Template class에 friend 함수를 구현하는 방법
+                    </a>
+                </div>
+                <div class="single-pagination-text">→</div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <hr />
+</div>
+
+
+
+  
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+    
+    
+
+
+
+
+
+    
+
+
+
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>

@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313/apple-touch-icon.png">
+
+<link rel="alternate" type="application/rss+xml" href="http://localhost:1313/tags/computer-architecture/index.xml" title="Hamsik2rang's blog">
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    Computer Architecture | Hamsik2rang&#39;s blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/tags/computer-architecture/"/>
+
+<meta property="og:url" content="http://localhost:1313/tags/computer-architecture/">
+  <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
+  <meta property="og:title" content="Computer Architecture">
+  <meta property="og:description" content="A Tech Blog">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="website">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">Hamsik2rang&#39;s blog</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+<div class="list-container">
+
+    <div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/tags/">Tags</a><span class="breadcrumbs-separator">/</span>
+        <a href="/tags/computer-architecture/">Computer Architecture</a></div>
+
+    <h1>Computer Architecture</h1>
+    
+
+    
+
+    
+    
+    
+    
+
+    
+
+    
+
+    
+    <div class="post-line">
+
+    
+    
+    
+    
+
+    <p class="line-date">1 Jan 0001 </p>
+
+    <div>
+        <p class="line-title">
+            <a href="/_posts_backup/2023-11-13-a-trip-through-the-graphics-pipeline-2011-part1/">
+                A trip through the Graphics Pipeline 2011 - part 1
+            </a>
+        </p>
+
+        
+        <p class="line-summary"> <p><a href="https://fgiesen.wordpress.com/2011/07/01/a-trip-through-the-graphics-pipeline-2011-part-1/">해당 포스트</a>를 번역한 글입니다.</p>
+<hr>
+<p>이 포스트는 <a href="https://hamsik2rang.github.io/2023/05/21/A-Trip-Through-The-Graphics-Pipeline-2011-00.html">&ldquo;A trip through the Graphics Pipeline 2011&rdquo;</a> 시리즈의 일부를 번역한 글입니다.</p>
+<p>제가 무언가를 이 곳에 포스팅한 지 꽤 되었고, 저는 이 블로그를 그래픽스 하드웨어와 소프트웨어의 몇 가지 일반적인 점들을 설명하기 위해 사용할 수 있을 것 같다고 생각했습니다. 당신은 당신의 PC의 그래픽스 스택이 무엇을 하는지 기능적인 설명을 찾을 수 있지만, &ldquo;왜&rdquo; 또는 &ldquo;어떻게&rdquo; 그것을 하는지는 쉽게 찾을 수 없습니다. 저는 너무 특정 하드웨어에 너무 구체적이지 않게 이러한 비어있는 칸을 채우려 노력할 것입니다. 저는 대부분 Windows 운영체제에서 D3D9/10/11을 실행할 수 있는 DX11 수준의 하드웨어에 대해 대부분을 이야기할 것인데, 이는 제가 가장 친숙한 장치 스택이기 때문입니다. API 세부 사항 등은 이러한 첫 번째 부분(하드웨어적인 요소들)을 넘어서 더 중요하진 않을 것입니다. 한번 우리가 실제 GPU 위에 있게 되면 이것들은 모두 네이티브한 명령들이기 때문입니다.</p> </p>
+        
+    </div>
+</div>
+    
+
+    
+
+    
+    <div class="post-line">
+
+    
+    
+    
+    
+
+    <p class="line-date">1 Jan 0001 </p>
+
+    <div>
+        <p class="line-title">
+            <a href="/_posts_backup/2022-10-30-process-when-we-start-hello-world-c-program/">
+                C로 짜여진 Hello World! 프로그램이 실행되는 과정
+            </a>
+        </p>
+
+        
+        <p class="line-summary"> <h2 class="heading" id="0-서론">
+  0. 서론
+  <a class="anchor" href="#0-%ec%84%9c%eb%a1%a0">#</a>
+</h2>
+<p>프로그래머는 코드를 작성해 컴퓨터에게 명령을 내리는 사람들이다. 여기서 중요한 건, 대부분의 프로그래머는 단지 코드를 작성해 컴퓨터에게 건넬 뿐 작성한 코드가 처리되는 과정에는 크게 관여하지 않는다는 점이다(물론 그 과정 역시 프로그래머들의 작품이다). 그렇다면 전달한 코드가 실행되기 위해 처리되는 대부분의 작업은 컴퓨터가 묵시적으로 수행해 준다는 것을 의미하는데, 과연 이 과정이 어떻게 진행되는지를 살펴보고자 한다.</p>
+<h2 class="heading" id="1-살펴볼-프로그램">
+  1. 살펴볼 프로그램
+  <a class="anchor" href="#1-%ec%82%b4%ed%8e%b4%eb%b3%bc-%ed%94%84%eb%a1%9c%ea%b7%b8%eb%9e%a8">#</a>
+</h2>
+<p>우리가 살펴볼 프로그램은 C언어로 작성된 매우 유명한 예제이며, 다음과 같다.</p> </p>
+        
+    </div>
+</div>
+    
+
+    
+
+    
+    <div class="post-line">
+
+    
+    
+    
+    
+
+    <p class="line-date">1 Jan 0001 </p>
+
+    <div>
+        <p class="line-title">
+            <a href="/_posts_backup/2022-10-06-what-is-simd/">
+                SIMD에 대해 알아보자
+            </a>
+        </p>
+
+        
+        <p class="line-summary"> <h2 class="heading" id="1-simd란">
+  1. SIMD란?
+  <a class="anchor" href="#1-simd%eb%9e%80">#</a>
+</h2>
+<p>SIMD는 Single Instruction Multiple Data의 약자로, <strong>하나의 명령어로 여러 데이터를 처리하는 것</strong>을 의미한다. 이는 플린의 분류(Flynn&rsquo;s taxonomy)상 병렬 프로세싱(단일 명령어-복수 자료)의 범주에 속한다.</p>
+<p>SIMD연산은 특수한 명령어 집합을 통해 수행되는데, MMX(MultiMedia eXtension), SSE(Streaming SIMD Extension), AVX(Advanced Vector eXtension), AVX512등이 그것이다. 이 글에서는 SSE 명령어 집합을 기준으로 SIMD를 살펴볼 것이다.</p>
+<h2 class="heading" id="2-sse">
+  2. SSE
+  <a class="anchor" href="#2-sse">#</a>
+</h2>
+<p>SSE는 Streaming SIMD Extension의 약자이며, SIMD연산 명령어 세트 중 하나이다. SSE는 아래와 같은 데이터들의 동시 연산을 수행할 수 있도록 한다.</p> </p>
+        
+    </div>
+</div>
+    
+
+    
+
+    
+
+</div>
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+    
+    
+
+
+
+
+
+    
+
+
+
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>

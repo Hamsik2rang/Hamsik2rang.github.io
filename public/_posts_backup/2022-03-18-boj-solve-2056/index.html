@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313/apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    BOJ - 작업 (2056) | Hamsik2rang&#39;s blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/_posts_backup/2022-03-18-boj-solve-2056/"/>
+
+<meta property="og:url" content="http://localhost:1313/_posts_backup/2022-03-18-boj-solve-2056/">
+  <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
+  <meta property="og:title" content="BOJ - 작업 (2056)">
+  <meta property="og:description" content="0. 문제#문제 링크
+1. 풀이#이전에 살펴본 문제 - ACM Craft와 같은 위상 정렬 문제이다.
+수행해야 할 작업 $N(1 \leq N \leq 10000)$개가 주어지고, 각각의 작업마다 걸리는 시간이 정수로 주어질 때, 모든 작업을 완료하는 시간을 구하는 문제인데 어떠한 작업들은 앞서 끝내야만 시작할 수 있는 작업이 존재하고, 친절하게도 선행 작업들은 해당 작업보다 작업 번호가 낮다.
+즉, $X$번째 작업의 선행 작업의 번호는 $[1 , X-1]$의 범위 안에만 존재한다는 뜻이다.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="_posts_backup">
+    <meta property="article:tag" content="Algorithm">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">Hamsik2rang&#39;s blog</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+<div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/_posts_backup/">_Posts_backups</a><span class="breadcrumbs-separator">/</span>
+        <a href="/_posts_backup/2022-03-18-boj-solve-2056/">BOJ - 작업 (2056)</a></div>
+
+
+<div >
+  <article>
+    <header class="single-intro-container">
+        
+        <h1 class="single-title">BOJ - 작업 (2056)</h1>
+        
+        <div class="single-subsummary">
+          
+          <div>
+            
+            <p class="author">Im Yongsik </p>
+            
+            <p class="single-date">
+            </p>
+          </div>
+        </div>
+        
+    </header>
+    
+    <div class="single-content">
+      <h2 class="heading" id="0-문제">
+  0. 문제
+  <a class="anchor" href="#0-%eb%ac%b8%ec%a0%9c">#</a>
+</h2>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-18/BOJ-Solve-2056/img01.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<p><a href="https://www.acmicpc.net/problem/2056"><strong>문제 링크</strong></a></p>
+<h2 class="heading" id="1-풀이">
+  1. 풀이
+  <a class="anchor" href="#1-%ed%92%80%ec%9d%b4">#</a>
+</h2>
+<p>이전에 살펴본 문제 - <a href="https://hamsik2rang.github.io/2022/03/18/BOJ-Solve-1005.html">ACM Craft</a>와 같은 위상 정렬 문제이다.</p>
+<p>수행해야 할 작업 $N(1 \leq N \leq 10000)$개가 주어지고, 각각의 작업마다 걸리는 시간이 정수로 주어질 때, 모든 작업을 완료하는 시간을 구하는 문제인데 <strong>어떠한 작업들은 앞서 끝내야만 시작할 수 있는 작업이 존재</strong>하고, 친절하게도 <strong>선행 작업들은 해당 작업보다 작업 번호가 낮다.</strong></p>
+<!-- raw HTML omitted -->
+<p>즉, $X$번째 작업의 선행 작업의 번호는 $[1 , X-1]$의 범위 안에만 존재한다는 뜻이다.</p>
+<!-- raw HTML omitted -->
+<p>또한, 별도의 선행 작업 없이 바로 시작할 수 있는 작업들도 존재하며, 특히 <strong>1번 작업</strong>은 항상 그러하다.</p>
+<!-- raw HTML omitted -->
+<p>따라서 <strong>(1)각 작업들의 선행/후행 구조를 방향그래프로 표현</strong>한 후 <strong>(2)선행 정점이 없는 정점들을 기준으로 탐색을 수행하며 작업 종료 시간을 갱신</strong>해 주고 <strong>(3)모든 작업들의 종료 시간을 파악해 가장 늦게 끝나는 작업의 종료 시간을 출력</strong>하면 그 시간이 모든 작업이 끝나는 시간(정답)이 된다.</p>
+<h2 class="heading" id="2-코드">
+  2. 코드
+  <a class="anchor" href="#2-%ec%bd%94%eb%93%9c">#</a>
+</h2>
+<p>{%highlight cpp%}</p>
+<p>#define _CRT_SECURE_NO_WARNINGS
+#include <!-- raw HTML omitted -->
+#include <!-- raw HTML omitted -->
+#include <!-- raw HTML omitted -->
+#include <!-- raw HTML omitted --></p>
+<p>using namespace std;</p>
+<p>constexpr int MAXN = 10001;</p>
+<p>vector<!-- raw HTML omitted --> v[MAXN];
+int cost[MAXN];
+int d[MAXN];
+int pre[MAXN];</p>
+<p>int main()
+{
+ios::sync_with_stdio(false);
+cin.tie(nullptr);
+//freopen(&ldquo;input.txt&rdquo;, &ldquo;r&rdquo;, stdin);</p>
+<pre><code>queue&lt;int&gt; q;
+int n;
+cin &gt;&gt; n;
+for (int i = 1; i &lt;= n; i++)
+{
+	int preCnt;
+	cin &gt;&gt; cost[i] &gt;&gt; pre[i];
+	if (pre[i])
+	{
+		for (int j = 0; j &lt; pre[i]; j++)
+		{
+			int p;
+			cin &gt;&gt; p;
+			v[p].push_back(i);
+		}
+	}
+	else
+	{
+		q.push(i);
+		d[i] = cost[i];
+	}
+}
+
+while (!q.empty())
+{
+	int cur = q.front();
+	q.pop();
+	for (int i = 0; i &lt; v[cur].size(); i++)
+	{
+		int next = v[cur][i];
+		if (d[next] &lt; cost[next] + d[cur])
+		{
+			d[next] = cost[next] + d[cur];
+			q.push(next);
+		}
+	}
+}
+cout &lt;&lt; *max_element(d + 1, d + n + 1);
+
+return 0;
+</code></pre>
+<p>}</p>
+<p>{%endhighlight%}</p>
+<h2 class="heading" id="3-결과">
+  3. 결과
+  <a class="anchor" href="#3-%ea%b2%b0%ea%b3%bc">#</a>
+</h2>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-18/BOJ-Solve-2056/img02.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+
+    </div>
+  </article>
+
+  
+
+  
+
+  
+  
+
+<div class="single-pagination">
+    <hr />
+
+    <div class="flexnowrap">
+
+        <div class="single-pagination-prev">
+            
+            <div class="single-pagination-container-prev">
+                <div class="single-pagination-text">←</div>
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2022-03-18-boj-solve-20119/">
+                        BOJ - 클레어와 물약 (20119)
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="single-pagination-next">
+            
+            <div class="single-pagination-container-next">
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2022-10-29-boj-solve-2468/">
+                        BOJ - 안전 영역(2468)
+                    </a>
+                </div>
+                <div class="single-pagination-text">→</div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <hr />
+</div>
+
+
+
+  
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+    
+    
+
+
+
+
+
+    
+
+
+
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>

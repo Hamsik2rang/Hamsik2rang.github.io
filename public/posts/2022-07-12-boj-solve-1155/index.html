@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313/apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    BOJ - 변형 하노이(1155) | Hamsik2rang&#39;s blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/posts/2022-07-12-boj-solve-1155/"/>
+
+<meta property="og:url" content="http://localhost:1313/posts/2022-07-12-boj-solve-1155/">
+  <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
+  <meta property="og:title" content="BOJ - 변형 하노이(1155)">
+  <meta property="og:description" content="0. 문제#문제 링크
+1. 풀이#문제에서 일반적인 하노이 탑에 대한 설명이 주어지지 않았는데, 하노이 탑이 무엇인지는 생략하더라도 그 풀이법은 간단히 소개해야 할 것 같다.
+일반 하노이는 다음과 같은 연역적 방법으로 해결할 수 있음은 다들 잘 알 것이다.
+A폴에 위치한 n개의 원판을 B또는 C폴로 옮긴다고 하면
+n-1개의 원판을 B 또는 C 폴로 옮긴다 n번째 원판을 나머지 폴로 옮긴다 n-1개의 원판을 n번째 원판이 위치한 폴로 옮긴다. 변형 하노이는 일반 하노이와 달리 몇 가지 제약이 존재한다.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:tag" content="Algorithm">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">Hamsik2rang&#39;s blog</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+<div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/posts/">Posts</a><span class="breadcrumbs-separator">/</span>
+        <a href="/posts/2022-07-12-boj-solve-1155/">BOJ - 변형 하노이(1155)</a></div>
+
+
+<div >
+  <article>
+    <header class="single-intro-container">
+        
+        <h1 class="single-title">BOJ - 변형 하노이(1155)</h1>
+        
+        <div class="single-subsummary">
+          
+          <div>
+            
+            <p class="author">Im Yongsik </p>
+            
+            <p class="single-date">
+            </p>
+          </div>
+        </div>
+        
+    </header>
+    
+    <div class="single-content">
+      <h2 class="heading" id="0-문제">
+  0. 문제
+  <a class="anchor" href="#0-%eb%ac%b8%ec%a0%9c">#</a>
+</h2>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-07-12/BOJ-Solve-1155/img01.JPG" >
+    </div>
+
+    
+</figure>
+</p>
+<p><a href="https://www.acmicpc.net/problem/1155"><strong>문제 링크</strong></a></p>
+<h2 class="heading" id="1-풀이">
+  1. 풀이
+  <a class="anchor" href="#1-%ed%92%80%ec%9d%b4">#</a>
+</h2>
+<p>문제에서 일반적인 하노이 탑에 대한 설명이 주어지지 않았는데, 하노이 탑이 무엇인지는 생략하더라도 그 풀이법은 간단히 소개해야 할 것 같다.</p>
+<p>일반 하노이는 다음과 같은 연역적 방법으로 해결할 수 있음은 다들 잘 알 것이다.</p>
+<!-- raw HTML omitted -->
+<blockquote>
+<p>A폴에 위치한 n개의 원판을 B또는 C폴로 옮긴다고 하면</p>
+<ol>
+<li>n-1개의 원판을 B 또는 C 폴로 옮긴다</li>
+<li>n번째 원판을 나머지 폴로 옮긴다</li>
+<li>n-1개의 원판을 n번째 원판이 위치한 폴로 옮긴다.</li>
+</ol></blockquote>
+<!-- raw HTML omitted -->
+<p>변형 하노이는 일반 하노이와 달리 <strong>몇 가지 제약</strong>이 존재한다.</p>
+<ul>
+<li>직전에 건드린 원판을 <strong>연속으로 건드릴 수 없다</strong>.</li>
+<li><strong>원판을 옮길 수 있는 위치에 대해 우선순위가 존재</strong>하며, 해당 우선순위를 만족할 수 없는 상황이 아니라면 반드시 그 우선순위 대로 이동시켜야 한다.</li>
+</ul>
+<!-- raw HTML omitted -->
+<p>따라서 변형 하노이는 해결 전략이 살짝 바뀐다.</p>
+<p>동일하게, A폴에 위치한 n개의 원판을 B 또는 C폴로 옮긴다고 하면</p>
+<ol>
+<li>
+<p>n-1개의 원판을 <strong>우선순위대로</strong> 옮긴다.</p>
+</li>
+<li>
+<p>n번째 원판을 <strong>우선순위대로</strong> 옮긴다.</p>
+<p>이 때 n-1개의 원판이 우선순위대로 옮겼다면 n번째 원판은 반드시 n-1개의 원판들이 위치한 폴이 아닌 다른 곳으로 옮겨진다.</p>
+</li>
+<li>
+<p>n-1개의 원판을 <strong>우선순위대로</strong> <strong>옮겨본</strong>다.</p>
+<p>이 때 n-1개의 원판이 우선순위상 n번째 원판 위로 바로 옮겨질 수 있는지, 그렇지 않은지에 따라 방법이 나뉜다.</p>
+</li>
+<li>
+<p>n-1개의 원판이 <strong>우선순위상 바로 n번째 원판 위로 옮겨진다면</strong></p>
+<p>n-1개의 원판을 n번째 원판 위로 옮긴다.</p>
+</li>
+<li>
+<p>n-1개의 원판이 <strong>우선순위상 바로 n번째 원판 위로 옮겨지지 않는다면</strong></p>
+<ol>
+<li>
+<p>n-1개의 원판을 <strong>우선순위대로(n번째 원판이 위치하지 않은 나머지 폴로)</strong> 옮긴다.</p>
+</li>
+<li>
+<p>n-1개의 원판을 곧바로 다시 옮길 수 없으므로 n번재 원판을 옮긴다.</p>
+<p>이 때에도 마찬가지로 n번째 원판은 n-1개 원판들이 위치하지 않은 나머지 폴로 이동하게 된다.</p>
+</li>
+<li>
+<p>n-1개의 원판을 n번째 원판 위로 옮긴다.</p>
+</li>
+</ol>
+</li>
+</ol>
+<!-- raw HTML omitted -->
+<p>여기서 5.3 번째 항목을 보면 n-1개의 원판을 별도의 우선순위를 논하지 않고 n번째 원판 위로 바로 옮길 수 있다고 가정하였는데, 이는 각 원판의 개수와 우선순위 간의 상관관계를 파악했다면 당연한 가정이다.</p>
+<p>원판 개수와 우선순위간의 상관관계를 파악하기 위해 간단한 상황을 가정해 문제를 직접 풀어보자.</p>
+<p>문제에 원판이 각각 1개, 2개, 3개 주어졌다고 가정하고, 우선순위는 다음과 같이 주어졌다고 하자.</p>
+<blockquote>
+<p>AB BC CA BA CB AC</p></blockquote>
+<ul>
+<li>
+<p>원판이 1개 주어진 경우</p>
+<p>A에 있던 <strong>1개의 원판은 반드시 B로 이동</strong>한다.</p>
+<p>이제 전체 원판이 B 또는 C로 옮겨진 상황이므로 문제가 해결되었다.</p>
+</li>
+<li>
+<p>원판이 2개 주어진 경우</p>
+<p>1번째 원판은 1개 주어졌을 때처럼 반드시 B로 이동한다.</p>
+<p>그러나 이로 인해 <strong>2번째 원판이 B로 이동할 수 없게 되고, 어쩔 수 없이 C로 이동</strong>하게 된다.</p>
+<p>그 다음 B에 있는 1번 원판을 바로 C로 옮길 수 있으므로 C로 옮기면 문제가 해결된다.</p>
+</li>
+<li>
+<p>원판이 3개 주어진 경우</p>
+<p>2개 주어진 경우에서 알 수 있듯이 3번째 원판 위의 두 원판은 C로 모일 수 있다.</p>
+<p>이번에는 <strong>3번째 원판이 B로 이동</strong>할 수 있다.</p>
+<p>이후 C에 있는 2개의 원판을 B로 옮겨 문제를 해결한다.</p>
+</li>
+</ul>
+<p>예시 풀이를 통해 알 수 있듯이, X폴에 위치한 N번 원판이 우선순위상 Y폴로 이동할 수 있다면 N-1번 원판은 우선순위상 Z폴로 이동한다. 그리고 N-2번 원판은 Y폴로 이동하고 N-3번 원판은 Z폴로 이동하고&hellip;.</p>
+<p>이러한 규칙 덕분에 5.3.번 절차에서 반드시 n-1개의 원판이 n번 원판 위로 이동할 수 있는 것이다.</p>
+<!-- raw HTML omitted -->
+<p>따라서 이 문제는 k번 원판을 이동하기 위해 k-1번 원판들이 이동한 위치들을 기록해야 하고, 그 외에도 k개 원판을 전부 옮기는 횟수는 k-1개 원판을 전부 옮기는 횟수에 기초하므로 DP를 이용할 수 있다.</p>
+<p>정리하면, 우리는 다음 정보들을 기록해야 한다.</p>
+<ul>
+<li>k개 원판이 A, B, C폴에 각각 위치했을 때 우선순위대로 움직이기 위한 이동 횟수 : $answer[count][3]$</li>
+<li>k개 원판이 A, B, C폴에 각각 위치했을 때 옮겨질 수 있는 폴의 위치 : $poll[count][3]$</li>
+</ul>
+<p>이 경우, A, B, C는 각각 0, 1, 2 인덱스에 대응된다.</p>
+<p>맨 처음 소개한 문제풀이 절차를 의사코드로 작성하면 다음과 같다.</p>
+<p>{%highlight cpp%}</p>
+<p>function solution</p>
+<p>////////////Variables/////////////////////////////////////
+count //문제에 주어진 원판 개수
+c //현재 원판 개수
+i //현재 폴의 위치, 0 = A, 1 = B, 2 = C
+answer[count][3] // count개 원판이 A/B/C에 있을 때 우선순위에 맞게 다른 어딘가로 이동하기 위한 이동 횟수
+poll[count][3] // count개 원판이 A/B/C에 있을 때 우선순위상 이동할 위치
+//////////////////////////////////////////////////////////</p>
+<p>// 1. m번째 원판을 이동하려면 그 위에 있던 m-1개 원판이 전부 이동한 상태여야 하므로 그 만큼의 이동 횟수를 기본적으로 가져감
+answer[c][i] = answer[c-1][i]
+// 이전에 m-1개의 원판이 이동한 폴 파악
+j = poll[c-1][i]
+// m번째 원판이 이동할 수 있는 폴. 자기 자신이 위치한 폴(i)과 m-1개 원판들이 위치한 폴(j)가 아닌 나머지 폴을 가리킴
+k = 3 - i - j</p>
+<p>// 2. m번째 원판을 k로 옮기며 이동 횟수 1 추가
+answer[c][i] += 1
+// 3. 이제 m-1개 원판들을 이동시킴
+// 4.m-1개 원판들이 우선순위상 m번 원판 위(k)로 바로 올 수 있다면
+if poll[c-1][j] == k then:
+// 4.1. 바로 k번 원판 위로 k-1개 원판들을 옮김
+answer[c][i] += answer[c-1][j]
+// 5. m-1개 원판들이 m번 원판 위로 바로 올 수 없다면
+else then:
+// 5.1. 일단 m-1개 원판들을 다른 곳(i)으로 옮김
+answer[c][i] += answer[c-1][j]
+// 5.2. 이후 m-1개 원판을 바로 건드릴 수 없으므로 m번째 원판을 한 번 이동함 - m번째 원판은 j로 이동함
+answer[c][i] += 1
+// 5.3. m-1개 원판을 m번째 원판 위(j)로 옮김
+answer[c][i] += answer[c-1][i]</p>
+<p>{%endhighlight%}</p>
+<h2 class="heading" id="2-코드">
+  2. 코드
+  <a class="anchor" href="#2-%ec%bd%94%eb%93%9c">#</a>
+</h2>
+<p>{%highlight cpp%}</p>
+<p>#define _CRT_SECURE_NO_WARNINGS
+#include <!-- raw HTML omitted -->
+#include <!-- raw HTML omitted -->
+#include <!-- raw HTML omitted --></p>
+<p>#define MAXN 31</p>
+<p>using namespace std;</p>
+<p>uint64_t answer[MAXN][3];
+int poll[MAXN][3];
+vector<!-- raw HTML omitted --> order[3];</p>
+<p>int main()
+{
+ios::sync_with_stdio(false);
+cin.tie(nullptr);</p>
+<pre><code>int n;
+cin &gt;&gt; n;
+for (int i = 0; i &lt; 6; i++)
+{
+	string s;
+	cin &gt;&gt; s;
+	order[s[0] - 'A'].push_back(s[1] - 'A');
+}
+
+for (int i = 0; i &lt; 3; i++)
+{
+	answer[1][i] = 1;
+	poll[1][i] = order[i][0];
+}
+
+for (int index = 2; index &lt;= n; index++)
+{
+	for (int i = 0; i &lt; 3; i++)
+	{
+		answer[index][i] = answer[index - 1][i];
+		int j = poll[index - 1][i];
+		int k = 3 - i - j;
+
+		answer[index][i]++;
+
+		if (poll[index - 1][j] == k)
+		{
+			answer[index][i] += answer[index - 1][j];
+			poll[index][i] = k;
+			continue;
+		}
+
+		answer[index][i] += answer[index - 1][j];
+		answer[index][i]++;
+		answer[index][i] += answer[index - 1][i];
+		poll[index][i] = poll[index - 1][i];
+	}
+}
+
+cout &lt;&lt; answer[n][0];
+
+return 0;
+</code></pre>
+<p>}</p>
+<p>{%endhighlight%}</p>
+<h2 class="heading" id="3-결과">
+  3. 결과
+  <a class="anchor" href="#3-%ea%b2%b0%ea%b3%bc">#</a>
+</h2>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-07-12/BOJ-Solve-1155/img02.JPG" >
+    </div>
+
+    
+</figure>
+</p>
+
+    </div>
+  </article>
+
+  
+
+  
+
+  
+  
+
+<div class="single-pagination">
+    <hr />
+
+    <div class="flexnowrap">
+
+        <div class="single-pagination-prev">
+            
+            <div class="single-pagination-container-prev">
+                <div class="single-pagination-text">←</div>
+                <div class="single-pagination-text">
+                    <a href="/posts/2022-10-29-boj-solve-2468/">
+                        BOJ - 안전 영역(2468)
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="single-pagination-next">
+            
+            <div class="single-pagination-container-next">
+                <div class="single-pagination-text">
+                    <a href="/posts/2022-03-13-boj-solve-11000/">
+                        BOJ - 강의실 배정(11000)
+                    </a>
+                </div>
+                <div class="single-pagination-text">→</div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <hr />
+</div>
+
+
+
+  
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+    
+    
+
+
+
+
+
+    
+
+
+
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>

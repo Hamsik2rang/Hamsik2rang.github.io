@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313/apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    HTTP와 네트워크의 기본 - 4 | Hamsik2rang&#39;s blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/_posts_backup/2022-09-13-http-network-basic-04/"/>
+
+<meta property="og:url" content="http://localhost:1313/_posts_backup/2022-09-13-http-network-basic-04/">
+  <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
+  <meta property="og:title" content="HTTP와 네트워크의 기본 - 4">
+  <meta property="og:description" content="0. 서론#이번 포스트에서는 HTTP Response Message에 포함되는 상태 코드(Status Code)들을 살펴보자.
+1. TL;DR#HTTP 통신에서 서버는 응답 메시지에 요청에 대한 처리 결과를 알려주는 상태 코드를 포함시킨다. 상태 코드는 1XX ~ 5XX의 범위로 표현되며, 세 번째 자릿수의 숫자에 따라 다음과 같은 의미를 포함한다. 1XX : Informational - 요청을 받아 처리중 2XX : Success - 요청을 정상적으로 처리하였음 3XX : Redirection - 요청을 정상적으로 처리하기 위해 추가 동작이 필요함 4XX : Client Error - 서버가 이해할 수 없는 요청이므로 클라이언트에 에러가 발생한 것 같음 5XX : Server Error - 요청을 이해했으나 서버가 처리할 수 없으므로, 서버에 에러가 발생한 것 같음 2. 상태 코드(Status Code)#HTTP 프로토콜을 이용해 클라이언트가 서버에 동작을 요청하는 경우, 서버는 그 동작을 수행한 후 동작에 맞는 적절한 응답을 클라이언트에 회신한다. 그러나 모종의 이유로 인해 서버가 동작을 수행할 수 없는 경우가 존재할 수도 있다. 또는, 클라이언트가 회신을 필요로 하지 않는 동작을 요청한 경우도 존재할 수 있다. 대표적인 예가 파일 업로드이다.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="_posts_backup">
+    <meta property="article:tag" content="Network">
+    <meta property="article:tag" content="Web">
+    <meta property="article:tag" content="Server">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">Hamsik2rang&#39;s blog</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+<div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/_posts_backup/">_Posts_backups</a><span class="breadcrumbs-separator">/</span>
+        <a href="/_posts_backup/2022-09-13-http-network-basic-04/">HTTP와 네트워크의 기본 - 4</a></div>
+
+
+<div >
+  <article>
+    <header class="single-intro-container">
+        
+        <h1 class="single-title">HTTP와 네트워크의 기본 - 4</h1>
+        
+        <div class="single-subsummary">
+          
+          <div>
+            
+            <p class="author">Im Yongsik </p>
+            
+            <p class="single-date">
+            </p>
+          </div>
+        </div>
+        
+    </header>
+    
+    <div class="single-content">
+      <h2 class="heading" id="0-서론">
+  0. 서론
+  <a class="anchor" href="#0-%ec%84%9c%eb%a1%a0">#</a>
+</h2>
+<p>이번 포스트에서는 HTTP Response Message에 포함되는 상태 코드(Status Code)들을 살펴보자.</p>
+<h2 class="heading" id="1-tldr">
+  1. TL;DR
+  <a class="anchor" href="#1-tldr">#</a>
+</h2>
+<ul>
+<li>HTTP 통신에서 서버는 응답 메시지에 요청에 대한 처리 결과를 알려주는 상태 코드를 포함시킨다.</li>
+<li>상태 코드는 1XX ~ 5XX의 범위로 표현되며, 세 번째 자릿수의 숫자에 따라 다음과 같은 의미를 포함한다.
+<ul>
+<li>1XX : Informational - 요청을 받아 처리중</li>
+<li>2XX : Success - 요청을 정상적으로 처리하였음</li>
+<li>3XX : Redirection - 요청을 정상적으로 처리하기 위해 추가 동작이 필요함</li>
+<li>4XX : Client Error - 서버가 이해할 수 없는 요청이므로 클라이언트에 에러가 발생한 것 같음</li>
+<li>5XX : Server Error - 요청을 이해했으나 서버가 처리할 수 없으므로, 서버에 에러가 발생한 것 같음</li>
+</ul>
+</li>
+</ul>
+<h2 class="heading" id="2-상태-코드status-code">
+  2. 상태 코드(Status Code)
+  <a class="anchor" href="#2-%ec%83%81%ed%83%9c-%ec%bd%94%eb%93%9cstatus-code">#</a>
+</h2>
+<p>HTTP 프로토콜을 이용해 클라이언트가 서버에 동작을 요청하는 경우, 서버는 그 동작을 수행한 후 동작에 맞는 적절한 응답을 클라이언트에 회신한다. 그러나 모종의 이유로 인해 서버가 동작을 수행할 수 없는 경우가 존재할 수도 있다. 또는, 클라이언트가 회신을 필요로 하지 않는 동작을 요청한 경우도 존재할 수 있다. 대표적인 예가 파일 업로드이다.</p>
+<p>만약 이러한 상황에서 클라이언트가 서버의 요청 처리 결과를 모른다면 그 이후 요청에서 문제가 발생할 확률이 높아진다. 따라서 이러한 문제들을 방지하기 위해 HTTP Protocol에서는 클라이언트의 요청에 대해 어떠한 경우라도 서버가 그 처리 결과를 응답 메시지에 포함시켜 클라이언트에 회신하도록 되어 있다.</p>
+<p>이때 처리 결과를 나타내는 정보를 **상태 코드(Status Code)**라 하는데, 상태 코드는 세 자리의 자연수로 이루어져 있고, 이 중 백의 자릿수에 해당하는 숫자가 응답 클래스(Response Class)를 의미한다.</p>
+<p>응답 클래스는 처리가 어떻게 진행되었는지를 설명하는 용도인데, 1~5의 범위를 가지며 아래와 같이 구분되어 있다.</p>
+
+<div class="table-outer">
+    <table>
+        <thead>
+            <tr>
+                <th>Code</th>
+                <th>Response Class</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1XX</td>
+                <td>Informational</td>
+                <td>요청을 정상적으로 받았으며 현재 처리중입니다.</td>
+            </tr>
+            <tr>
+                <td>2XX</td>
+                <td>Success</td>
+                <td>요청을 정상적으로 처리 완료하였습니다.</td>
+            </tr>
+            <tr>
+                <td>3XX</td>
+                <td>Redirection</td>
+                <td>요청을 정상적으로 처리하기 위해 추가적인 동작이 필요합니다.</td>
+            </tr>
+            <tr>
+                <td>4XX</td>
+                <td>Client Error</td>
+                <td>서버가 이해할 수 없는 요청입니다.</td>
+            </tr>
+            <tr>
+                <td>5XX</td>
+                <td>Server Error</td>
+                <td>요청을 이해하였으나 현재 서버가 이를 처리할 수 없습니다.</td>
+            </tr>
+        </tbody>
+    </table>
+</div><p>보통 응답 클래스를 제외한 나머지 두 자릿수도 RFC에 명시된 코드를 사용하지만, 응답 클래스를 처리 결과에 맞게 잘 지정한다면 나머지 자릿수에 프로그래머가 직접 설정한 코드를 명시할 수도 있다. 만약 이러한 경우라면 클라이언트와 서버가 서로 코드에 따른 대응 동작을 잘 합의해야 할 것이다.</p>
+<h3 class="heading" id="2xx-성공success">
+  2XX 성공(Success)
+  <a class="anchor" href="#2xx-%ec%84%b1%ea%b3%b5success">#</a>
+</h3>
+<p>2XX 응답 클래스는 리퀘스트가 정상적으로 처리되었음을 나타내는데 이 중에도 여러가지 세부 코드가 존재한다.</p>
+<h4 class="heading" id="200-ok">
+  200 OK
+  <a class="anchor" href="#200-ok">#</a>
+</h4>
+<p>200 OK 상태 코드는 리퀘스트가 완벽히 처리되었으며, 그 결과를 함께 반환한다는 뜻이다. 그러나 만약 HEAD Method와 같이 별도의 리소스를 요청하지 않은 경우에는 리스폰스 메시지의 바디가 빈 채로 회신하게 된다.</p>
+<h4 class="heading" id="204-no-contact">
+  204 No Contact
+  <a class="anchor" href="#204-no-contact">#</a>
+</h4>
+<p>204 No Contact 상태 코드는 리퀘스트가 완벽히 처리되었으나 회신할 리소스가 존재하지 않으므로 바디를 비운 채로 반환한다는 의미이다. 따라서 어떠한 엔티티 바디를 되돌려 보내서도 안되며, 클라이언트 사이드에서 브라우저 상태가 변하는 일이 없어야 한다.</p>
+<h4 class="heading" id="206-partial-content">
+  206 Partial Content
+  <a class="anchor" href="#206-partial-content">#</a>
+</h4>
+<p>직전 포스트에서 살펴 본 Range Request 방식의 요청에 대한 처리가 정상적으로 이루어졌을 때 반환하는 상태 코드이다. 이를 풀어서 설명하면 &lsquo;클라이언트가 리소스의 일부분만을 요청했으므로, 그 요청에 따라 리소스의 일부분을 포함시켜 회신하겠다&rsquo; 라는 뜻이다.</p>
+<p>따라서 엔티티 바디에는 클라이언트가 명시한 바이트 범위의 리소스가 포함되게 된다.</p>
+<h3 class="heading" id="3xx-리디렉션redirection">
+  3XX 리디렉션(Redirection)
+  <a class="anchor" href="#3xx-%eb%a6%ac%eb%94%94%eb%a0%89%ec%85%98redirection">#</a>
+</h3>
+<p>3XX 응답 클래스는 리퀘스트가 정상적으로 처리를 종료하기 위해 브라우저 측에서 추가 동작을 해 주어야 함을 의미한다.</p>
+<h4 class="heading" id="301-moved-permanently">
+  301 Moved Permanently
+  <a class="anchor" href="#301-moved-permanently">#</a>
+</h4>
+<p>클라이언트가 지정한 리소스의 URI가 서버상에서 변경되었기 때문에 앞으로 클라이언트도 새로운 URI를 통해 리소스를 참조해야 한다는 것을 나타내는 상태 코드이다. 만약 특정 URI를 북마크하고 있다면 북마크를 다시 하는게 좋다는 것을 의미하기도 한다.</p>
+<p>301이 발생하는 가장 흔한 상황은 디렉터리 지정 시 마지막 부분에 슬래시를 붙이는 것을 잊은 경우 등이 존재한다.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>http<span style="color:#1f2328">:</span><span style="color:#0550ae">//</span>example<span style="color:#0550ae">.</span>com<span style="color:#0550ae">/</span>sample
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#0550ae">&gt;&gt;&gt;</span> <span style="color:#0550ae">301</span> Moved Permanently
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>http<span style="color:#1f2328">:</span><span style="color:#0550ae">//</span>example<span style="color:#0550ae">.</span>com<span style="color:#0550ae">/</span>sample<span style="color:#0550ae">/</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#0550ae">&gt;&gt;&gt;</span> <span style="color:#0550ae">200</span> OK
+</span></span></code></pre></div><h4 class="heading" id="302-found">
+  302 Found
+  <a class="anchor" href="#302-found">#</a>
+</h4>
+<p>클라이언트가 지정한 리소스가 서버에선 새로운 URI로 할당되어 있기 때문에 그 URI를 참조해 달라는 의미의 상태 코드이다.</p>
+<p>301 Moved Permanently와 동일한 의미 아닌가 생각할 수 있지만, 302 Found는 301 Moved Permanently와 달리 일시적으로 URI가 재할당된 경우에 사용된다. 따라서 해당 URI를 북마크하고 있다면 301과 달리 그 북마크를 유지해야 한다.</p>
+<h4 class="heading" id="303-see-other">
+  303 See Other
+  <a class="anchor" href="#303-see-other">#</a>
+</h4>
+<p>클라이언트가 지정한 리소스가 다른 URI에 존재하므로 GET Method를 사용해서 얻어야 함을 나타내는 상태 코드이다.</p>
+<p>302 Found와 완전히 동일한 의미이지만 리다이렉트 장소를 GET Method를 사용해 얻어야 한다고 명시한다는 점에서 조금 더 구체적이다.</p>
+<p>따라서 클라이언트가 POST등의 다른 메소드를 이용해 서버에 요청 메시지를 전달했을 때 303 상태 코드가 회신될 경우 지정해준 새 URI에 <strong>GET</strong> 메소드를 이용해 리디렉션 해야 한다.</p>
+<h4 class="heading" id="304-not-modified">
+  304 Not Modified
+  <a class="anchor" href="#304-not-modified">#</a>
+</h4>
+<p>클라이언트가 조건부 요청을 했을 때 리소스에 대한 접근은 허용하지만 그 조건이 충족되지는 않았음을 의미하는 상태 코드이다.</p>
+<p>따라서 304 Not Modified를 되돌려 줄 때에는 메시지 바디에 어떠한 정보도 포함시켜선 안 된다.</p>
+<h4 class="heading" id="307-temporary-redirected">
+  307 Temporary Redirected
+  <a class="anchor" href="#307-temporary-redirected">#</a>
+</h4>
+<p>302 Found와 같은 의미를 가지지만 302 Found의 경우 GET으로의 메소드 치환을 금지해 놓았지만 실제로는 치환을 하는 경우가 잦은데, 307의 경우 이를 명확히 금지했다는 차이가 있다.</p>
+<p>따라서, 종합해보면 어떤 URI가 일시적으로 변경되었을 때 상태 코드에 따라 다음 의미를 가진다.</p>
+
+<div class="table-outer">
+    <table>
+        <thead>
+            <tr>
+                <th>Status Code</th>
+                <th>Description</th>
+                <th>Difference</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>302 Found</td>
+                <td>URI가 일시적으로 변경되었음.</td>
+                <td>메소드 치환을 권장하지 않으며, 변경된 URI로 접근하길 바람</td>
+            </tr>
+            <tr>
+                <td>303 See Other</td>
+                <td>URI가 일시적으로 변경되었음.</td>
+                <td><strong>반드시</strong> 메소드를 GET으로 치환해 변경된 URI로 접근하길 바람</td>
+            </tr>
+            <tr>
+                <td>307 Temporary Redirected</td>
+                <td>URI가 일시적으로 변경되었음.</td>
+                <td><strong>반드시</strong> 메소드를 치환하지 말고 그대로 변경된 URI로 접근하길 바람</td>
+            </tr>
+        </tbody>
+    </table>
+</div><h3 class="heading" id="4xx-클라이언트-에러client-error">
+  4XX 클라이언트 에러(Client Error)
+  <a class="anchor" href="#4xx-%ed%81%b4%eb%9d%bc%ec%9d%b4%ec%96%b8%ed%8a%b8-%ec%97%90%eb%9f%acclient-error">#</a>
+</h3>
+<h4 class="heading" id="400-bad-request">
+  400 Bad Request
+  <a class="anchor" href="#400-bad-request">#</a>
+</h4>
+<p>클라이언트에서 요청한 메시지의 구문이 올바르지 않음을 의미하는 상태 코드이다. 이 코드를 전달받은 클라이언트는 리퀘스트 내용을 재검토 후 다시 요청해야 한다. 다만 브라우저 상에서는 별도의 동작이 없으면 200 OK와 동일하게 취급한다.</p>
+<h4 class="heading" id="401-unauthorized">
+  401 Unauthorized
+  <a class="anchor" href="#401-unauthorized">#</a>
+</h4>
+<p>클라이언트가 송신한 요청에 해당하는 리소스가 인증 정보가 있어야만 접근할 수 있음을 의미하는 상태 코드이다.</p>
+<p>만약 401 Unauthorized에 해당하는 리퀘스트가 2번 이상 수행된 경우라면 유저 인증에 실패했음을 의미하기도 한다.</p>
+<p>401 Unauthorized 상태 코드를 포함한 리스폰스를 반환하는 경우에는 리퀘스트 된 리소스에 적용되는 챌린지를 포함한 <code>WWW-Authenticate</code> 헤더 필드를 포함해야 한다.</p>
+<h4 class="heading" id="403-forbidden">
+  403 Forbidden
+  <a class="anchor" href="#403-forbidden">#</a>
+</h4>
+<p>요청한 리소스의 액세스가 거부되었음을 나타내는 상태 코드이다.</p>
+<p>이 때 액세스가 거부된 자세한 이유는 엔티티 바디에 기재해 반환한다.</p>
+<h4 class="heading" id="404-not-found">
+  404 Not Found
+  <a class="anchor" href="#404-not-found">#</a>
+</h4>
+<p>요청한 리소스가 서버 상에 존재하지 않음을 나타내는 상태 코드이다. 이외에도 액세스를 거부하지만 그 이유는 알려주고 싶지 않을 때 403 Forbidden 대신 이용하기도 한다.</p>
+<h3 class="heading" id="5xx-서버-에러server-error">
+  5XX 서버 에러(Server Error)
+  <a class="anchor" href="#5xx-%ec%84%9c%eb%b2%84-%ec%97%90%eb%9f%acserver-error">#</a>
+</h3>
+<h4 class="heading" id="500-internal-server-error">
+  500 Internal Server Error
+  <a class="anchor" href="#500-internal-server-error">#</a>
+</h4>
+<p>서버에서 요청에 대한 처리를 진행하는 중 에러가 발생한 경우 사용하는 상태 코드이다. 웹 어플리케이션에 에러가 발생한 경우나 혹은 단순히 일시적인 에러가 발생한 경우일 수도 있다.</p>
+<h4 class="heading" id="503-service-unavailable">
+  503 Service Unavailable
+  <a class="anchor" href="#503-service-unavailable">#</a>
+</h4>
+<p>일시적으로 서버가 과부하 상태이거나 점검 중이어서 리퀘스트를 처리할 수 없는 경우를 나타내는 상태 코드이다. 만약 응답 메시지 작성 시 이 상태가 해소되기 전까지 어느 정도 시간이 걸리는 경우라면 Retry-After 헤더 필드에 따라 클라이언트에 전달하는 것이 바람직하다.</p>
+
+    </div>
+  </article>
+
+  
+
+  
+
+  
+  
+
+<div class="single-pagination">
+    <hr />
+
+    <div class="flexnowrap">
+
+        <div class="single-pagination-prev">
+            
+            <div class="single-pagination-container-prev">
+                <div class="single-pagination-text">←</div>
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2022-09-15-http-network-basic-05/">
+                        HTTP와 네트워크의 기본 - 5
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="single-pagination-next">
+            
+            <div class="single-pagination-container-next">
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2022-09-11-http-network-basic-03/">
+                        HTTP와 네트워크의 기본 - 3
+                    </a>
+                </div>
+                <div class="single-pagination-text">→</div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <hr />
+</div>
+
+
+
+  
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+    
+    
+
+
+
+
+
+    
+
+
+
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>

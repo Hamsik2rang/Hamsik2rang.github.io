@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313/apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    개발 일지 - 3월 4주차 | Hamsik2rang&#39;s blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/_posts_backup/2022-03-26-devlog/"/>
+
+<meta property="og:url" content="http://localhost:1313/_posts_backup/2022-03-26-devlog/">
+  <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
+  <meta property="og:title" content="개발 일지 - 3월 4주차">
+  <meta property="og:description" content="0. 서론#이번 주에는 싱숭생숭한 일이 많아서 프로젝트 개발에 많은 투자를 하지 못했다…
+딱 하나 구현한 게 Bezier Curve다.
+베지어 곡선을 구현한 이유는 이를 이용해 부드럽게 보간을 하거나, 카메라 워킹을 만들어낼 수 있기 때문이다(물론 이 외에도 여러 용도가 있다).
+1. Bezier Curve#베지어 곡선은 셋 이상의 점을 이용해 곡선을 그리는(또는 곡선 형태로 보간하는) 방법이다.
+곡선을 그리는 데 사용되는 점이 n개일 때 이를 n-1차 베지어 곡선이라고 하는데, 차수에 상관 없이 재귀를 이용해 구현되므로 굳이 차수를 나눌 필요가 없이 동일한 구현 방법을 가진다.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="_posts_backup">
+    <meta property="article:tag" content="Devlog">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">Hamsik2rang&#39;s blog</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+<div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/_posts_backup/">_Posts_backups</a><span class="breadcrumbs-separator">/</span>
+        <a href="/_posts_backup/2022-03-26-devlog/">개발 일지 - 3월 4주차</a></div>
+
+
+<div >
+  <article>
+    <header class="single-intro-container">
+        
+        <h1 class="single-title">개발 일지 - 3월 4주차</h1>
+        
+        <div class="single-subsummary">
+          
+          <div>
+            
+            <p class="author">Im Yongsik </p>
+            
+            <p class="single-date">
+            </p>
+          </div>
+        </div>
+        
+    </header>
+    
+    <div class="single-content">
+      <h2 class="heading" id="0-서론">
+  0. 서론
+  <a class="anchor" href="#0-%ec%84%9c%eb%a1%a0">#</a>
+</h2>
+<p>이번 주에는 싱숭생숭한 일이 많아서 프로젝트 개발에 많은 투자를 하지 못했다&hellip;</p>
+<p>딱 하나 구현한 게 <strong>Bezier Curve</strong>다.</p>
+<p>베지어 곡선을 구현한 이유는 이를 이용해 부드럽게 보간을 하거나, 카메라 워킹을 만들어낼 수 있기 때문이다(물론 이 외에도 여러 용도가 있다).</p>
+<h2 class="heading" id="1-bezier-curve">
+  1. Bezier Curve
+  <a class="anchor" href="#1-bezier-curve">#</a>
+</h2>
+<p>베지어 곡선은 셋 이상의 점을 이용해 곡선을 그리는(또는 곡선 형태로 보간하는) 방법이다.</p>
+<p>곡선을 그리는 데 사용되는 <strong>점이 n개일 때</strong> 이를 <strong>n-1차 베지어 곡선</strong>이라고 하는데, 차수에 상관 없이 재귀를 이용해 구현되므로 굳이 차수를 나눌 필요가 없이 동일한 구현 방법을 가진다.</p>
+<p>다만 굳이 고차원 곡선을 그리는 함수를 구현할 필요 없이 3차 베지어 곡선 정도면 충분히 원하는 모든 기능을 구현할 수 있겠다 싶어 3차 베지어 곡선 함수를 구현했다.</p>
+<!-- raw HTML omitted -->
+<p>베지어 곡선은 <strong>드 카스텔조 알고리즘(<em>de Casteljau algorithm</em>)</strong> 을 통해 구현하는데, 드 카스텔조 알고리즘은 베지어 곡선을 구성하는 $n$개의 CP(Control Point)에 대해 동일한 매개변수 $t$에 대한 선형 보간을 수행하고, 그 결과로 나온 $n-1$개의 점을 새로운 CP의 집합으로 여겨 동일하게 $t$에 대한 선형 보간을 재귀적으로 수행하여 매개변수 $t$에 대한 곡선상의 점을 구하는 방법이다.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-26/Devlog/img01.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<p>직선의 매개변수 표현은 위와 같이 가능한데, 이 때 매개변수 $t$를 $[0, 1]$ 범위에서 조정함으로써 선형 보간이 가능하다.</p>
+<p>만약 2차 베지어 곡선이라면 $v$가 3개($v_0, v_1, v_2)$가 되는데, 각각의 $v_i$를 <strong>Control Point</strong>라 한다.</p>
+<p>이 세개의 CP를 각각 매개변수 $t$에 대해 선형 보간하면 보간의 결과로 2개의 새로운 CP가 나오게 되고, 이 2개를 또 선형 보간하면 매개변수 $t$에 대한 베지어 곡선상의 점 $B(t)$가 나온다.</p>
+<p>재귀적 수행을 쉽게 알아보기 위해 그 깊이를 위첨자로 작성한 후 도식으로 표현하면 다음과 같다.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-26/Devlog/img02.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<p>이 과정을 $[0, 1]$의 범위 안에 존재하는 실수 $t$에 대해 수행하면 다음과 같은 결과를 얻는다.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-26/Devlog/img03.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<!-- raw HTML omitted -->
+<p>다만 이 과정을 구간 내의 모든 실수에 시도하는건 불가능하므로, 충분히 곡선을 표현할 수 있을 정도의 이산적인 t의 집합을 정해 해당 t에 대해서만 수행하게 된다. 이렇게 주어진 최초의 CP 집합 이용해 이산적인 t의 집합을 만들어내는 과정을 <strong>테셀레이션(Tessellation)</strong> 이라 한다.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-26/Devlog/img04.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<p>2차 베지어 곡선에 대한 지금까지의 설명과 완전히 동일하게 3차 베지어 곡선도 그려낼 수 있다.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-26/Devlog/img05.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<p>결론적으로, 프로젝트 상에서 3차 베지어 곡선은 다음과 같이 구현하였다.</p>
+<p>{%highlight cpp%}</p>
+<p>template <!-- raw HTML omitted -->
+Vector3D<!-- raw HTML omitted --> Bezier(Vector3D<!-- raw HTML omitted --> v0, Vector3D<!-- raw HTML omitted --> v1, Vector3D<!-- raw HTML omitted --> v2, Vector3D<!-- raw HTML omitted --> v3, float t)
+{
+Vector3D<!-- raw HTML omitted --> v10 = Lerp(v0, v1, t);
+Vector3D<!-- raw HTML omitted --> V11 = Lerp(v1, v2, t);
+Vector3D<!-- raw HTML omitted --> v12 = Lerp(v2, v3, t);</p>
+<pre><code>  Vector3D&lt;T&gt; v20 = Lerp(v10, v11, t);
+  Vector3D&lt;T&gt; v21 = Lerp(v11, v12, t);
+
+  return Lerp(v20, v21, t);
+</code></pre>
+<p>}</p>
+<p>{%endhighlight%}</p>
+<p>위 코드를 이용해 큐브를 곡선 형태로 움직이는 데 성공했으며, <a href="https://www.youtube.com/watch?v=i57TVulkrWQ"><strong>링크</strong></a>에서 확인할 수 있다. 여기서 움직이는 대상만 큐브에서 카메라로 바꾸면 아름다운 카메라 워킹이 구현된다.</p>
+<p>하나 더, 간단하지만 눈여겨 보면 베지어 곡선의 성질을 하나 알 수 있는데, 베지어 곡선은 반드시 CP들로 구성된 <strong>Convex Hull</strong> 내부에 위치한다는 것이다.</p>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-26/Devlog/img06.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<h2 class="heading" id="2-결론">
+  2. 결론
+  <a class="anchor" href="#2-%ea%b2%b0%eb%a1%a0">#</a>
+</h2>
+<p>다음 주에는&hellip; Direct3D 11 개발도 같이 해서 더 시간이 없을 것 같다. 6월까지는 그래픽스 기법들을 최대한 구현해보고 싶은데.. 마음이 힘드니까 몸이 안따라준다. 그래도 힘내야지.</p>
+
+    </div>
+  </article>
+
+  
+
+  
+
+  
+  
+
+<div class="single-pagination">
+    <hr />
+
+    <div class="flexnowrap">
+
+        <div class="single-pagination-prev">
+            
+            <div class="single-pagination-container-prev">
+                <div class="single-pagination-text">←</div>
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2022-09-27-after-read-book-game-engine-black-book-doom/">
+                        게임 엔진 블랙 북 - 둠을 읽고
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="single-pagination-next">
+            
+            <div class="single-pagination-container-next">
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2022-03-21-devlog/">
+                        개발 일지 - 3월 3주차
+                    </a>
+                </div>
+                <div class="single-pagination-text">→</div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <hr />
+</div>
+
+
+
+  
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+    
+    
+
+
+
+
+
+    
+
+
+
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>

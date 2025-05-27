@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313/apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    BOJ - 퇴사2 (15486) | Hamsik2rang&#39;s blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/_posts_backup/2022-03-18-boj-solve-15486/"/>
+
+<meta property="og:url" content="http://localhost:1313/_posts_backup/2022-03-18-boj-solve-15486/">
+  <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
+  <meta property="og:title" content="BOJ - 퇴사2 (15486)">
+  <meta property="og:description" content="0. 문제#문제 링크
+1. 풀이#N의 크기가 최대 1,500,000이다. 따라서 일일히 선형 탐색($O(N^2)$)을 이용해 답을 찾으려 하면 **TLE**가 나게 된다.
+시간복잡도의 문제를 다이나믹 프로그래밍으로 해결할 수 있으므로 다이나믹 프로그래밍을 이용한다.
+처음 문제를 풀면서 잘못 생각해 실수한 부분이 있었는데, T의 최대가 50이라고 주어져 있으므로 $i$일차의 최대 수익은 그 앞의 50일동안의 최대 수익에 $i$일차 수익이라고 생각하였다.
+그러나 이는 50일보다 더 이전에 진행한 상담을 고려하지 못한다는 오류가 존재함을 깨달아, 앞의 수익들 중의 최댓값을 저장해 가는 방식이 아닌 T와 무관하게 가장 마지막 수익으로부터 앞으로 진행하는 Top-down방식으로 구해나갔다.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="_posts_backup">
+    <meta property="article:tag" content="Algorithm">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">Hamsik2rang&#39;s blog</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+<div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/_posts_backup/">_Posts_backups</a><span class="breadcrumbs-separator">/</span>
+        <a href="/_posts_backup/2022-03-18-boj-solve-15486/">BOJ - 퇴사2 (15486)</a></div>
+
+
+<div >
+  <article>
+    <header class="single-intro-container">
+        
+        <h1 class="single-title">BOJ - 퇴사2 (15486)</h1>
+        
+        <div class="single-subsummary">
+          
+          <div>
+            
+            <p class="author">Im Yongsik </p>
+            
+            <p class="single-date">
+            </p>
+          </div>
+        </div>
+        
+    </header>
+    
+    <div class="single-content">
+      <h2 class="heading" id="0-문제">
+  0. 문제
+  <a class="anchor" href="#0-%eb%ac%b8%ec%a0%9c">#</a>
+</h2>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-18/BOJ-Solve-15486/img01.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+<p><a href="https://www.acmicpc.net/problem/15486"><strong>문제 링크</strong></a></p>
+<h2 class="heading" id="1-풀이">
+  1. 풀이
+  <a class="anchor" href="#1-%ed%92%80%ec%9d%b4">#</a>
+</h2>
+<p>N의 크기가 최대 1,500,000이다. 따라서 일일히 선형 탐색($O(N^2)$)을 이용해 답을 찾으려 하면 **<code>TLE</code>**가 나게 된다.</p>
+<p>시간복잡도의 문제를 다이나믹 프로그래밍으로 해결할 수 있으므로 다이나믹 프로그래밍을 이용한다.</p>
+<p>처음 문제를 풀면서 잘못 생각해 실수한 부분이 있었는데, T의 최대가 50이라고 주어져 있으므로 $i$일차의 최대 수익은 그 앞의 50일동안의 최대 수익에 $i$일차 수익이라고 생각하였다.</p>
+<p>그러나 이는 <strong>50일보다 더 이전에 진행한 상담을 고려하지 못한다는 오류</strong>가 존재함을 깨달아, 앞의 수익들 중의 최댓값을 저장해 가는 방식이 아닌 T와 무관하게 가장 마지막 수익으로부터 앞으로 진행하는 Top-down방식으로 구해나갔다.</p>
+<!-- raw HTML omitted -->
+<p>마지막 날부터 첫째 날까지 역순회하며 $i$번째 날의 최대 수익을 찾는데, 만약 다음과 같은 경우</p>
+<ul>
+<li>$i$번째 날의 상담을 진행하면 퇴사일을 넘겨서 끝나는 경우</li>
+<li>$i$번째 날의 상담을 진행하지 않는 것이 더 높은 수익을 얻는 경우</li>
+</ul>
+<p>$i$번째 날의 상담을 진행하지 않고, 이는 $memo[i] = memo[i+1]$이 된다.</p>
+<!-- raw HTML omitted -->
+<p>그렇지 않다면 상담을 진행하는 것과 그렇지 않은 방법 중 더 높은 수익을 선택한다.</p>
+<p>$$ memo[i] = MAX(memo[i+1], memo[i + T_i]) $$</p>
+<p>이후 전체 $memo$배열에서 가장 큰 값을 찾아 출력하면 이 값이 최대 수익이 된다.</p>
+<h2 class="heading" id="2-코드">
+  2. 코드
+  <a class="anchor" href="#2-%ec%bd%94%eb%93%9c">#</a>
+</h2>
+<p>{%highlight cpp%}</p>
+<p>#define _CRT_SECURE_NO_WARNINGS
+#include <!-- raw HTML omitted -->
+#include <!-- raw HTML omitted -->
+#include <!-- raw HTML omitted --></p>
+<p>using namespace std;</p>
+<p>constexpr int MAXN = 1'500'001;
+constexpr int MAXT = 50;</p>
+<p>int arr[MAXN][2];
+int memo[MAXN];
+int n;</p>
+<p>int main()
+{
+ios::sync_with_stdio(false);
+cin.tie(nullptr);
+//freopen(&ldquo;input.txt&rdquo;, &ldquo;r&rdquo;, stdin);</p>
+<pre><code>cin &gt;&gt; n;
+for (int i = 0; i &lt; n; i++)
+{
+	cin &gt;&gt; arr[i][0] &gt;&gt; arr[i][1];
+}
+
+for (int i = n; i &gt;= 0; i--)
+{
+	memo[i] = memo[i + 1];
+	if (i + arr[i][0] &lt;= n)
+	{
+		memo[i] = max(memo[i + arr[i][0]] + arr[i][1], memo[i]);
+	}
+}
+cout &lt;&lt; *max_element(memo, memo + n);
+
+return 0;
+</code></pre>
+<p>}</p>
+<p>{%endhighlight%}</p>
+<h2 class="heading" id="3-결과">
+  3. 결과
+  <a class="anchor" href="#3-%ea%b2%b0%ea%b3%bc">#</a>
+</h2>
+<p>
+
+
+
+
+
+
+
+
+
+
+
+<figure class="">
+
+    <div class="img-container" >
+        <img loading="lazy" alt="" src="%7B%7Bsite.baseurl%7D%7D/assets/img/posts/2022-03-18/BOJ-Solve-15486/img02.jpg" >
+    </div>
+
+    
+</figure>
+</p>
+
+    </div>
+  </article>
+
+  
+
+  
+
+  
+  
+
+<div class="single-pagination">
+    <hr />
+
+    <div class="flexnowrap">
+
+        <div class="single-pagination-prev">
+            
+            <div class="single-pagination-container-prev">
+                <div class="single-pagination-text">←</div>
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2023-07-01-cpp-optimization-part-1/">
+                        C&#43;&#43; 최적화 - part 1
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="single-pagination-next">
+            
+            <div class="single-pagination-container-next">
+                <div class="single-pagination-text">
+                    <a href="/_posts_backup/2022-03-18-boj-solve-20119/">
+                        BOJ - 클레어와 물약 (20119)
+                    </a>
+                </div>
+                <div class="single-pagination-text">→</div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <hr />
+</div>
+
+
+
+  
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+    
+    
+
+
+
+
+
+    
+
+
+
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>

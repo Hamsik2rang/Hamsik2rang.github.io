@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313/apple-touch-icon.png">
+
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    열거체와 가상 테이블을 이용해 타입 리플렉션 구현하기 | Hamsik2rang&#39;s blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/posts/2022-09-06-how-to-implement-type-reflection-using-enum/"/>
+
+<meta property="og:url" content="http://localhost:1313/posts/2022-09-06-how-to-implement-type-reflection-using-enum/">
+  <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
+  <meta property="og:title" content="열거체와 가상 테이블을 이용해 타입 리플렉션 구현하기">
+  <meta property="og:description" content="※ 개인 프로젝트 도중 마주한 문제와 해결 과정을 토대로 작성했습니다.
+0. 서론#현대를 살아가는 대부분의 프로그래머는 객체지향 패러다임에 기반한 코드를 작성한다. 이는 쉬운 유지 보수와 함께 ‘상속‘이라는 강력한 무기가 프로그래머들에게 절차지향 패러다임에서라면 복잡하기 짝이 없을 구조를 이전보다 한층 편리하게 표현할 수 있도록 도와주기 때문이다.
+상속을 사용하는 것은 단순히 코드의 중복을 막는 것 뿐만 아니라 **다형성(****Polymorphism)**을 이용해 여러 객체를 하나의 공동체로 바라보며 사용할 수 있도록 해 준다. 이는 다르게 말하면 객체 개개를 그만의 ‘타입’에 의존하지 않고 그들을 묶는 ‘집단’의 구성원으로 바라본다는 것이기도 하다.">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:tag" content="Devlog">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">Hamsik2rang&#39;s blog</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+
+
+
+<div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/posts/">Posts</a><span class="breadcrumbs-separator">/</span>
+        <a href="/posts/2022-09-06-how-to-implement-type-reflection-using-enum/">열거체와 가상 테이블을 이용해 타입 리플렉션 구현하기</a></div>
+
+
+<div >
+  <article>
+    <header class="single-intro-container">
+        
+        <h1 class="single-title">열거체와 가상 테이블을 이용해 타입 리플렉션 구현하기</h1>
+        
+        <div class="single-subsummary">
+          
+          <div>
+            
+            <p class="author">Im Yongsik </p>
+            
+            <p class="single-date">
+            </p>
+          </div>
+        </div>
+        
+    </header>
+    
+    <div class="single-content">
+      <p>※ <a href="https://github.com/Hamsik2rang/Kepler">개인 프로젝트</a> 도중 마주한 문제와 해결 과정을 토대로 작성했습니다.</p>
+<!-- raw HTML omitted -->
+<h2 class="heading" id="0-서론">
+  0. 서론
+  <a class="anchor" href="#0-%ec%84%9c%eb%a1%a0">#</a>
+</h2>
+<p>현대를 살아가는 대부분의 프로그래머는 객체지향 패러다임에 기반한 코드를 작성한다. 이는 쉬운 유지 보수와 함께 &lsquo;<strong>상속</strong>&lsquo;이라는 강력한 무기가 프로그래머들에게 절차지향 패러다임에서라면 복잡하기 짝이 없을 구조를 이전보다 한층 편리하게 표현할 수 있도록 도와주기 때문이다.</p>
+<!-- raw HTML omitted -->
+<p>상속을 사용하는 것은 단순히 코드의 중복을 막는 것 뿐만 아니라 **다형성(****Polymorphism)**을 이용해 여러 객체를 하나의 공동체로 바라보며 사용할 수 있도록 해 준다. 이는 다르게 말하면 객체 개개를 그만의 &lsquo;타입&rsquo;에 의존하지 않고 그들을 묶는 &lsquo;집단&rsquo;의 구성원으로 바라본다는 것이기도 하다.</p>
+<h2 class="heading" id="1-다형성의-문제점">
+  1. 다형성의 문제점
+  <a class="anchor" href="#1-%eb%8b%a4%ed%98%95%ec%84%b1%ec%9d%98-%eb%ac%b8%ec%a0%9c%ec%a0%90">#</a>
+</h2>
+<p>그러나 같은 학교의 모든 학생들이 같은 시간에 같은 수업을 들으면서도 같은 모습과 행동을 갖지 않듯, 한(또는 여러) 부모 객체로부터 파생된 객체들은 각각 자신만의 행동을 정의할 수 있고, 행동할 수 있으며, 행동해야 한다.</p>
+<!-- raw HTML omitted -->
+<p>그러나 다형성에 기반해서 객체들을 관리할 경우, 모든 객체들을 그들의 부모 객체를 기준으로 바라보며 관리하기 때문에 그들만의 행동을 수행하는 데 제약이 발생한다. Java와 같이 Down Casting 자체를 불가능하게 하는 언어들이라면 말할 것도 없고, C++와 같은 명시적인 Down-Casting이 가능한(C++의 dynamic_cast&lt;&gt;())경우에도 이는 유효하다.</p>
+<!-- raw HTML omitted -->
+<p>클래스 A로부터 B, C, D가 파생되었고, 이들의 명세로부터 정의된 객체가 100개가 한 컨테이너에 존재한다고 가정해 보자. C++ 코드로 나타내면 다음과 같을 것이다.</p>
+<p>{%highlight cpp%}</p>
+<p>/* main.cpp */
+class A
+{
+//&hellip;
+}</p>
+<p>class B : public A
+{
+//&hellip;
+void FuncB(){/<em>&hellip;</em>/}
+}
+class C : public A
+{
+//&hellip;.
+void FuncC(){/<em>&hellip;</em>/}
+}
+class D : public A
+{
+//&hellip;
+void FuncD(){/<em>&hellip;</em>/}
+}</p>
+<p>int main()
+{
+std::vector&lt;A*&gt; container // 이 안에 각각이 누구인지 모를 객체 100개가 들어 있다. <br>
+}</p>
+<p>{% endhighlight %}</p>
+<p>이 때 b(), c(), d()함수는 각각 B, C, D 객체에서만 정의된 함수라고 가정하자.</p>
+<p>container의 객체들을 각각 B, C, D중 무엇인지 구분해 FuncB(), FuncC(), FuncD()함수를 수행하도록 하려면 어떻게 해야 할까?</p>
+<!-- raw HTML omitted -->
+<p>dynamic_cast를 이용한다 하더라도 사용자는 container안의 각 원소들이 정확히 어떤 타입인지 알 길이 없다.</p>
+<p>그렇다면, 만약 그들에게 직접 자신의 타입을 물어볼 수 있도록 한다면 어떨까?</p>
+<p>아마 다음과 같은 코드의 작성이 가능해질 것이다.</p>
+<p>{%highlight cpp%}</p>
+<p>void DoSomething(const std::vector&lt;A*&gt;&amp; container)
+{
+for (int i = 0; i &lt; container.size(); i++)
+{
+auto type = container[i].GetType();
+// A는 인터페이스이므로 타입 구분에서 배제된다고 가정
+switch (type)
+{
+case B:
+container[i].FuncB();
+break;
+case C:
+container[i].FuncC();
+break;
+case D:
+container[i].FuncD();
+break;
+}
+}
+}</p>
+<p>{%endhighlight%}</p>
+<h2 class="heading" id="2-리플렉션reflection">
+  2. 리플렉션(Reflection)
+  <a class="anchor" href="#2-%eb%a6%ac%ed%94%8c%eb%a0%89%ec%85%98reflection">#</a>
+</h2>
+<p>이처럼 완성된 객체로부터 객체의 정보(타입, 함수, 변수의 선언 정보)를 받아오는 것을 **&lsquo;리플렉션(Reflection)&rsquo;**이라 한다.</p>
+<p>C#과 Java등에서는 언어 자체에서 리플렉션 기능을 지원하지만, Native C/C++의 경우 별도의 리플렉션 기능이 지원되지 않는다.</p>
+<!-- raw HTML omitted -->
+<p>일반적으로 C++프로그래머는 탬플릿 메타프로그래밍 기법을 통해 자신의 프로그램에 리플렉션 기능을 구현한다.</p>
+<p>심지어 C++ 공식 라이브러리에서도 <em>std::is_abstract_v()</em> 와 같은 이러한 메타 함수들을 일부 제공한다.</p>
+<!-- raw HTML omitted -->
+<p>그러나 탬플릿 메타프로그래밍은 일반적으로 가독성이 좋지 않고 코드의 크기가 매우 커지는 단점이 존재한다. 또한 모든 것이 컴파일 시점에 이루어지는 특성상 빌드 타임이 늘어나는 것도 주요한 단점이다.</p>
+<!-- raw HTML omitted -->
+<p>이러한 단점들을 감안할 때 단순히 상속받은 객체들 간의 구분에 메타프로그래밍 기법을 도입하는 것은 간단히 결정할 수 있는 일이 아니었고, 따라서 다른 방법을 통해 리플렉션 기능을 구현할 방법을 찾아야 했다.</p>
+<h2 class="heading" id="3-구현-명세">
+  3. 구현 명세
+  <a class="anchor" href="#3-%ea%b5%ac%ed%98%84-%eb%aa%85%ec%84%b8">#</a>
+</h2>
+<p>모든 개발 과정이 그러하듯, 타입 리플렉션을 구현하기 전 어떠한 기능들이 필요할지 그 명세를 먼저 작성하였고, 다음과 같았다.</p>
+<p>* 같은 클래스로부터 만들어진 모든 객체가 그들이 가진 데이터에 관계없이 모두 같은 동작을 수행해야 함</p>
+<p>* 서로 구분하고자 하는 클래스들 모두가 같은 동작을 수행해야 함</p>
+<p>* 객체들은 모두 부모 클래스의 형태로 간주되어 관리되므로 부모 클래스가 그 인터페이스를 가지고 있어야 함</p>
+<p>* 서로의 타입을 비교할 수 있어야 함</p>
+<p>* 가능하면 불필요한 자원 낭비가 발생하지 않아야 함</p>
+<!-- raw HTML omitted -->
+<p>C++을 어느정도 사용한 프로그래머라면 위 명세를 보자마자 어떠한 방식을 사용해야 할 지 감을 잡을 것이다. 맨 위 첫 번째 요구는 정적 함수를 통해 구현할 수 있으며, 다음 두 가지는 결국 부모 클래스인 A클래스에서 <strong>(순수)가상 함수</strong>를 정의하고 각 자식 클래스들이 해당 함수에서 자신의 타입을 구분할 정보를 제공하게 하면 된다. 그리고 마지막 두 가지는 타입을 비교할 수 있도록 값의 형태를 제공하되 이를 위해 메모리 점유가 일어나는 것을 피하는 것이 좋다는 뜻이므로 **열거체(enum) 혹은 열거 클래스(enum class)**를 사용해 해결할 수 있을 것이다.</p>
+<!-- raw HTML omitted -->
+<p>그런데 문제가 되는 것은 <strong>정적 클래스 함수는 virtual로 선언할 수 없다</strong>는 것이다. 따라서 각 함수가 정적 클래스 함수를 가지게 한 후 가상 함수에서 해당 함수의 호출 결과를 리턴하도록 구현해야 한다.</p>
+<h2 class="heading" id="4-구현-결과">
+  4. 구현 결과
+  <a class="anchor" href="#4-%ea%b5%ac%ed%98%84-%ea%b2%b0%ea%b3%bc">#</a>
+</h2>
+<p>명세를 바탕으로 타입 리플렉션을 구현하면 다음과 같을 것이다.</p>
+<p>{% highlight cpp %}</p>
+<p>/* reflection.hpp */
+enum eType { A = 0, B, C, D }</p>
+<p>class A
+{
+//&hellip;
+virtual eType GetType() const = 0;
+}</p>
+<p>class B : public A
+{
+//&hellip;
+void FuncB();
+static eType GetStaticType() { return eType::B; }
+virtual eType GetType() const override { return GetStaticType(); }
+}
+class C : public A
+{
+//&hellip;
+void FuncC();
+static eType GetStaticType() { return eType::C; }
+virtual eType GetType() const override { return GetStaticType(); }
+}
+class D : public A
+{
+//&hellip;
+void FuncD();
+static eType GetStaticType() const { return eType::D; }
+virtual eType GetType() const override { return GetStaticType(); }
+}</p>
+<p>{% endhighlight %}</p>
+<p>이제 위에서 보았던 switch문이 정상적으로 동작할 수 있음을 알 수 있다.</p>
+<p>만약 코드의 중복이 마음에 들지 않는다면, 전처리문을 통해 정리할 수 있다. 그러나 가독성이 더 좋은지는 판단에 맡긴다.</p>
+<p>{% highlight cpp %}</p>
+<p>/* reflection.hpp */
+enum eType { A = 0, B, C, D }</p>
+<p>#define CLASS_TYPE(type) static eType GetStaticType() { return eType::##type; }<br>
+virtual eType GetType() const override { return GetStaticType(); }</p>
+<p>class A
+{
+//&hellip;
+virtual eType GetType() const = 0;
+}</p>
+<p>class B : public A
+{
+//&hellip;
+void FuncB();
+CLASS_TYPE(B)
+}
+class C : public A
+{
+//&hellip;
+void FuncC();
+CLASS_TYPE(C)
+}
+class D : public A
+{
+//&hellip;
+void FuncD();
+CLASS_TYPE(D)
+}</p>
+<p>{% endhighlight %}</p>
+
+    </div>
+  </article>
+
+  
+
+  
+
+  
+  
+
+<div class="single-pagination">
+    <hr />
+
+    <div class="flexnowrap">
+
+        <div class="single-pagination-prev">
+            
+            <div class="single-pagination-container-prev">
+                <div class="single-pagination-text">←</div>
+                <div class="single-pagination-text">
+                    <a href="/posts/2023-11-12-pixel-shader-invoke-order-and-writing-order/">
+                        임의의 드로우콜에서 픽셀이 겹치면 어떻게 될까?
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="single-pagination-next">
+            
+            <div class="single-pagination-container-next">
+                <div class="single-pagination-text">
+                    <a href="/posts/2023-05-21-a-trip-through-the-graphics-pipeline-2011-00/">
+                        번역] A trip through the Graphics Pipeline 2011 - Index
+                    </a>
+                </div>
+                <div class="single-pagination-text">→</div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <hr />
+</div>
+
+
+
+  
+
+  
+
+  
+  <div class="back-to-top">
+    <a href="#top">
+      back to top
+    </a>
+  </div>
+  
+
+</div>
+
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+    
+    
+
+
+
+
+
+    
+
+
+
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>

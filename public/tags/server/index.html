@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en-us"
+  dir="ltr">
+
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+<link rel="icon" type="image/ico" href="http://localhost:1313/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="http://localhost:1313/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="http://localhost:1313/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="http://localhost:1313/android-chrome-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:1313/apple-touch-icon.png">
+
+<link rel="alternate" type="application/rss+xml" href="http://localhost:1313/tags/server/index.xml" title="Hamsik2rang's blog">
+<meta name="description" content=""/>
+
+
+
+<title>
+    
+    Server | Hamsik2rang&#39;s blog
+    
+</title>
+
+<link rel="canonical" href="http://localhost:1313/tags/server/"/>
+
+<meta property="og:url" content="http://localhost:1313/tags/server/">
+  <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
+  <meta property="og:title" content="Server">
+  <meta property="og:description" content="A Tech Blog">
+  <meta property="og:locale" content="en_us">
+  <meta property="og:type" content="website">
+
+
+
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+</head>
+
+
+
+
+
+
+
+<body class="auto">
+
+  <div class="content">
+    <header>
+      
+
+<div class="header">
+
+    
+
+    <h1 class="header-title">
+        <a href="http://localhost:1313/">Hamsik2rang&#39;s blog</a>
+    </h1>
+
+    <div class="header-menu">
+        
+
+        
+        
+
+        <p
+            class="small ">
+            <a href="/" >
+                /home
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/posts" >
+                /posts
+            </a>
+        </p>
+        
+
+        <p
+            class="small ">
+            <a href="/about" >
+                /about
+            </a>
+        </p>
+        
+        
+    </div>
+
+    
+
+</div>
+
+    </header>
+
+    <main class="main">
+      
+
+<div class="list-container">
+
+    <div class="breadcrumbs"><a href="/">Home</a><span class="breadcrumbs-separator">/</span><a href="/tags/">Tags</a><span class="breadcrumbs-separator">/</span>
+        <a href="/tags/server/">Server</a></div>
+
+    <h1>Server</h1>
+    
+
+    
+
+    
+    
+    
+    
+
+    
+
+    
+
+    
+    <div class="post-line">
+
+    
+    
+    
+    
+
+    <p class="line-date">1 Jan 0001 </p>
+
+    <div>
+        <p class="line-title">
+            <a href="/_posts_backup/2022-09-07-http-network-basic-01/">
+                HTTP와 네트워크의 기본 - 1
+            </a>
+        </p>
+
+        
+        <p class="line-summary"> <h2 class="heading" id="0-서론">
+  0. 서론
+  <a class="anchor" href="#0-%ec%84%9c%eb%a1%a0">#</a>
+</h2>
+<p>웹 서버 프로그래밍을 공부할 일이 있어 관련 지식을 살펴보던 중 세션이나 쿠키, HTTP Protocol등 평소 관심있게 살펴보지 않았던 주제들을 필요로 하게 되어 이를 정리하고자 한다.</p>
+<h2 class="heading" id="1-tldr">
+  1. TL;DR
+  <a class="anchor" href="#1-tldr">#</a>
+</h2>
+<ul>
+<li>웹 상에서 페이지를 비롯한 모든 리소스는 HTTP기반 통신을 통해 송/수신된다.</li>
+<li>프로토콜(Protocol)이란 상호간에 정한 일종의 규약이다.</li>
+<li>TCP/IP Layer는 4계층으로 구분할 수 있으며, 어플리케이션(Application), 전송(Transport), 네트워크(Network), 링크(Link, Data Link) 계층으로 구분된다.</li>
+<li>URL은 해당 리소스의 위치를 나타내며, URL에 리소스 간의 식별자가 포함된 것을 URI라 한다.</li>
+</ul>
+<h2 class="heading" id="2-웹과-http">
+  2. 웹과 HTTP
+  <a class="anchor" href="#2-%ec%9b%b9%ea%b3%bc-http">#</a>
+</h2>
+<p>사람들마다 웹 브라우저의 시작 페이지는 다르겠지만, 웹 브라우저를 실행하면 익숙한 웹 페이지들이 사용자를 반긴다. 구글일 수도 있고 네이버일 수도 있으며, 즐겨하는 게임 접속 사이트나 대형 커뮤니티 사이트일 수도 있다.</p> </p>
+        
+    </div>
+</div>
+    
+
+    
+
+    
+    <div class="post-line">
+
+    
+    
+    
+    
+
+    <p class="line-date">1 Jan 0001 </p>
+
+    <div>
+        <p class="line-title">
+            <a href="/_posts_backup/2022-09-09-http-network-basic-02/">
+                HTTP와 네트워크의 기본 - 2
+            </a>
+        </p>
+
+        
+        <p class="line-summary"> <h2 class="heading" id="0-서론">
+  0. 서론
+  <a class="anchor" href="#0-%ec%84%9c%eb%a1%a0">#</a>
+</h2>
+<p>이번 포스트에는 HTTP Protocol의 특성에 대해 알아보자.</p>
+<h2 class="heading" id="1-tldr">
+  1. TL;DR
+  <a class="anchor" href="#1-tldr">#</a>
+</h2>
+<ul>
+<li>HTTP는 클라이언트-서버 간 요청(Request)과 응답(Response)이 이루어지는 통신 프로토콜이다.</li>
+<li>HTTP는 Stateless 프로토콜이다.</li>
+<li>클라이언트는  URI로 원하는 리소스를,  Method로 원하는 종류의 Request를 보낼 수 있다.</li>
+<li>HTTP는 매 통신마다 커넥션의 체결과 해제가 이루어진다. 그러나 최신 HTTP(&lt;1.1)는 명시적인 요청이 이루어지지 않는 한 커넥션을 유지한다.</li>
+<li>HTTP는 Stateless 서버의 단점을 보완하기 위해 쿠키(Cookie)를 이용한다.</li>
+</ul>
+<h2 class="heading" id="2-http를-이용한-통신">
+  2. HTTP를 이용한 통신
+  <a class="anchor" href="#2-http%eb%a5%bc-%ec%9d%b4%ec%9a%a9%ed%95%9c-%ed%86%b5%ec%8b%a0">#</a>
+</h2>
+<p>HTTP의 통신은 클라이언트(Client)와 서버(Server)의 상호작용을 의미한다. 매 통신마다 클라이언트와 서버의 역할은 고정되어 있지 않지만 모든 개개의 통신에는 클라이언트 역할의 기기와 서버 역할의 기기가 반드시 정해져 있다.</p> </p>
+        
+    </div>
+</div>
+    
+
+    
+
+    
+    <div class="post-line">
+
+    
+    
+    
+    
+
+    <p class="line-date">1 Jan 0001 </p>
+
+    <div>
+        <p class="line-title">
+            <a href="/_posts_backup/2022-09-11-http-network-basic-03/">
+                HTTP와 네트워크의 기본 - 3
+            </a>
+        </p>
+
+        
+        <p class="line-summary"> <h2 class="heading" id="0-서론">
+  0. 서론
+  <a class="anchor" href="#0-%ec%84%9c%eb%a1%a0">#</a>
+</h2>
+<p>이번 포스트에는 HTTP 메시지의 구조와 인코딩에 대해 알아보자.</p>
+<h2 class="heading" id="1-tldr">
+  1. TL;DR
+  <a class="anchor" href="#1-tldr">#</a>
+</h2>
+<ul>
+<li><strong>HTTP Protocol을 통해 교환(Request/Response)하는 정보를 HTTP 메시지라 한다.</strong></li>
+<li><strong>HTTP 메시지는 Header와 Body로 구분된다.</strong></li>
+<li><strong>Header Field에 따라 메시지에 대한 응답이 달라지며, 이를 이용해 Content Negotiation등을 수행할 수도 있다.</strong></li>
+<li><strong>Body 안에는 상대에게 전송할 Entity가 포함된다. 일반적인 경우 Message Body와 Entity Body는 동일하다.</strong></li>
+<li><strong>Body 안에 들어가는 Entity의 크기가 클 경우 효율적인 전송을 위해 압축이나 분할 등을 수행할 수 있는데, 이를 인코딩(Encoding)이라 한다. 인코딩이 적용되는 경우 Entity Body는 변형된다.</strong></li>
+</ul>
+<h2 class="heading" id="2-http-메시지">
+  2. HTTP 메시지
+  <a class="anchor" href="#2-http-%eb%a9%94%ec%8b%9c%ec%a7%80">#</a>
+</h2>
+<p>HTTP Protocol을 이용해 상대에게 정보를 보낼 때, 이 정보를 <strong>HTTP Message</strong>라 한다.</p> </p>
+        
+    </div>
+</div>
+    
+
+    
+
+    
+    <div class="post-line">
+
+    
+    
+    
+    
+
+    <p class="line-date">1 Jan 0001 </p>
+
+    <div>
+        <p class="line-title">
+            <a href="/_posts_backup/2022-09-13-http-network-basic-04/">
+                HTTP와 네트워크의 기본 - 4
+            </a>
+        </p>
+
+        
+        <p class="line-summary"> <h2 class="heading" id="0-서론">
+  0. 서론
+  <a class="anchor" href="#0-%ec%84%9c%eb%a1%a0">#</a>
+</h2>
+<p>이번 포스트에서는 HTTP Response Message에 포함되는 상태 코드(Status Code)들을 살펴보자.</p>
+<h2 class="heading" id="1-tldr">
+  1. TL;DR
+  <a class="anchor" href="#1-tldr">#</a>
+</h2>
+<ul>
+<li>HTTP 통신에서 서버는 응답 메시지에 요청에 대한 처리 결과를 알려주는 상태 코드를 포함시킨다.</li>
+<li>상태 코드는 1XX ~ 5XX의 범위로 표현되며, 세 번째 자릿수의 숫자에 따라 다음과 같은 의미를 포함한다.
+<ul>
+<li>1XX : Informational - 요청을 받아 처리중</li>
+<li>2XX : Success - 요청을 정상적으로 처리하였음</li>
+<li>3XX : Redirection - 요청을 정상적으로 처리하기 위해 추가 동작이 필요함</li>
+<li>4XX : Client Error - 서버가 이해할 수 없는 요청이므로 클라이언트에 에러가 발생한 것 같음</li>
+<li>5XX : Server Error - 요청을 이해했으나 서버가 처리할 수 없으므로, 서버에 에러가 발생한 것 같음</li>
+</ul>
+</li>
+</ul>
+<h2 class="heading" id="2-상태-코드status-code">
+  2. 상태 코드(Status Code)
+  <a class="anchor" href="#2-%ec%83%81%ed%83%9c-%ec%bd%94%eb%93%9cstatus-code">#</a>
+</h2>
+<p>HTTP 프로토콜을 이용해 클라이언트가 서버에 동작을 요청하는 경우, 서버는 그 동작을 수행한 후 동작에 맞는 적절한 응답을 클라이언트에 회신한다. 그러나 모종의 이유로 인해 서버가 동작을 수행할 수 없는 경우가 존재할 수도 있다. 또는, 클라이언트가 회신을 필요로 하지 않는 동작을 요청한 경우도 존재할 수 있다. 대표적인 예가 파일 업로드이다.</p> </p>
+        
+    </div>
+</div>
+    
+
+    
+
+    
+    <div class="post-line">
+
+    
+    
+    
+    
+
+    <p class="line-date">1 Jan 0001 </p>
+
+    <div>
+        <p class="line-title">
+            <a href="/_posts_backup/2022-09-15-http-network-basic-05/">
+                HTTP와 네트워크의 기본 - 5
+            </a>
+        </p>
+
+        
+        <p class="line-summary"> <h2 class="heading" id="0-서론">
+  0. 서론
+  <a class="anchor" href="#0-%ec%84%9c%eb%a1%a0">#</a>
+</h2>
+<p>이번 포스트에서는 HTTP Protocol 기반 통신을 돕는 웹 서버 구성 기술들을 살펴보자.</p>
+<h2 class="heading" id="1-tldr">
+  1. TL;DR
+  <a class="anchor" href="#1-tldr">#</a>
+</h2>
+<ul>
+<li>가상 호스트(Virtual Host)기능을 통해 1대의 물리적 서버에서 여러 서버를 운영할 수 있다.</li>
+<li>프록시(Proxy), 게이트웨이(Gateway), 터널(Tunnel), 캐시(Cache)는 클라이언트-서버 간 통신을 중계하는 구성 요소이다</li>
+<li>프록시(Proxy)는 클라이언트/서버 양 역할을 모두 수행하며 메시지를 중계한다</li>
+<li>게이트웨이(Gateway)는 클라이언트/서버 양 역할을 수행하며 HTTP 이외의 서버에 메시지를 중계한다</li>
+<li>터널(Tunnel)은 클라이언트-서버 간 안전한 통신 경로를 확립한다.</li>
+<li>캐시(Cache)는 리소스를 보관하는 역할을 한다</li>
+</ul>
+<h2 class="heading" id="2-가상-호스트virtual-host">
+  2. 가상 호스트(Virtual Host)
+  <a class="anchor" href="#2-%ea%b0%80%ec%83%81-%ed%98%b8%ec%8a%a4%ed%8a%b8virtual-host">#</a>
+</h2>
+<p>HTTP/1.1 이후 가상 호스트 라는 기술이 추가되었다. 이는 한 대의 물리적 서버에서 여러 개의 가상 서버를 운영할 수 있게 해 주는 기술이다. 즉, 한 대의 서버 기기가 A, B, C, D라는 사이트를 모두 운영할 수 있게 해 주는 기술이다.</p> </p>
+        
+    </div>
+</div>
+    
+
+    
+
+    
+
+</div>
+
+    </main>
+  </div>
+
+  
+  
+
+
+
+
+
+    
+
+
+
+
+  <footer>
+    
+
+    
+    
+
+
+
+
+
+    
+
+
+
+
+    
+    <p>Powered by
+        <a href="https://gohugo.io/">Hugo</a>
+        and
+        <a href="https://github.com/tomfran/typo">tomfran/typo</a>
+    </p>
+    
+    
+    
+
+
+  </footer>
+
+  
+</body>
+
+<script src="/js/theme-switch.js"></script>
+<script defer src="/js/copy-code.js"></script>
+</html>

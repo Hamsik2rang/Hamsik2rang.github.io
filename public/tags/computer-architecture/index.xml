@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Computer Architecture on Hamsik2rang&#39;s blog</title>
+    <link>http://localhost:1313/tags/computer-architecture/</link>
+    <description>Recent content in Computer Architecture on Hamsik2rang&#39;s blog</description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <atom:link href="http://localhost:1313/tags/computer-architecture/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A trip through the Graphics Pipeline 2011 - part 1</title>
+      <link>http://localhost:1313/_posts_backup/2023-11-13-a-trip-through-the-graphics-pipeline-2011-part1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/_posts_backup/2023-11-13-a-trip-through-the-graphics-pipeline-2011-part1/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://fgiesen.wordpress.com/2011/07/01/a-trip-through-the-graphics-pipeline-2011-part-1/&#34;&gt;해당 포스트&lt;/a&gt;를 번역한 글입니다.&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;이 포스트는 &lt;a href=&#34;https://hamsik2rang.github.io/2023/05/21/A-Trip-Through-The-Graphics-Pipeline-2011-00.html&#34;&gt;&amp;ldquo;A trip through the Graphics Pipeline 2011&amp;rdquo;&lt;/a&gt; 시리즈의 일부를 번역한 글입니다.&lt;/p&gt;&#xA;&lt;p&gt;제가 무언가를 이 곳에 포스팅한 지 꽤 되었고, 저는 이 블로그를 그래픽스 하드웨어와 소프트웨어의 몇 가지 일반적인 점들을 설명하기 위해 사용할 수 있을 것 같다고 생각했습니다. 당신은 당신의 PC의 그래픽스 스택이 무엇을 하는지 기능적인 설명을 찾을 수 있지만, &amp;ldquo;왜&amp;rdquo; 또는 &amp;ldquo;어떻게&amp;rdquo; 그것을 하는지는 쉽게 찾을 수 없습니다. 저는 너무 특정 하드웨어에 너무 구체적이지 않게 이러한 비어있는 칸을 채우려 노력할 것입니다. 저는 대부분 Windows 운영체제에서 D3D9/10/11을 실행할 수 있는 DX11 수준의 하드웨어에 대해 대부분을 이야기할 것인데, 이는 제가 가장 친숙한 장치 스택이기 때문입니다. API 세부 사항 등은 이러한 첫 번째 부분(하드웨어적인 요소들)을 넘어서 더 중요하진 않을 것입니다. 한번 우리가 실제 GPU 위에 있게 되면 이것들은 모두 네이티브한 명령들이기 때문입니다.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>C로 짜여진 Hello World! 프로그램이 실행되는 과정</title>
+      <link>http://localhost:1313/_posts_backup/2022-10-30-process-when-we-start-hello-world-c-program/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/_posts_backup/2022-10-30-process-when-we-start-hello-world-c-program/</guid>
+      <description>&lt;h2 class=&#34;heading&#34; id=&#34;0-서론&#34;&gt;&#xD;&#xA;  0. 서론&#xD;&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#0-%ec%84%9c%eb%a1%a0&#34;&gt;#&lt;/a&gt;&#xD;&#xA;&lt;/h2&gt;&#xD;&#xA;&lt;p&gt;프로그래머는 코드를 작성해 컴퓨터에게 명령을 내리는 사람들이다. 여기서 중요한 건, 대부분의 프로그래머는 단지 코드를 작성해 컴퓨터에게 건넬 뿐 작성한 코드가 처리되는 과정에는 크게 관여하지 않는다는 점이다(물론 그 과정 역시 프로그래머들의 작품이다). 그렇다면 전달한 코드가 실행되기 위해 처리되는 대부분의 작업은 컴퓨터가 묵시적으로 수행해 준다는 것을 의미하는데, 과연 이 과정이 어떻게 진행되는지를 살펴보고자 한다.&lt;/p&gt;&#xA;&lt;h2 class=&#34;heading&#34; id=&#34;1-살펴볼-프로그램&#34;&gt;&#xD;&#xA;  1. 살펴볼 프로그램&#xD;&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#1-%ec%82%b4%ed%8e%b4%eb%b3%bc-%ed%94%84%eb%a1%9c%ea%b7%b8%eb%9e%a8&#34;&gt;#&lt;/a&gt;&#xD;&#xA;&lt;/h2&gt;&#xD;&#xA;&lt;p&gt;우리가 살펴볼 프로그램은 C언어로 작성된 매우 유명한 예제이며, 다음과 같다.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>SIMD에 대해 알아보자</title>
+      <link>http://localhost:1313/_posts_backup/2022-10-06-what-is-simd/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/_posts_backup/2022-10-06-what-is-simd/</guid>
+      <description>&lt;h2 class=&#34;heading&#34; id=&#34;1-simd란&#34;&gt;&#xD;&#xA;  1. SIMD란?&#xD;&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#1-simd%eb%9e%80&#34;&gt;#&lt;/a&gt;&#xD;&#xA;&lt;/h2&gt;&#xD;&#xA;&lt;p&gt;SIMD는 Single Instruction Multiple Data의 약자로, &lt;strong&gt;하나의 명령어로 여러 데이터를 처리하는 것&lt;/strong&gt;을 의미한다. 이는 플린의 분류(Flynn&amp;rsquo;s taxonomy)상 병렬 프로세싱(단일 명령어-복수 자료)의 범주에 속한다.&lt;/p&gt;&#xA;&lt;p&gt;SIMD연산은 특수한 명령어 집합을 통해 수행되는데, MMX(MultiMedia eXtension), SSE(Streaming SIMD Extension), AVX(Advanced Vector eXtension), AVX512등이 그것이다. 이 글에서는 SSE 명령어 집합을 기준으로 SIMD를 살펴볼 것이다.&lt;/p&gt;&#xA;&lt;h2 class=&#34;heading&#34; id=&#34;2-sse&#34;&gt;&#xD;&#xA;  2. SSE&#xD;&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#2-sse&#34;&gt;#&lt;/a&gt;&#xD;&#xA;&lt;/h2&gt;&#xD;&#xA;&lt;p&gt;SSE는 Streaming SIMD Extension의 약자이며, SIMD연산 명령어 세트 중 하나이다. SSE는 아래와 같은 데이터들의 동시 연산을 수행할 수 있도록 한다.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
