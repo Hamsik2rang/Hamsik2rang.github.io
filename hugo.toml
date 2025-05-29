@@ -79,3 +79,8 @@ category = "General"
 categoryid = "categoryId"
 mapping = "pathname"
 theme = "preferred_color_scheme"
+
+# Caches for Github Pages Deploy
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'
