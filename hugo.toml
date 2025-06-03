@@ -84,3 +84,9 @@ theme = "preferred_color_scheme"
 [caches]
   [caches.images]
     dir = ':cacheDir/images'
+
+[sitemap]
+  changeFreq = 'always'
+  disable = true
+  filename = 'sitemap.xml'
+  priority = 1.0
