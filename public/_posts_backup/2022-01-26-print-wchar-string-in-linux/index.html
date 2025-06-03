@@ -41,8 +41,8 @@
 <meta property="og:url" content="http://localhost:1313/_posts_backup/2022-01-26-print-wchar-string-in-linux/">
   <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
   <meta property="og:title" content="Linux에서 wchar 문자열 출력하기">
-  <meta property="og:description" content="0. 서론#최근 리눅스에서 소켓 프로그래밍을 진행하면서 출력과 관련해 막히는 부분이 있었습니다. wchar_t 문자 배열로 표현되는 한글 문자열의 출력과 관련된 부분이었는데, 이를 해결하게 되어 해결법을 공유하고자 합니다.
-1. 한글이 “????…“으로 출력돼요!#다음 코드가 있다고 하자.
+  <meta property="og:description" content="0. 서론 # 최근 리눅스에서 소켓 프로그래밍을 진행하면서 출력과 관련해 막히는 부분이 있었습니다. wchar_t 문자 배열로 표현되는 한글 문자열의 출력과 관련된 부분이었는데, 이를 해결하게 되어 해결법을 공유하고자 합니다.
+1. 한글이 “????…“으로 출력돼요! # 다음 코드가 있다고 하자.
 #include &lt;iostream&gt; #include &lt;cwchar&gt; int main(int argc, char** argv) { wchar_t test_str[](L&#34;오늘 점심은 샌드위치&#34;) std::wcout &lt;&lt; test_str; // or // wprintf(L&#34;%S&#34;, test_str); // note. 리눅스는 wchar를 위한 포매팅 인자로 &#39;대문자 S&#39;를 전달함. return 0; } 만약 출력 결과가 다음처럼 나타난다면">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
@@ -62,7 +62,7 @@
 
 
 
-<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+<link rel="stylesheet" href="/assets/combined.min.5f180c655f336b6dc2ab7250b010951e0a6430633df4da33bc679996f064b1e5.css" media="all">
 
 
 

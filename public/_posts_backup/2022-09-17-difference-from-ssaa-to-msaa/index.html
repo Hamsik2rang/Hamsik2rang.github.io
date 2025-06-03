@@ -41,8 +41,8 @@
 <meta property="og:url" content="http://localhost:1313/_posts_backup/2022-09-17-difference-from-ssaa-to-msaa/">
   <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
   <meta property="og:title" content="SSAA와 MSAA의 차이">
-  <meta property="og:description" content="0. 서론#그래픽스를 공부하던 중 Anti-Aliasing에 대해 공부하게 되었는데 뭔가 머리에 잘 들어오지 않아 스스로 정리할 겸 SSAA와 MSAA, 이를 위한 샘플링 이론에 대해 정리한 글을 작성하고자 한다.
-1. TL;DR#Aliasing artifact를 줄이기 위해 SSAA와 MSAA 모두 원래 해상도보다 더 고해상도의 렌더 타겟을 이용한다. 따라서 SSAA, MSAA 모두 원래 해상도보다 큰 깊이 버퍼, 스텐실 버퍼 등을 필요로 한다. 그러나 SSAA는 고해상도 렌더 타겟의 크기만큼 픽셀 쉐이더를 호출하는 데 반해 MSAA는 원래 해상도 크기만큼 픽셀 쉐이더를 호출한다. 2. Aliasing#**에일리어싱(위신호 현상, Aliasing)**이란 연속 신호를 이산 신호로 샘플링하는 가운데 추출된 각 신호가 연속 신호를 정확히 표현하지 못해 발생하는 일종의 일그러짐(jaggies)을 의미한다. 대부분의 경우 ‘위신호 현상’이라는 용어 보다 ‘계단 현상‘이라는 용어에 더 익숙할 것이다.">
+  <meta property="og:description" content="0. 서론 # 그래픽스를 공부하던 중 Anti-Aliasing에 대해 공부하게 되었는데 뭔가 머리에 잘 들어오지 않아 스스로 정리할 겸 SSAA와 MSAA, 이를 위한 샘플링 이론에 대해 정리한 글을 작성하고자 한다.
+1. TL;DR # Aliasing artifact를 줄이기 위해 SSAA와 MSAA 모두 원래 해상도보다 더 고해상도의 렌더 타겟을 이용한다. 따라서 SSAA, MSAA 모두 원래 해상도보다 큰 깊이 버퍼, 스텐실 버퍼 등을 필요로 한다. 그러나 SSAA는 고해상도 렌더 타겟의 크기만큼 픽셀 쉐이더를 호출하는 데 반해 MSAA는 원래 해상도 크기만큼 픽셀 쉐이더를 호출한다. 2. Aliasing # **에일리어싱(위신호 현상, Aliasing)**이란 연속 신호를 이산 신호로 샘플링하는 가운데 추출된 각 신호가 연속 신호를 정확히 표현하지 못해 발생하는 일종의 일그러짐(jaggies)을 의미한다. 대부분의 경우 ‘위신호 현상’이라는 용어 보다 ‘계단 현상‘이라는 용어에 더 익숙할 것이다.">
   <meta property="og:locale" content="en_us">
   <meta property="og:type" content="article">
     <meta property="article:section" content="_posts_backup">
@@ -59,7 +59,7 @@
 
 
 
-<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+<link rel="stylesheet" href="/assets/combined.min.5f180c655f336b6dc2ab7250b010951e0a6430633df4da33bc679996f064b1e5.css" media="all">
 
 
 

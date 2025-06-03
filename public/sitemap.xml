@@ -5,6 +5,12 @@
     <loc>http://localhost:1313/tags/blog/</loc>
     <lastmod>2023-11-12T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>http://localhost:1313/posts/about-of-defferd-shading/</loc>
+    <lastmod>2023-11-12T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>http://localhost:1313/tags/graphics/</loc>
+    <lastmod>2023-11-12T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>http://localhost:1313/posts/hello-blog/</loc>
     <lastmod>2023-11-12T00:00:00+00:00</lastmod>
   </url><url>
@@ -77,8 +83,6 @@
     <loc>http://localhost:1313/tags/googletest/</loc>
   </url><url>
     <loc>http://localhost:1313/_posts_backup/2022-04-18-tdd-on-project/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/graphics/</loc>
   </url><url>
     <loc>http://localhost:1313/_posts_backup/2022-09-07-http-network-basic-01/</loc>
   </url><url>

@@ -61,7 +61,7 @@
 
 
 
-<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+<link rel="stylesheet" href="/assets/combined.min.5f180c655f336b6dc2ab7250b010951e0a6430633df4da33bc679996f064b1e5.css" media="all">
 
 
 
@@ -165,7 +165,7 @@
             
             <p class="single-date">
               <time datetime="2023-11-12T00:00:00&#43;00:00">November 12, 2023</time>
-              &nbsp; · &nbsp;1 min read
+              &nbsp; · &nbsp;2 min read
             </p>
           </div>
         </div>
@@ -175,9 +175,17 @@
         <p><strong>Table of contents</strong></p>
         <nav id="TableOfContents">
   <ul>
-    <li><a href="#목차가-필요해요">목차가 필요해요.</a>
+    <li><a href="#heading-2">Heading 2</a>
       <ul>
-        <li><a href="#h1은-목차로-안넣어주나">h1은 목차로 안넣어주나?</a></li>
+        <li><a href="#heading-3">Heading 3</a></li>
+        <li><a href="#emphasis">Emphasis</a></li>
+        <li><a href="#link">Link</a></li>
+        <li><a href="#paragraph">Paragraph</a></li>
+        <li><a href="#ordered-list">Ordered List</a></li>
+        <li><a href="#unordered-list">Unordered List</a></li>
+        <li><a href="#code-and-syntax-highlighting">Code and Syntax Highlighting</a></li>
+        <li><a href="#blockquote">Blockquote</a></li>
+        <li><a href="#tables">Tables</a></li>
       </ul>
     </li>
   </ul>
@@ -185,37 +193,213 @@
       </aside>
     
     <div class="single-content">
-      <h1 class="heading" id="안녕하세요">
-  안녕하세요!
-  <a class="anchor" href="#%ec%95%88%eb%85%95%ed%95%98%ec%84%b8%ec%9a%94">#</a>
+      <p>Here is an example of headings. You can use this heading by the following markdown rules. For example: use <code>#</code> for heading 1 and use <code>######</code> for heading 6.</p>
+<h1 class="heading" id="heading-1">
+  Heading 1
+  <a class="anchor" href="#heading-1">#</a>
 </h1>
-<p>Hugo test</p>
-<h2 class="heading" id="목차가-필요해요">
-  목차가 필요해요.
-  <a class="anchor" href="#%eb%aa%a9%ec%b0%a8%ea%b0%80-%ed%95%84%ec%9a%94%ed%95%b4%ec%9a%94">#</a>
+<h2 class="heading" id="heading-2">
+  Heading 2
+  <a class="anchor" href="#heading-2">#</a>
 </h2>
-<h3 class="heading" id="h1은-목차로-안넣어주나">
-  h1은 목차로 안넣어주나?
-  <a class="anchor" href="#h1%ec%9d%80-%eb%aa%a9%ec%b0%a8%eb%a1%9c-%ec%95%88%eb%84%a3%ec%96%b4%ec%a3%bc%eb%82%98">#</a>
+<h3 class="heading" id="heading-3">
+  Heading 3
+  <a class="anchor" href="#heading-3">#</a>
 </h3>
-<h1 class="heading" id="신기하네요">
-  신기하네요.
-  <a class="anchor" href="#%ec%8b%a0%ea%b8%b0%ed%95%98%eb%84%a4%ec%9a%94">#</a>
-</h1>
-<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#cf222e">static</span> <span style="color:#cf222e">void</span> <span style="color:#6639ba">foo</span><span style="color:#1f2328">()</span> 
+<h4 class="heading" id="heading-4">
+  Heading 4
+  <a class="anchor" href="#heading-4">#</a>
+</h4>
+<h5 class="heading" id="heading-5">
+  Heading 5
+  <a class="anchor" href="#heading-5">#</a>
+</h5>
+<h6 class="heading" id="heading-6">
+  Heading 6
+  <a class="anchor" href="#heading-6">#</a>
+</h6>
+<!-- raw HTML omitted -->
+<h3 class="heading" id="emphasis">
+  Emphasis
+  <a class="anchor" href="#emphasis">#</a>
+</h3>
+<p>The emphasis, aka italics, with <em>asterisks</em> or <em>underscores</em>.</p>
+<p>Strong emphasis, aka bold, with <strong>asterisks</strong> or <strong>underscores</strong>.</p>
+<p>The combined emphasis with <strong>asterisks and <em>underscores</em></strong>.</p>
+<p>Strike through uses two tildes. <del>Scratch this.</del></p>
+<!-- raw HTML omitted -->
+<h3 class="heading" id="link">
+  Link
+  <a class="anchor" href="#link">#</a>
+</h3>
+<p><a href="https://www.google.com">I&rsquo;m an inline-style link</a></p>
+<p><a href="https://www.google.com" title="Google's Homepage">I&rsquo;m an inline-style link with title</a></p>
+<p><a href="https://www.themefisher.com">I&rsquo;m a reference-style link</a></p>
+<p><a href="../blob/master/LICENSE">I&rsquo;m a relative reference to a repository file</a></p>
+<p><a href="https://gethugothemes.com">You can use numbers for reference-style link definitions</a></p>
+<p>Or leave it empty and use the <a href="https://www.getjekyllthemes.com">link text itself</a>.</p>
+<p>URLs and URLs in angle brackets will automatically get turned into links.
+<a href="http://www.example.com">http://www.example.com</a> or <a href="http://www.example.com">http://www.example.com</a> and sometimes
+example.com (but not on Github, for example).</p>
+<p>Some text to show that the reference links can follow later.</p>
+<!-- raw HTML omitted -->
+<h3 class="heading" id="paragraph">
+  Paragraph
+  <a class="anchor" href="#paragraph">#</a>
+</h3>
+<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam nihil enim maxime corporis cumque totam aliquid nam sint inventore optio modi neque laborum officiis necessitatibus, facilis placeat pariatur! Voluptatem, sed harum pariatur adipisci voluptates voluptatum cumque, porro sint minima similique magni perferendis fuga! Optio vel ipsum excepturi tempore reiciendis id quidem? Vel in, doloribus debitis nesciunt fugit sequi magnam accusantium modi neque quis, vitae velit, pariatur harum autem a! Velit impedit atque maiores animi possimus asperiores natus repellendus excepturi sint architecto eligendi non, omnis nihil. Facilis, doloremque illum. Fugit optio laborum minus debitis natus illo perspiciatis corporis voluptatum rerum laboriosam.</p>
+<!-- raw HTML omitted -->
+<h3 class="heading" id="ordered-list">
+  Ordered List
+  <a class="anchor" href="#ordered-list">#</a>
+</h3>
+<ol>
+<li>List item</li>
+<li>List item</li>
+<li>List item</li>
+<li>List item</li>
+<li>List item</li>
+</ol>
+<!-- raw HTML omitted -->
+<h3 class="heading" id="unordered-list">
+  Unordered List
+  <a class="anchor" href="#unordered-list">#</a>
+</h3>
+<ul>
+<li>List item</li>
+<li>List item</li>
+<li>List item</li>
+<li>List item</li>
+<li>List item</li>
+</ul>
+<!-- raw HTML omitted -->
+<h3 class="heading" id="code-and-syntax-highlighting">
+  Code and Syntax Highlighting
+  <a class="anchor" href="#code-and-syntax-highlighting">#</a>
+</h3>
+<p>This is an <code>Inline code</code> sample.</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#cf222e">var</span> <span style="color:#1f2328">s</span> <span style="color:#0550ae">=</span> <span style="color:#0a3069">&#34;JavaScript syntax highlighting&#34;</span><span style="color:#1f2328">;</span>
+</span></span><span style="display:flex;"><span><span style="color:#1f2328">alert</span><span style="color:#1f2328">(</span><span style="color:#1f2328">s</span><span style="color:#1f2328">);</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>s <span style="color:#0550ae">=</span> <span style="color:#0a3069">&#34;Python syntax highlighting&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6639ba">print</span> s
+</span></span></code></pre></div><div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#57606a">#include</span> <span style="color:#57606a">&lt;stdio.h&gt;</span><span style="color:#57606a">
+</span></span></span><span style="display:flex;"><span><span style="color:#57606a"></span>
+</span></span><span style="display:flex;"><span><span style="color:#cf222e">int</span> <span style="color:#6639ba">main</span><span style="color:#1f2328">(</span><span style="color:#cf222e">void</span><span style="color:#1f2328">)</span>
 </span></span><span style="display:flex;"><span><span style="color:#1f2328">{</span>
-</span></span><span style="display:flex;"><span>    std<span style="color:#0550ae">::</span>cout <span style="color:#0550ae">&lt;&lt;</span><span style="color:#0a3069">&#34;Hello! &lt;&lt; std::endl;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6639ba">printf</span><span style="color:#1f2328">(</span><span style="color:#0a3069">&#34;hello, world</span><span style="color:#0a3069">\n</span><span style="color:#0a3069">&#34;</span><span style="color:#1f2328">);</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#cf222e">return</span> <span style="color:#0550ae">0</span><span style="color:#1f2328">;</span>
 </span></span><span style="display:flex;"><span><span style="color:#1f2328">}</span>
-</span></span></code></pre></div>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><pre class="mermaid">flowchart TD
+    A[Start] --&gt; B{Is it?}
+    B -- Yes --&gt; C[OK]
+    C --&gt; D[Rethink]
+    D --&gt; B
+    B -- No ----&gt; E[End]
+</pre>
+
+<!-- raw HTML omitted -->
+<h3 class="heading" id="blockquote">
+  Blockquote
+  <a class="anchor" href="#blockquote">#</a>
+</h3>
+<blockquote>
+<p>Did you come here for something in particular or just general Riker-bashing? And blowing into maximum warp speed, you appeared for an instant to be in two places at once.</p></blockquote>
+<!-- raw HTML omitted -->
+<h3 class="heading" id="tables">
+  Tables
+  <a class="anchor" href="#tables">#</a>
+</h3>
+
+<div class="table-outer">
+    <table>
+        <thead>
+            <tr>
+                <th>Tables</th>
+                <th style="text-align: center">Are</th>
+                <th style="text-align: right">Cool</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>col 3 is</td>
+                <td style="text-align: center">right-aligned</td>
+                <td style="text-align: right">$1600</td>
+            </tr>
+            <tr>
+                <td>col 2 is</td>
+                <td style="text-align: center">centered</td>
+                <td style="text-align: right">$12</td>
+            </tr>
+            <tr>
+                <td>zebra stripes</td>
+                <td style="text-align: center">are neat</td>
+                <td style="text-align: right">$1</td>
+            </tr>
+        </tbody>
+    </table>
+</div><!-- raw HTML omitted -->
+
     </div>
   </article>
 
   
-
+  
+  
+  <script defer
+    type="module"
+    id="mermaid_script"
+    data-light-theme="default"
+    data-dark-theme="dark"
+    src='/js/mermaid.js'>
+  </script>
   
 
   
+
   
+  
+
+<div class="single-pagination">
+    <hr />
+
+    <div class="flexnowrap">
+
+        <div class="single-pagination-prev">
+            
+        </div>
+
+        <div class="single-pagination-next">
+            
+            <div class="single-pagination-container-next">
+                <div class="single-pagination-text">
+                    <a href="/posts/about-of-defferd-shading/">
+                        Deferred Shading의 개념
+                    </a>
+                </div>
+                <div class="single-pagination-text">→</div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <hr />
+</div>
+
+
 
   
 

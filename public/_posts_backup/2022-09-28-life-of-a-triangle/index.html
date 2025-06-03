@@ -41,7 +41,7 @@
 <meta property="og:url" content="http://localhost:1313/_posts_backup/2022-09-28-life-of-a-triangle/">
   <meta property="og:site_name" content="Hamsik2rang&#39;s blog">
   <meta property="og:title" content="Modern GPU에서 삼각형이 그려지는 과정">
-  <meta property="og:description" content="Overview#Modern GPU Architecture#과거 GPU(GeForce8XX Series Architecture 이전)는 물리적인 Graphics Pipeline을 따라 삼각형들을 처리했지만, G80이후 논리 파이프라인(Logical pipeline)으로 삼각형들을 처리하게 되었다.
+  <meta property="og:description" content="Overview # Modern GPU Architecture # 과거 GPU(GeForce8XX Series Architecture 이전)는 물리적인 Graphics Pipeline을 따라 삼각형들을 처리했지만, G80이후 논리 파이프라인(Logical pipeline)으로 삼각형들을 처리하게 되었다.
 물리 파이프라인의 경우 한 삼각형을 구성하는 모든 구성 데이터에 대해 한 단계가 끝나야 다음 단계를 진행했음과 달리, 논리 파이프라인은 한 삼각형의 구성 데이터도 쉐이더 코어의 진행 상황에 따라 제각기 다른 파이프라인 단계를 진행할 수 있게 되었다.
 다만 G80의 경우 쉐이더 코어가 정점/픽셀 처리를 모두 수행할 수 있게 된 건 맞지만 여전히 프리미티브/래스터라이제이션 연산은 순서에 맞게 연속적으로 이루어졌는데, Fermi Architecture 이후 완전한 병렬화를 이루게 되었다. 즉, 한 삼각형을 구성하는 정점/픽셀들 중 특정 정점은 정점 쉐이더를 수행하고 있을 때 같은 삼각형의 어떤 픽셀은 래스터 연산이 수행되고 어떤 픽셀은 픽셀 쉐이더가 수행될 수 있다는 뜻이기도 하며, 심지어는 어떤 쉐이더 코어는 해당 삼각형을 모두 처리하고 다음 삼각형에 대한 프리미티브 연산을 수행하고 있을 수도 있다는 것을 의미한다.">
   <meta property="og:locale" content="en_us">
@@ -60,7 +60,7 @@
 
 
 
-<link rel="stylesheet" href="/assets/combined.min.112a98362a6f946f340ec0d31c274a3107084c507913f2324eff00b52a189b0a.css" media="all">
+<link rel="stylesheet" href="/assets/combined.min.5f180c655f336b6dc2ab7250b010951e0a6430633df4da33bc679996f064b1e5.css" media="all">
 
 
 
