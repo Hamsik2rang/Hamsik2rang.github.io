@@ -6,15 +6,7 @@
     <description>Recent content in Blog on Hamsik2rang&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 12 Nov 2023 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/blog/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Hello Blog</title>
-      <link>http://localhost:1313/posts/hello-blog/</link>
-      <pubDate>Sun, 12 Nov 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/hello-blog/</guid>
-      <description>Hugo test</description>
-    </item>
     <item>
       <title>2022년의 목표</title>
       <link>http://localhost:1313/_posts_backup/2022-01-04-goal-of-2022/</link>

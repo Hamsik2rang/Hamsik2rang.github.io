@@ -6,14 +6,14 @@
     <description>Recent content in Graphics on Hamsik2rang&#39;s blog</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 12 Nov 2023 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 09 Oct 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://localhost:1313/tags/graphics/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Deferred Shading의 개념</title>
-      <link>http://localhost:1313/posts/about-of-defferd-shading/</link>
-      <pubDate>Sun, 12 Nov 2023 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/about-of-defferd-shading/</guid>
-      <description>Graphics</description>
+      <link>http://localhost:1313/posts/about-of-deferred-shading/</link>
+      <pubDate>Wed, 09 Oct 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/about-of-deferred-shading/</guid>
+      <description>효율적인 렌더링을 위한 여러 가지 기법들에 대한 소개</description>
     </item>
     <item>
       <title>A trip through the Graphics Pipeline 2011 - part 1</title>
