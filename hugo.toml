@@ -1,4 +1,4 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://hamsik2rang.github.io/'
 languageCode = 'en-us'
 title = "Hamsik2rang's blog"
 theme = 'typo'
@@ -19,13 +19,18 @@ colorPalette = 'default'
 hideHeader = false
 
 # Intro on main page, content is markdown
-homeIntroTitle = '임용식(Yongsik Im)'
-profileImage = "/images/profile.jpg"
+homeIntroTitle = 'Hello!'
+profileImage = "images/profile.jpg"
 homeIntroContent = """
 안녕하세요. 방문해주셔서 감사합니다.\n
 현재 [컴투스](https://com2us.com/)에서 엔진 프로그래머로 일하며 게임 엔진을 개발하고 있습니다.  
 게임 엔진 아키텍쳐, 실시간 렌더링, GPGPU 등의 주제를 탐구하며, 블로그를 통해 다양한 기술과 경험을 공유하고 싶습니다.  
 """
+
+# About section on home
+homeAbout = true
+homeAboutTitle = 'About'
+homeAboutPage = 'about'
 
 # Collection to display on home
 homeCollectionTitle = 'Posts'
@@ -86,7 +91,7 @@ theme = "preferred_color_scheme"
     dir = ':cacheDir/images'
 
 [sitemap]
-  changeFreq = 'always'
-  disable = true
+  changeFreq = 'weekly'
+  disable = false
   filename = 'sitemap.xml'
-  priority = 1.0
+  priority = 0.5

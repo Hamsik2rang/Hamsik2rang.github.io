@@ -15,54 +15,5 @@
       <guid>http://localhost:1313/posts/about-of-deferred-shading/</guid>
       <description>효율적인 렌더링을 위한 여러 가지 기법들에 대한 소개</description>
     </item>
-    <item>
-      <title>A trip through the Graphics Pipeline 2011 - part 1</title>
-      <link>http://localhost:1313/_posts_backup/2023-11-13-a-trip-through-the-graphics-pipeline-2011-part1/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/_posts_backup/2023-11-13-a-trip-through-the-graphics-pipeline-2011-part1/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;https://fgiesen.wordpress.com/2011/07/01/a-trip-through-the-graphics-pipeline-2011-part-1/&#34;&gt;해당 포스트&lt;/a&gt;를 번역한 글입니다.&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;이 포스트는 &lt;a href=&#34;https://hamsik2rang.github.io/2023/05/21/A-Trip-Through-The-Graphics-Pipeline-2011-00.html&#34;&gt;&amp;ldquo;A trip through the Graphics Pipeline 2011&amp;rdquo;&lt;/a&gt; 시리즈의 일부를 번역한 글입니다.&lt;/p&gt;&#xA;&lt;p&gt;제가 무언가를 이 곳에 포스팅한 지 꽤 되었고, 저는 이 블로그를 그래픽스 하드웨어와 소프트웨어의 몇 가지 일반적인 점들을 설명하기 위해 사용할 수 있을 것 같다고 생각했습니다. 당신은 당신의 PC의 그래픽스 스택이 무엇을 하는지 기능적인 설명을 찾을 수 있지만, &amp;ldquo;왜&amp;rdquo; 또는 &amp;ldquo;어떻게&amp;rdquo; 그것을 하는지는 쉽게 찾을 수 없습니다. 저는 너무 특정 하드웨어에 너무 구체적이지 않게 이러한 비어있는 칸을 채우려 노력할 것입니다. 저는 대부분 Windows 운영체제에서 D3D9/10/11을 실행할 수 있는 DX11 수준의 하드웨어에 대해 대부분을 이야기할 것인데, 이는 제가 가장 친숙한 장치 스택이기 때문입니다. API 세부 사항 등은 이러한 첫 번째 부분(하드웨어적인 요소들)을 넘어서 더 중요하진 않을 것입니다. 한번 우리가 실제 GPU 위에 있게 되면 이것들은 모두 네이티브한 명령들이기 때문입니다.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Linear Space와 Gamma Space</title>
-      <link>http://localhost:1313/_posts_backup/2023-05-07-linear-space-and-gamma-correction/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/_posts_backup/2023-05-07-linear-space-and-gamma-correction/</guid>
-      <description>&lt;h3 class=&#34;heading&#34; id=&#34;0-서론&#34;&gt;&#xA;  0. 서론&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#0-%ec%84%9c%eb%a1%a0&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h3&gt;&#xA;&lt;p&gt;회사에서 업무로 엔진에 다양한 포스트 프로세싱들을 구현하게 되었는데, 지금까지 포스트 프로세싱은 커녕 감마 보정에 대한 이해마저 제대로 하고 있지 못했다. 따라서 업무를 하며 알게된 개념들을 하나하나 정리해보고자 한다.&lt;/p&gt;&#xA;&lt;h2 class=&#34;heading&#34; id=&#34;1-gamma-correction&#34;&gt;&#xA;  1. Gamma Correction&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#1-gamma-correction&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;**Gamma Encoding(감마 부호화)**이란 임의의 값(γ, Gamma)을 이용해 색을 보정한 것을 말한다. 이와 반대로 Gamma Encoding된 색상을 원래 정확한 색상으로 돌려놓는 것을 **Gamma Decoding(감마 복호화)**이라 한다.&lt;/p&gt;&#xA;&lt;p&gt;일반적으로 디지털 이미지들은 모두 저장 장치에 저장될 때 Gamma Encoding되어 저장된다.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Modern GPU에서 삼각형이 그려지는 과정</title>
-      <link>http://localhost:1313/_posts_backup/2022-09-28-life-of-a-triangle/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/_posts_backup/2022-09-28-life-of-a-triangle/</guid>
-      <description>&lt;h2 class=&#34;heading&#34; id=&#34;overview&#34;&gt;&#xA;  Overview&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#overview&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;!-- raw HTML omitted --&gt;&#xA;&lt;h2 class=&#34;heading&#34; id=&#34;modern-gpu-architecture&#34;&gt;&#xA;  Modern GPU Architecture&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#modern-gpu-architecture&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;과거 GPU(GeForce8XX Series Architecture 이전)는 물리적인 Graphics Pipeline을 따라 삼각형들을 처리했지만, G80이후 논리 파이프라인(Logical pipeline)으로 삼각형들을 처리하게 되었다.&lt;/p&gt;&#xA;&lt;p&gt;물리 파이프라인의 경우 한 삼각형을 구성하는 모든 구성 데이터에 대해 한 단계가 끝나야 다음 단계를 진행했음과 달리, 논리 파이프라인은 한 삼각형의 구성 데이터도 쉐이더 코어의 진행 상황에 따라 제각기 다른 파이프라인 단계를 진행할 수 있게 되었다.&lt;/p&gt;&#xA;&lt;!-- raw HTML omitted --&gt;&#xA;&lt;p&gt;다만 G80의 경우 쉐이더 코어가 정점/픽셀 처리를 모두 수행할 수 있게 된 건 맞지만 여전히 프리미티브/래스터라이제이션 연산은 순서에 맞게 연속적으로 이루어졌는데, Fermi Architecture 이후 완전한 병렬화를 이루게 되었다. 즉, 한 삼각형을 구성하는 정점/픽셀들 중 특정 정점은 정점 쉐이더를 수행하고 있을 때 같은 삼각형의 어떤 픽셀은 래스터 연산이 수행되고 어떤 픽셀은 픽셀 쉐이더가 수행될 수 있다는 뜻이기도 하며, 심지어는 어떤 쉐이더 코어는 해당 삼각형을 모두 처리하고 다음 삼각형에 대한 프리미티브 연산을 수행하고 있을 수도 있다는 것을 의미한다.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>SSAA와 MSAA의 차이</title>
-      <link>http://localhost:1313/_posts_backup/2022-09-17-difference-from-ssaa-to-msaa/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/_posts_backup/2022-09-17-difference-from-ssaa-to-msaa/</guid>
-      <description>&lt;h2 class=&#34;heading&#34; id=&#34;0-서론&#34;&gt;&#xA;  0. 서론&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#0-%ec%84%9c%eb%a1%a0&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;그래픽스를 공부하던 중 Anti-Aliasing에 대해 공부하게 되었는데 뭔가 머리에 잘 들어오지 않아 스스로 정리할 겸 SSAA와 MSAA, 이를 위한 샘플링 이론에 대해 정리한 글을 작성하고자 한다.&lt;/p&gt;&#xA;&lt;h2 class=&#34;heading&#34; id=&#34;1-tldr&#34;&gt;&#xA;  1. TL;DR&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#1-tldr&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;Aliasing artifact를 줄이기 위해 SSAA와 MSAA 모두 원래 해상도보다 더 고해상도의 렌더 타겟을 이용한다.&lt;/li&gt;&#xA;&lt;li&gt;따라서 SSAA, MSAA 모두 원래 해상도보다 큰 깊이 버퍼, 스텐실 버퍼 등을 필요로 한다.&lt;/li&gt;&#xA;&lt;li&gt;그러나 SSAA는 고해상도 렌더 타겟의 크기만큼 픽셀 쉐이더를 호출하는 데 반해 MSAA는 원래 해상도 크기만큼 픽셀 쉐이더를 호출한다.&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 class=&#34;heading&#34; id=&#34;2-aliasing&#34;&gt;&#xA;  2. Aliasing&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#2-aliasing&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;**에일리어싱(위신호 현상, Aliasing)**이란 연속 신호를 이산 신호로 샘플링하는 가운데 추출된 각 신호가 연속 신호를 정확히 표현하지 못해 발생하는 일종의 일그러짐(jaggies)을 의미한다. 대부분의 경우 &amp;lsquo;위신호 현상&amp;rsquo;이라는 용어 보다 &amp;lsquo;&lt;strong&gt;계단 현상&lt;/strong&gt;&amp;lsquo;이라는 용어에 더 익숙할 것이다.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>번역] A trip through the Graphics Pipeline 2011 - Index</title>
-      <link>http://localhost:1313/_posts_backup/2023-05-21-a-trip-through-the-graphics-pipeline-2011-00/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/_posts_backup/2023-05-21-a-trip-through-the-graphics-pipeline-2011-00/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;https://fgiesen.wordpress.com/2011/07/09/a-trip-through-the-graphics-pipeline-2011-index/&#34;&gt;해당 포스트&lt;/a&gt;를 번역한 글입니다.&lt;/p&gt;&#xA;&lt;hr&gt;&#xA;&lt;p&gt;환영합니다.&lt;/p&gt;&#xA;&lt;p&gt;이 글은 실제 GPU에 의해 구현된 D3D/OpenGL 그래픽스 파이프라인에 대해 현재 작성중인 일련의 블로그 포스트의 목차 페이지입니다.  그래픽스 프로그래머들에게 이것들의 대부분은 잘 알려져 있고, 수많은 자료들이 존재합니다. 그러나 제가 이것에 대해 언짢아하는 점은 각각의 컴포넌트에 대해 매우 폭넓은 개요 혹은 매우 세부적인 정보들이 존재하는 것과는 달리 그 사이 어딘가의 자료는 많지 않고 그마저도 매우 오래 된 것이라는 점입니다.&lt;/p&gt;&#xA;&lt;p&gt;이 시리즈는 모던 3D API(적어도 OpenGL 2.0+ 혹은 D3D9+)를 잘 다루고 그것이 내부적으로 어떻게 이루어지는지를 잘 알고 싶은 그래픽스 프로그래머를 대상으로 합니다. 이것은 초심자를 위한 그래픽스 파이프라인에 대한 설명이 &lt;strong&gt;아닙니다&lt;/strong&gt;. 만약 당신이 3D API를 사용해보지 않았다면, 아마도 대부분의 이 시리즈에서 소개하는 내용은 당신에게 필요없을 것입니다. 저는 또한 당신이 현대적인 하드웨어 구조에 대해 이해하고 있다고 가정합니다ㅡ적어도 당신은 레지스터, FIFO, 캐시, 그리고 파이프라인 등이 무엇인지, 어떻게 작동하는지에 대해 이해하고 있어야 합니다. 마지막으로, 당신은 최소한의 병렬 프로그래밍&lt;em&gt;parallel programming&lt;/em&gt;에 대한 기본적인 이해를 하고 있어야 합니다. GPU는 매우 거대한 병렬 컴퓨터이므로, 이를 무시할 수 없습니다.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>임의의 드로우콜에서 픽셀이 겹치면 어떻게 될까?</title>
-      <link>http://localhost:1313/_posts_backup/2023-11-12-pixel-shader-invoke-order-and-writing-order/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/_posts_backup/2023-11-12-pixel-shader-invoke-order-and-writing-order/</guid>
-      <description>&lt;h1 class=&#34;heading&#34; id=&#34;0-서론&#34;&gt;&#xA;  0. 서론&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#0-%ec%84%9c%eb%a1%a0&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h1&gt;&#xA;&lt;p&gt;회사에서 UI Batching System을 구현하고 있었다. 그 중 UI Mesh를 묶어내는 코드를 작성하고 있었는데, 불현듯 한 가지 걱정이 생겼다: &lt;strong&gt;만약 묶인 메시의 프리미티브가 서로 겹치면, (UI는 z값이 모두 같으므로) 픽셀 쉐이더에서 Z-Fighting이 일어나게 되지 않을까?&lt;/strong&gt; 다음과 같은 그림을 상상해 보자.&lt;/p&gt;&#xA;&lt;!-- raw HTML omitted --&gt;&#xA;&lt;p&gt;내 머릿속의 그래픽스 지식으로는 픽셀 쉐이더는 워프 단위로 Parallel하게 수행되기 때문에 어떤 렌더링 결과가 나타날 지 알 수 없다는 결론에 이르렀다. 그래서 이걸 어떻게 해결해야 할 지 많은 고민을 하고 회사 선임님께도 여쭤보았는데, 결론부터 말하자면 &lt;strong&gt;신경 쓸 필요 없었다.&lt;/strong&gt;&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>임의의 한 점이 삼각형 내부에 있는지 어떻게 판단할 수 있을까?</title>
-      <link>http://localhost:1313/_posts_backup/2022-02-23-how-to-discriminate-if-a-point-is-insde-a-triangle/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/_posts_backup/2022-02-23-how-to-discriminate-if-a-point-is-insde-a-triangle/</guid>
-      <description>&lt;h2 class=&#34;heading&#34; id=&#34;0-서론&#34;&gt;&#xA;  0. 서론&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#0-%ec%84%9c%eb%a1%a0&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;소프트웨어 래스터라이저(라 쓰고 렌더러라 읽음)를 구현하다가 삼각형을 벡터 방식으로 그리는 코드를 작성할 필요가 있었다.&lt;/p&gt;&#xA;&lt;p&gt;삼각형 자체는 선분을 그리는 함수를 이용해 간단하게 그릴 수도 있지만, 삼각형 내부를 임의의 색으로 칠한다면 그렇게 단순하게 해결할 수가 없는데, 이때 삼각형을 구성하는 세 꼭지점(vertex)을 이용해 임의의 점이 삼각형의 내/외부 중 어디에 위치하는지 판단하는 방법을 알아보자.&lt;/p&gt;&#xA;&lt;h2 class=&#34;heading&#34; id=&#34;1-무게중심barycentric&#34;&gt;&#xA;  1. 무게중심(Barycentric)&#xA;  &lt;a class=&#34;anchor&#34; href=&#34;#1-%eb%ac%b4%ea%b2%8c%ec%a4%91%ec%8b%acbarycentric&#34;&gt;#&lt;/a&gt;&#xA;&lt;/h2&gt;&#xA;&lt;p&gt;임의의 삼각형이 있을 때 삼각형의 &lt;strong&gt;무게 중심 $P$&lt;/strong&gt; 는 다음과 같다.&lt;/p&gt;&#xA;&lt;p&gt;![]({{ site.baseurl }}/assets/img/posts/2022-02-23/how-to-discriminate-if-a-point-is-insde-a-triangle/img-01.jpg)&lt;/p&gt;</description>
-    </item>
   </channel>
 </rss>

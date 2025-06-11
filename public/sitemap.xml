@@ -4,151 +4,42 @@
   <url>
     <loc>http://localhost:1313/posts/about-of-deferred-shading/</loc>
     <lastmod>2024-10-09T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url><url>
     <loc>http://localhost:1313/tags/graphics/</loc>
     <lastmod>2024-10-09T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url><url>
     <loc>http://localhost:1313/</loc>
     <lastmod>2024-10-09T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url><url>
     <loc>http://localhost:1313/posts/</loc>
     <lastmod>2024-10-09T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url><url>
     <loc>http://localhost:1313/tags/</loc>
     <lastmod>2024-10-09T00:00:00+00:00</lastmod>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-01-04-goal-of-2022/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2023-07-01-second-half-plan/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2023-11-13-a-trip-through-the-graphics-pipeline-2011-part1/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/algorithm/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url><url>
     <loc>http://localhost:1313/tags/blog/</loc>
+    <lastmod>2023-11-12T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-03-18-boj-solve-1005/</loc>
+    <loc>http://localhost:1313/posts/hello-blog/</loc>
+    <lastmod>2023-11-12T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-03-22-boj-solve-21618/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-03-13-boj-solve-11000/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-07-12-boj-solve-1155/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-10-29-boj-solve-2468/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-03-18-boj-solve-2056/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-03-18-boj-solve-20119/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-03-18-boj-solve-15486/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/c/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2023-07-01-cpp-optimization-part-1/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2023-07-06-cpp-optimization-part-2/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2023-07-07-cpp-optimization-part-3/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2023-07-07-cpp-optimization-part-4/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2023-07-08-cpp-optimization-part-5/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/computer-architecture/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/cpp/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-10-30-process-when-we-start-hello-world-c-program/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/data-structure/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/devlog/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/git/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-09-14-what-is-git-1/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-09-16-what-is-git-2/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/googletest/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-04-18-tdd-on-project/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-09-07-http-network-basic-01/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-09-09-http-network-basic-02/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-09-11-http-network-basic-03/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-09-13-http-network-basic-04/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-09-15-http-network-basic-05/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2023-05-07-linear-space-and-gamma-correction/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/linux/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-01-26-print-wchar-string-in-linux/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-12-07-implement-malloc-lab/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/math/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2023-05-20-about-mlfqs/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-09-28-life-of-a-triangle/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/network/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/os/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2023-01-15-implement-pintos-process-wait/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/reading/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/server/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-10-06-what-is-simd/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-09-17-difference-from-ssaa-to-msaa/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/tdd/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-04-17-how-to-implement-friend-template-function/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/unittest/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/web/</loc>
-  </url><url>
-    <loc>http://localhost:1313/tags/wsl/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-03-13-devlog-software-renderer/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-03-21-devlog/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-03-26-devlog/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-09-27-after-read-book-game-engine-black-book-doom/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2023-05-21-a-trip-through-the-graphics-pipeline-2011-00/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-09-06-how-to-implement-type-reflection-using-enum/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2023-11-12-pixel-shader-invoke-order-and-writing-order/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-02-23-how-to-discriminate-if-a-point-is-insde-a-triangle/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-10-28-reminisce-me/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2023-01-19-join-to-com2us/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-05-25-about-quaternion/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-11-20-jungle-week-4-sunday/</loc>
-  </url><url>
-    <loc>http://localhost:1313/_posts_backup/2022-11-07-what-is-hash-table/</loc>
+    <loc>http://localhost:1313/tags/markdown/</loc>
+    <lastmod>2023-11-12T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
   </url>
 </urlset>

@@ -1,0 +1,8 @@
+{{/* SEO Meta Tags */}}
+{{ partial "head/seo.html" . }}
+
+{{ if eq .Type "page" }}
+  {{ if eq .File.BaseFileName "about" }}
+    <link rel="stylesheet" href="{{ "css/custom.css" | relURL }}">
+  {{ end }}
+{{ end }}

@@ -1,0 +1,34 @@
+{{ define "main" }}
+
+<div class="about-page">
+    {{/* Profile Section - Home 페이지와 유사한 스타일 */}}
+    <div class="intro">
+        {{/* Profile Image */}}
+        <div class="profile-image">
+            <img src="/images/profile.jpg" alt="Profile Image" />
+        </div>
+        
+        <h1>{{ .Title }}</h1>
+        
+        {{/* Social Icons */}}
+        {{ with site.Params.social }}
+        <div class="social-icons">
+            {{- range . }}
+            <a href="{{ trim .url " " | safeURL }}" target="_blank"
+                rel="noopener noreferrer me"
+                title="{{ (.title | default .name) | title }}">
+                {{ partial "svg.html" . }}
+            </a>
+            {{- end }}
+        </div>
+        {{ end }}
+    </div>
+
+    {{/* Content Section */}}
+    <div class="about-content">
+        {{ .Content }}
+    </div>
+</div>
+
+
+{{ end }}
