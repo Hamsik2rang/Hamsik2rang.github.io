@@ -189,9 +189,9 @@ AI를 증가시키기 위한 주요한 전략은 온칩 메모리에서 SM에 �
 
 문제는 중간 메모리 트래픽입니다. 융합되지 않은 연산 `y = relu(x + 1)`을 고려해 봅시다:
 
-1. Kernel 1 (add): 전역 메모리에서 텐서 x의 전체 데이터를 읽습니다. `tmp = x + 1`을 계산합니다. 중간 텐서인 `tmp`의 전체 데이터를 다시 전역 메모리에 씁니다(Write). 
+1. **Kernel 1 (add):** 전역 메모리에서 텐서 x의 전체 데이터를 읽습니다. `tmp = x + 1`을 계산합니다. 중간 텐서인 `tmp`의 전체 데이터를 다시 전역 메모리에 씁니다(Write). 
 
-2. Kernel 2 (relu): 텐서 `tmp`의 데이터 전체를 전역 메모리에서 읽습니다. `y = relu(tmp)`를 계산합니다. 최종 텐서 `y`를 전역 메모리에 씁니다.
+2. **Kernel 2 (relu):** 텐서 `tmp`의 데이터 전체를 전역 메모리에서 읽습니다. `y = relu(tmp)`를 계산합니다. 최종 텐서 `y`를 전역 메모리에 씁니다.
 
 이는 낭비가 매우 심한 접근입니다. 이는 두 개의 커널 실행 오버헤드와 중간 텐서 `tmp`의 **전역 메모리로의 왕복이 강제**됩니다.
 
@@ -409,7 +409,7 @@ Result: HBM reads are coalesced, SRAM reads are conflict-free.
 
 #### 전략 1: 한 스레드가 하나의 출력을 계산하기
 
-이 가장 간단한 접근은 하나의 출력 원소를 한 스레드와 사상하는 것입니다. `BLOCK_DIM`과 `TILE_DIM`이 같은 크기일 때  `BLOCK_DIM x BLOCK_DIM` 크기의 스레드 블록은 `TILE_DIM x TILE_DIM` 크기의 데이터 타일을 연산합니다. 이 전략은 개념적으로 공유 메모리 캐싱을 소개한 [Boehm의 포스트](https://siboehm.com/articles/22/CUDA-MMM)의 **Kernel 3**과 유사합니다. 블록당 1024개 스레드라는 하드웨어 제한은  `BLOCK_DIM`의 최대 크기가 32(역주. $N^2$가 1024를 넘을 수 없으므로 $N$은 32가 최대입니다라는 제약을 만듭니다. 스레드 `(tx, ty)`는 단일 출력 원소 `C_patial[tx, ty]`를 책임지게 됩니다.
+이 가장 간단한 접근은 하나의 출력 원소를 한 스레드와 사상하는 것입니다. `BLOCK_DIM`과 `TILE_DIM`이 같은 크기일 때  `BLOCK_DIM x BLOCK_DIM` 크기의 스레드 블록은 `TILE_DIM x TILE_DIM` 크기의 데이터 타일을 연산합니다. 이 전략은 개념적으로 공유 메모리 캐싱을 소개한 [Boehm의 포스트](https://siboehm.com/articles/22/CUDA-MMM)의 **Kernel 3**과 유사합니다. 블록당 1024개 스레드라는 하드웨어 제한은  `BLOCK_DIM`의 최대 크기가 32(역주. $N^2$가 1024를 넘을 수 없으므로 $N$은 32가 최대입니다)라는 제약을 만듭니다. 스레드 `(tx, ty)`는 단일 출력 원소 `C_patial[tx, ty]`를 책임지게 됩니다.
 
 ```
 # Action for a single thread (tx, ty) where BLOCK_DIM = TILE_DIM
