@@ -74,6 +74,15 @@ url = "/about"
 [markup.highlight]
 style = 'github'
 
+[mediaTypes]
+  [mediaTypes."application/xml"]
+    suffixes = ["xml"]
+
+[outputFormats]
+  [outputFormats.sitemap]
+    mediaType = "application/xml"
+    baseName = "sitemap"
+    isPlainText = false
 
 # Giscus comments
 [params.giscus]
