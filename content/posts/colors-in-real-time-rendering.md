@@ -11,8 +11,8 @@ autonumber: true
 math: true
 tags: ["Graphics", "GPU", "AI"]
 showTags: false
+draft: true
 hideBackToTop: false
-# draft: true
 ---
 ## Light Quantities
 PBR(Physically-Based Rendering)등의 렌더링 기법을 이용해 현실적인 장면을 렌더링하려면 현실에 적용되는 물리적인 법칙들을 최대한 비슷하게 묘사해야 한다. 그 중에는 당연히 Shading을 위한 빛의 법칙들도 포함된다.  
