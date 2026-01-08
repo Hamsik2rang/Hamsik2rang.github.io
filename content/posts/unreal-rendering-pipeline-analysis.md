@@ -286,7 +286,7 @@ void FRDGBuilder::ExecutePassEpilogue(FRHIComputeCommandList& RHICmdListPass, FR
 
 #### Barrier Batch System
 
-RDG는 여러 리소스의 전환을 **배치(Batch)**로 묶어서 효율성을 높입니다:
+RDG는 여러 리소스의 전환을 **배치(Batch)** 로 묶어서 효율성을 높입니다:
 
 ```cpp
 // RenderGraphPass.h:107-168
