@@ -16,6 +16,10 @@ hideBackToTop: false
 
 ## Overview
 ![image_0](/post_images/life-of-a-triangle/0.png)  
+#
+#
+#
+
 
 -----  
 
