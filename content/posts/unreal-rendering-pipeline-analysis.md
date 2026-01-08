@@ -2,7 +2,7 @@
 title: "언리얼 엔진 렌더링 파이프라인 분석"
 author: "Yongsik Im"
 authorAvatarPath: "/images/profile.jpg"
-date: "2025-01-07"
+date: "2026-01-07"
 summary: "언리얼 엔진 5.7의 렌더링 파이프라인 및 렌더링 단계까지의 진입 경로를 분석합니다"
 description: ""
 toc: true
