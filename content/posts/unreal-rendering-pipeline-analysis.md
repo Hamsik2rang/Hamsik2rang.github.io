@@ -91,7 +91,7 @@ GraphBuilder.Execute();  // 여기서 실제 리소스 할당, 배리어 삽입,
 람다 캡처 방식을 통해 `Execute()`호출 전까지 실행을 지연시킵니다.
 ## 구성 API
 실제 코드상에서 `FRDGBuilder`가 제공하는 API는 크게 4가지 분류로 나눌 수 있습니다.
-### 1. 새 리소스 생성
+### 새 리소스 생성
 ```
 // RenderCore/Public/RenderGraphBuilder.h
 FRDGTextureRef CreateTexture(const FRDGTextureDesc& Desc, ...);
@@ -99,14 +99,14 @@ FRDGBufferRef CreateBuffer(const FRDGBufferDesc& Desc, ...);
 FRDGBufferSRVRef CreateSRV(const FRDGBufferSRVDesc& Desc);
 ```
 마찬가지로, 이러한 리소스 생성 API 역시 단순히 호출 시점에는 스펙을 전달할 뿐이고 실제 리소스의 생성(GPU 메모리 할당)은 Exeucte()단계에서 이루어집니다. 또, 이러한 콜을 통해 생성된 API들은 Transiant 리소스이기 때문에 프레임이 끝나면 해제됩니다. 
-### 2. 외부 리소스 등록
+### 외부 리소스 등록
 ```
 FRDGTextureRef RegisterExternalTexture(const TRefCountPtr<IPooledRenderTarget>& ExternalPooledTexture, ERDGTextureFlags Flags);
 FRDGBufferRef RegisterExternalBuffer(const TRefCountPtr<FRDGPooledBuffer>& ExternalPooledBuffer, ERDGTextureFlags Flags);
 ```
 RDG 외부에서 이미 만들어진 리소스를 그래프에 포함시키는 함수이며, 이는 여러 프레임에 걸쳐 유지되어야 하는 리소스들(ex. TAA, Motion Blur등에 사용되는 텍스쳐)을 위한 용도입니다.
 여기서 외부 리소스는 상술했던 Proxy 리소스를 의미합니다. 
-### 3. 패스 추가
+### 패스 추가
 ```
 template <typename ParameterStructType, typename ExecuteLambdaType>
 FRDGPassRef AddPass(FRDGEventName&& Name, const ParameterStructType* ParameterStruct,
@@ -140,18 +140,18 @@ ENUM_CLASS_FLAGS(ERDGPassFlags);
 * `NeverMerge`: 다른 패스와 합치지 않음
 * `NeverParallel`: (렌더링 스레드 기준)단일 스레드 작업을 보장(== 렌더링 스레드 외부에서 실행하지 않음)
 
-### 4. 실행 및 추출
+### 실행 및 추출
 ```
 void Execute();
 void QueueTextureExtraction(FRDGTextureRef Texture, TRefCountPtr<IPooledRenderTarget>* OutPtr);
 ```
-### 5. Transient Resource Aliasing
+### Transient Resource Aliasing
 앞서 RDG에서 새 리소스를 생성하는 API를 호출하면 Transiant 리소스를 생성한다고 했습니다. 이러한 Transiant 리소스는 일종의 임시 리소스이며, 특정 패스에서만 사용되고 해제될 데이터들에 대해 GPU메모리 재사용이 가능하도록 해 줍니다. 이를 통해 GPU메모리를 절감할 수 있으며, 이는 Frostbite의 발표에서도 강조되었던 내용입니다.
 `IRHITransientResourceAllocator`가 이러한 Transiant 리소스 할당 및 관리를 수행합니다.
 
 ## Graph 실행(Execute)
 
-### 1. Compile → Cull → Execute 과정
+### Compile → Cull → Execute 과정
 
 ```cpp
 // RenderCore/Private/RenderGraphBuilder.cpp:1751
@@ -182,7 +182,7 @@ void FRDGBuilder::Execute()
 
 ---
 
-### 2. Pass 실행 상세
+### Pass 실행 상세
 
 ```cpp
 // RenderCore/Private/RenderGraphBuilder.cpp:3448-3461
@@ -284,7 +284,7 @@ void FRDGBuilder::ExecutePassEpilogue(FRHIComputeCommandList& RHICmdListPass, FR
 }
 ```
 
-### 3. Barrier Batch System
+### Barrier Batch System
 
 RDG는 여러 리소스의 전환을 **배치(Batch)**로 묶어서 효율성을 높입니다:
 
@@ -323,7 +323,7 @@ Batch.Submit(RHICmdList);  // 한 번에 제출
 ```
 이를 통해 GPU커맨드의 개수를 최소화할 수 있습니다.
 
-### 4. Transition Packing
+### Transition Packing
 
 ```cpp
 // RenderGraphPass.h:57-83
@@ -366,7 +366,7 @@ FParallelMeshDrawCommandPass
 
 ---
 
-## 1. Parallel Setup Task
+## Parallel Setup Task
 
 ```cpp
 // MeshDrawCommands.h:130-146
@@ -409,7 +409,7 @@ class FMeshDrawCommandPassSetupTaskContext
 
 ---
 
-## 2. Instance Culling Integration
+## Instance Culling Integration
 
 ```cpp
 // Renderer/Private/MeshDrawCommands.h
@@ -443,7 +443,7 @@ CPU Setup Task → GPU Culling Pass → GPU Draw (Indirect)
 
 ---
 
-## 3. 실제 Draw 실행
+## 실제 Draw 실행
 
 ```cpp
 // Renderer/Private/MeshDrawCommands.h
@@ -472,7 +472,7 @@ void Dispatch(
 
 ---
 
-## 4. Primitive ID Vertex Buffer Pool
+## Primitive ID Vertex Buffer Pool
 
 Instance ID를 vertex buffer로 전달하기 위한 풀:
 
@@ -506,16 +506,16 @@ FPrimitiveIdVertexBufferPoolEntry Entry =
 // 5. 프레임 끝에 반환
 GPrimitiveIdVertexBufferPool.ReturnToFreeList(Entry);
 ```
-# 3. Rendering Path
+# Rendering Path
 상술한 내용을 기반으로 렌더링 경로를 도식으로 나타내면 다음과 같습니다.  
 
 ![ImagesFullPipeline](/post_images/unreal-rendering-pipeline-analysis/FullPipeline.png)
 
-# 4. Rendering Passes 상세 분석
+# Rendering Passes 상세 분석
 
 `FDeferredShadingSceneRenderer::Render()` 함수 내부에서 실행되는 각 렌더링 패스를 상세히 분석합니다.
 
-## 4.1 Visibility & Culling
+## Visibility & Culling
 
 렌더링의 첫 단계로, 카메라에 보이지 않는 오브젝트들을 필터링하여 GPU 부하를 줄입니다. 언리얼 엔진은 다단계 컬링 파이프라인을 통해 효율적으로 가시성을 계산합니다.
 
@@ -740,7 +740,7 @@ GPU: DrawIndexedInstancedIndirect()
 
 ---
 
-## 4.2 Depth Prepass (Early-Z)
+## Depth Prepass (Early-Z)
 
 불투명 오브젝트의 깊이만 먼저 기록하여 이후 패스에서 overdraw를 방지합니다. GPU의 Early-Z 하드웨어와 결합하여 Base Pass에서 불필요한 픽셀 셰이더 실행을 제거합니다.
 
@@ -929,7 +929,7 @@ World Position Offset(WPO)이나 Dithered LOD Transition을 사용하는 머티�
 
 ---
 
-## 4.3 Base Pass (G-Buffer)
+## Base Pass (G-Buffer)
 
 Deferred Shading의 핵심으로, 모든 불투명 오브젝트의 지오메트리/머티리얼 정보를 G-Buffer에 기록합니다. 이 단계에서는 라이팅 계산 없이 머티리얼 속성만 저장합니다.
 
@@ -1153,7 +1153,7 @@ if (Substrate::IsSubstrateEnabled())
 
 ---
 
-## 4.4 Shadow Depth Rendering
+## Shadow Depth Rendering
 
 각 광원에 대한 Shadow Map을 생성합니다. UE5는 기존 Cascaded Shadow Maps(CSM)과 새로운 Virtual Shadow Maps(VSM) 두 가지 시스템을 지원합니다.
 
@@ -1364,7 +1364,7 @@ float SampleShadowMap(float3 ShadowCoord, float2 ShadowMapSize)
 
 ---
 
-## 4.5 Lighting Pass
+## Lighting Pass
 
 G-Buffer 정보를 기반으로 최종 라이팅을 계산합니다. Deferred Shading의 핵심으로, 모든 광원의 기여도를 누적하여 SceneColor에 기록합니다.
 
@@ -1610,7 +1610,7 @@ void FDeferredShadingSceneRenderer::RenderMegaLights(FRDGBuilder& GraphBuilder, 
 
 ---
 
-## 4.6 Post Processing
+## Post Processing
 
 최종 이미지 품질 향상을 위한 후처리 파이프라인입니다. UE5의 포스트 프로세싱은 RDG 기반으로 구현되어 있으며, TOverridePassSequence를 통해 패스 순서와 활성화 여부를 관리합니다.
 
@@ -1674,7 +1674,7 @@ void AddPostProcessingPasses(
 }
 ```
 
-### 4.6.1 Motion Blur
+### Motion Blur
 
 카메라 및 오브젝트 움직임에 의한 블러 효과를 시뮬레이션합니다.
 
@@ -1728,7 +1728,7 @@ bool IsMotionBlurScatterRequired(const FViewInfo& View, const FScreenPassTexture
 }
 ```
 
-### 4.6.2 TSR (Temporal Super Resolution)
+### TSR (Temporal Super Resolution)
 
 UE5의 핵심 업스케일링 기술로, 낮은 렌더링 해상도에서 고품질 출력을 생성합니다.
 
@@ -1780,7 +1780,7 @@ TAutoConsoleVariable<float> CVarTSRFlickeringPeriod(
     TEXT("Frame frequency threshold for flickering detection"));
 ```
 
-### 4.6.3 Eye Adaptation (자동 노출)
+### Eye Adaptation (자동 노출)
 
 씬의 밝기에 따라 카메라 노출을 자동으로 조정합니다.
 
@@ -1829,7 +1829,7 @@ EyeAdaptationBuffer = AddBasicEyeAdaptationPass(
     bLocalExposureEnabled);
 ```
 
-### 4.6.4 Bloom
+### Bloom
 
 밝은 영역에서 발산되는 빛 번짐 효과를 구현합니다.
 
@@ -1881,7 +1881,7 @@ FScreenPassTexture AddGaussianBloomPasses(
 **Bloom 타입 비교:**  
 ![ImagesBloomMethod](/post_images/unreal-rendering-pipeline-analysis/BloomMethod.png)
 
-### 4.6.5 Tonemapping
+### Tonemapping
 
 HDR 씬 컬러를 디스플레이 가능한 LDR로 변환합니다.
 
@@ -1964,7 +1964,7 @@ namespace TonemapperPermutation
 }
 ```
 
-### 4.6.6 Downsample Chain
+### Downsample Chain
 
 Eye Adaptation과 Bloom을 위한 다운샘플 체인을 생성합니다.
 
