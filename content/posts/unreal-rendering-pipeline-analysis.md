@@ -16,11 +16,11 @@ hideBackToTop: false
 
 # Unreal Engine Rendering Pipeline 분석
 
-# 개요 
+## 개요 
 언리얼 엔진(5.7.1)의 렌더링 파이프라인(및 렌더링 단계까지의 진입 경로)을 분석한 포스트입니다. 
 
-# 1. Threading Model
-## 3 스레드 모델
+## Threading Model
+### 3 스레드 모델
 언리얼 엔진은 대부분의 게임 엔진들과 동일하게 멀티 스레드 렌더링 모델을 채택하고 있지만, 여타 엔진과 달리 3개 스레드를 사용합니다.
 각 스레드는 다음과 같습니다.
 * Game Thread
@@ -74,7 +74,7 @@ Transform같은 가변성이 높은 데이터는 `SendRenderTransform()` 등을 
 | RenderProxy | UMaterialInterface | 머티리얼 파라미터 캐시 |
 | 없음 | UDataAsset, UBlueprint | 렌더링과 무관 |
 
-# Render Dependency Graph(RDG)
+## Render Dependency Graph(RDG)
 Frostbite가 GDC에서 발표한 [FrameGraph](https://www.gdcvault.com/play/1024612/FrameGraph-Extensible-Rendering-Architecture-in)이후 대부분의 엔진에서 사용하는 Render Graph 구조의 언리얼 버전입니다. Vulkan, DX12등의 API에 명시적인 리소스 배리어가 필요하게 되면서 각 렌더 패스(와 그 안에서 사용하는 리소스들) 간의 의존성 파악이 필수적이게 되었고, 이를 수행함과 동시에 최적화 요소를 최대한 확보하는 것을 목적으로 합니다.
 ```
 // Renderer/Private/BasePassRendering.cpp:1702
@@ -89,9 +89,9 @@ GraphBuilder.AddPass(
 GraphBuilder.Execute();  // 여기서 실제 리소스 할당, 배리어 삽입, 실행
 ```
 람다 캡처 방식을 통해 `Execute()`호출 전까지 실행을 지연시킵니다.
-## 구성 API
+### 구성 API
 실제 코드상에서 `FRDGBuilder`가 제공하는 API는 크게 4가지 분류로 나눌 수 있습니다.
-### 새 리소스 생성
+#### 새 리소스 생성
 ```
 // RenderCore/Public/RenderGraphBuilder.h
 FRDGTextureRef CreateTexture(const FRDGTextureDesc& Desc, ...);
@@ -99,14 +99,14 @@ FRDGBufferRef CreateBuffer(const FRDGBufferDesc& Desc, ...);
 FRDGBufferSRVRef CreateSRV(const FRDGBufferSRVDesc& Desc);
 ```
 마찬가지로, 이러한 리소스 생성 API 역시 단순히 호출 시점에는 스펙을 전달할 뿐이고 실제 리소스의 생성(GPU 메모리 할당)은 Exeucte()단계에서 이루어집니다. 또, 이러한 콜을 통해 생성된 API들은 Transiant 리소스이기 때문에 프레임이 끝나면 해제됩니다. 
-### 외부 리소스 등록
+#### 외부 리소스 등록
 ```
 FRDGTextureRef RegisterExternalTexture(const TRefCountPtr<IPooledRenderTarget>& ExternalPooledTexture, ERDGTextureFlags Flags);
 FRDGBufferRef RegisterExternalBuffer(const TRefCountPtr<FRDGPooledBuffer>& ExternalPooledBuffer, ERDGTextureFlags Flags);
 ```
 RDG 외부에서 이미 만들어진 리소스를 그래프에 포함시키는 함수이며, 이는 여러 프레임에 걸쳐 유지되어야 하는 리소스들(ex. TAA, Motion Blur등에 사용되는 텍스쳐)을 위한 용도입니다.
 여기서 외부 리소스는 상술했던 Proxy 리소스를 의미합니다. 
-### 패스 추가
+#### 패스 추가
 ```
 template <typename ParameterStructType, typename ExecuteLambdaType>
 FRDGPassRef AddPass(FRDGEventName&& Name, const ParameterStructType* ParameterStruct,
@@ -140,18 +140,18 @@ ENUM_CLASS_FLAGS(ERDGPassFlags);
 * `NeverMerge`: 다른 패스와 합치지 않음
 * `NeverParallel`: (렌더링 스레드 기준)단일 스레드 작업을 보장(== 렌더링 스레드 외부에서 실행하지 않음)
 
-### 실행 및 추출
+#### 실행 및 추출
 ```
 void Execute();
 void QueueTextureExtraction(FRDGTextureRef Texture, TRefCountPtr<IPooledRenderTarget>* OutPtr);
 ```
-### Transient Resource Aliasing
+#### Transient Resource Aliasing
 앞서 RDG에서 새 리소스를 생성하는 API를 호출하면 Transiant 리소스를 생성한다고 했습니다. 이러한 Transiant 리소스는 일종의 임시 리소스이며, 특정 패스에서만 사용되고 해제될 데이터들에 대해 GPU메모리 재사용이 가능하도록 해 줍니다. 이를 통해 GPU메모리를 절감할 수 있으며, 이는 Frostbite의 발표에서도 강조되었던 내용입니다.
 `IRHITransientResourceAllocator`가 이러한 Transiant 리소스 할당 및 관리를 수행합니다.
 
-## Graph 실행(Execute)
+### Graph 실행(Execute)
 
-### Compile → Cull → Execute 과정
+#### Compile → Cull → Execute 과정
 
 ```cpp
 // RenderCore/Private/RenderGraphBuilder.cpp:1751
@@ -182,7 +182,7 @@ void FRDGBuilder::Execute()
 
 ---
 
-### Pass 실행 상세
+#### Pass 실행 상세
 
 ```cpp
 // RenderCore/Private/RenderGraphBuilder.cpp:3448-3461
@@ -284,7 +284,7 @@ void FRDGBuilder::ExecutePassEpilogue(FRHIComputeCommandList& RHICmdListPass, FR
 }
 ```
 
-### Barrier Batch System
+#### Barrier Batch System
 
 RDG는 여러 리소스의 전환을 **배치(Batch)**로 묶어서 효율성을 높입니다:
 
@@ -323,7 +323,7 @@ Batch.Submit(RHICmdList);  // 한 번에 제출
 ```
 이를 통해 GPU커맨드의 개수를 최소화할 수 있습니다.
 
-### Transition Packing
+#### Transition Packing
 
 ```cpp
 // RenderGraphPass.h:57-83
@@ -347,7 +347,7 @@ struct FRDGTransitionInfo
 - **64-bit 압축**: Access 상태 + 리소스 정보를 64비트에 압축해 캐시 라인 점유율을 증가시킵니다.
 - **Subresource 단위**: Mip, Array Slice 별로 개별 전환이 가능합니다.
 
-# Mesh Draw Command 생성
+## Mesh Draw Command 생성
 RDG와 별개로, Mesh Draw Command 시스템은 실제 Draw Call을 생성하고 최적화합니다.
 
 ###시스템 구조
@@ -366,7 +366,7 @@ FParallelMeshDrawCommandPass
 
 ---
 
-## Parallel Setup Task
+### Parallel Setup Task
 
 ```cpp
 // MeshDrawCommands.h:130-146
@@ -409,7 +409,7 @@ class FMeshDrawCommandPassSetupTaskContext
 
 ---
 
-## Instance Culling Integration
+### Instance Culling Integration
 
 ```cpp
 // Renderer/Private/MeshDrawCommands.h
@@ -443,7 +443,7 @@ CPU Setup Task → GPU Culling Pass → GPU Draw (Indirect)
 
 ---
 
-## 실제 Draw 실행
+### 실제 Draw 실행
 
 ```cpp
 // Renderer/Private/MeshDrawCommands.h
@@ -472,7 +472,7 @@ void Dispatch(
 
 ---
 
-## Primitive ID Vertex Buffer Pool
+### Primitive ID Vertex Buffer Pool
 
 Instance ID를 vertex buffer로 전달하기 위한 풀:
 
@@ -506,20 +506,18 @@ FPrimitiveIdVertexBufferPoolEntry Entry =
 // 5. 프레임 끝에 반환
 GPrimitiveIdVertexBufferPool.ReturnToFreeList(Entry);
 ```
-# Rendering Path
-상술한 내용을 기반으로 렌더링 경로를 도식으로 나타내면 다음과 같습니다.  
-
-![ImagesFullPipeline](/post_images/unreal-rendering-pipeline-analysis/FullPipeline.png)
-
-# Rendering Passes 상세 분석
+## Rendering Path
+![ImagesFullPipeline](/post_images/unreal-rendering-pipeline-analysis/RenderingPath.png)
+#
+## Rendering Passes 상세 분석
 
 `FDeferredShadingSceneRenderer::Render()` 함수 내부에서 실행되는 각 렌더링 패스를 상세히 분석합니다.
 
-## Visibility & Culling
+### Visibility & Culling
 
 렌더링의 첫 단계로, 카메라에 보이지 않는 오브젝트들을 필터링하여 GPU 부하를 줄입니다. 언리얼 엔진은 다단계 컬링 파이프라인을 통해 효율적으로 가시성을 계산합니다.
 
-### Visibility 계산 전체 흐름
+#### Visibility 계산 전체 흐름
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Private/SceneVisibility.cpp
@@ -531,7 +529,7 @@ GPrimitiveIdVertexBufferPool.ReturnToFreeList(Entry);
 // 4단계: Relevance 계산 - 각 View에 대한 Primitive의 렌더링 관련성 판단
 ```
 
-### Frustum Culling
+#### Frustum Culling
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Private/SceneVisibility.cpp:773
@@ -612,7 +610,7 @@ static int32 FrustumCull(
 // r.Visibility.FrustumCull.NumPrimitivesPerTask: Task당 Primitive 수
 ```
 
-### IntersectBox8Plane SIMD 구현
+#### IntersectBox8Plane SIMD 구현
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Private/SceneVisibility.cpp:527
@@ -656,7 +654,7 @@ inline bool IntersectBox8Plane(const FVector& InOrigin, const FVector& InExtent,
 }
 ```
 
-### Hierarchical Z-Buffer Occlusion Culling (HZB)
+#### Hierarchical Z-Buffer Occlusion Culling (HZB)
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Private/SceneOcclusion.cpp
@@ -694,7 +692,7 @@ Full Resolution Depth (Mip 0)
     Mip N (최소 해상도)
 ```
 
-### GPU-Driven Culling (Nanite/Instance Culling)
+#### GPU-Driven Culling (Nanite/Instance Culling)
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Private/InstanceCulling/InstanceCullingManager.cpp
@@ -740,11 +738,11 @@ GPU: DrawIndexedInstancedIndirect()
 
 ---
 
-## Depth Prepass (Early-Z)
+### Depth Prepass (Early-Z)
 
 불투명 오브젝트의 깊이만 먼저 기록하여 이후 패스에서 overdraw를 방지합니다. GPU의 Early-Z 하드웨어와 결합하여 Base Pass에서 불필요한 픽셀 셰이더 실행을 제거합니다.
 
-### RenderPrePass 전체 흐름
+#### RenderPrePass 전체 흐름
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Private/DepthRendering.cpp:525
@@ -790,7 +788,7 @@ void FDeferredShadingSceneRenderer::RenderPrePass(
 }
 ```
 
-### Parallel Depth Pass 구현
+#### Parallel Depth Pass 구현
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Private/DepthRendering.cpp:548
@@ -838,7 +836,7 @@ auto RenderDepthPass = [&](uint8 DepthMeshPass)
 };
 ```
 
-### EDepthDrawingMode 상세
+#### EDepthDrawingMode 상세
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Public/DepthRendering.h
@@ -886,7 +884,7 @@ else if (bDeferredShading)
 | DDM_AllOccluders | bUseAsOccluder=true | 복잡한 씬 | 최대 Overdraw 감소 |
 | DDM_AllOpaque | 모든 Opaque | Nanite 미사용 복잡 씬 | 모든 불투명 오브젝트 Z-buffer 등록 |
 
-### Depth Pass Shader Binding
+#### Depth Pass Shader Binding
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Private/DepthRendering.cpp
@@ -901,7 +899,7 @@ void SetupDepthPassState(FMeshPassProcessorRenderState& DrawRenderState)
 }
 ```
 
-### Second Stage Depth Pass
+#### Second Stage Depth Pass
 
 World Position Offset(WPO)이나 Dithered LOD Transition을 사용하는 머티리얼의 경우, 깊이가 2단계로 처리됩니다:
 
@@ -917,7 +915,7 @@ World Position Offset(WPO)이나 Dithered LOD Transition을 사용하는 머티�
 - **WPO (World Position Offset)**: 버텍스 셰이더에서 위치를 변경하는 머티리얼 (풀, 나무 등)
 - **Dithered LOD Transition**: LOD 전환 시 디더링 효과로 부드러운 전환
 
-### Depth Prepass 최적화 고려사항
+#### Depth Prepass 최적화 고려사항
 
 | 항목 | 설명 |
 |------|------|
@@ -929,11 +927,11 @@ World Position Offset(WPO)이나 Dithered LOD Transition을 사용하는 머티�
 
 ---
 
-## Base Pass (G-Buffer)
+### Base Pass (G-Buffer)
 
 Deferred Shading의 핵심으로, 모든 불투명 오브젝트의 지오메트리/머티리얼 정보를 G-Buffer에 기록합니다. 이 단계에서는 라이팅 계산 없이 머티리얼 속성만 저장합니다.
 
-### RenderBasePass 전체 흐름
+#### RenderBasePass 전체 흐름
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Private/BasePassRendering.cpp:1071
@@ -1004,7 +1002,7 @@ void FDeferredShadingSceneRenderer::RenderBasePass(
 }
 ```
 
-### G-Buffer 레이아웃 상세
+#### G-Buffer 레이아웃 상세
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Internal/SceneTextures.h
@@ -1059,7 +1057,7 @@ Velocity (R16G16_FLOAT): - 선택적 (bHasVelocity)
   - RG: Screen Space Motion Vector
 ```
 
-### Shading Model별 G-Buffer 사용
+#### Shading Model별 G-Buffer 사용
 
 | Shading Model | GBufferD 사용 | 추가 데이터 |
 |---------------|---------------|-------------|
@@ -1073,7 +1071,7 @@ Velocity (R16G16_FLOAT): - 선택적 (bHasVelocity)
 | Cloth | RGB: Fuzz Color | - |
 | Eye | RG: Iris Normal, B: Iris Mask | Iris Distance |
 
-### Nanite Base Pass 통합
+#### Nanite Base Pass 통합
 
 Nanite 메시는 전통적인 버텍스 파이프라인 대신 Visibility Buffer 방식을 사용합니다:
 
@@ -1114,7 +1112,7 @@ Depth Buffer: 표준 24-bit Depth
 | LOD | CPU 선택 | GPU 클러스터 단위 연속 LOD |
 | 컬링 | CPU + GPU | 완전 GPU-driven |
 
-### DBuffer Decal 통합
+#### DBuffer Decal 통합
 
 ```cpp
 // Base Pass에서 DBuffer Decal 적용
@@ -1140,7 +1138,7 @@ if (Substrate::IsSubstrateEnabled())
 }
 ```
 
-### Base Pass 성능 최적화
+#### Base Pass 성능 최적화
 
 | 최적화 기법 | 설명 |
 |-------------|------|
@@ -1153,11 +1151,11 @@ if (Substrate::IsSubstrateEnabled())
 
 ---
 
-## Shadow Depth Rendering
+### Shadow Depth Rendering
 
 각 광원에 대한 Shadow Map을 생성합니다. UE5는 기존 Cascaded Shadow Maps(CSM)과 새로운 Virtual Shadow Maps(VSM) 두 가지 시스템을 지원합니다.
 
-### Shadow Map 유형 및 선택
+#### Shadow Map 유형 및 선택
 
 | 유형 | 대상 광원 | 특징 |
 |------|-----------|------|
@@ -1165,7 +1163,7 @@ if (Substrate::IsSubstrateEnabled())
 | **Per-Object Shadows** | Spot/Point Light | 오브젝트 단위 섀도우, 작은 광원 |
 | **Virtual Shadow Maps (VSM)** | 모든 광원 | 가상화된 고해상도 섀도우, UE5 기본값 |
 
-### RenderShadowDepthMaps 전체 흐름
+#### RenderShadowDepthMaps 전체 흐름
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Private/ShadowDepthRendering.cpp:1678
@@ -1230,7 +1228,7 @@ void FSceneRenderer::RenderShadowDepthMaps(
 }
 ```
 
-### Cascaded Shadow Maps (CSM) 상세
+#### Cascaded Shadow Maps (CSM) 상세
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Private/ShadowSetup.cpp
@@ -1265,7 +1263,7 @@ float SplitNear = Mix(
 );
 ```
 
-### Virtual Shadow Maps (VSM) 상세
+#### Virtual Shadow Maps (VSM) 상세
 
 VSM은 UE5의 핵심 섀도우 시스템으로, 16K×16K 가상 텍스처를 페이지 단위로 관리합니다.
 
@@ -1303,7 +1301,7 @@ void FVirtualShadowMapArray::RenderVirtualShadowMapsHw(FRDGBuilder& GraphBuilder
 | 캐싱 | 없음 | 페이지 단위 캐싱 |
 | 적합한 씬 | 중소규모 | 대규모 오픈월드 |
 
-### Shadow Map Atlas
+#### Shadow Map Atlas
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Private/ShadowDepthRendering.cpp
@@ -1327,7 +1325,7 @@ void FSceneRenderer::RenderShadowDepthMapAtlases(FRDGBuilder& GraphBuilder)
 }
 ```
 
-### Shadow Depth Rendering 최적화
+#### Shadow Depth Rendering 최적화
 
 | 최적화 | 설명 |
 |--------|------|
@@ -1338,7 +1336,7 @@ void FSceneRenderer::RenderShadowDepthMapAtlases(FRDGBuilder& GraphBuilder)
 | **Nanite Integration** | Nanite LOD와 Shadow LOD 연동 |
 | **Async Shadow Setup** | 병렬 Shadow Mesh Pass 생성 |
 
-### Shadow Projection (Lighting Pass에서 사용)
+#### Shadow Projection (Lighting Pass에서 사용)
 
 ```cpp
 // Shadow Map 샘플링 및 PCF 필터링
@@ -1364,11 +1362,11 @@ float SampleShadowMap(float3 ShadowCoord, float2 ShadowMapSize)
 
 ---
 
-## Lighting Pass
+### Lighting Pass
 
 G-Buffer 정보를 기반으로 최종 라이팅을 계산합니다. Deferred Shading의 핵심으로, 모든 광원의 기여도를 누적하여 SceneColor에 기록합니다.
 
-### 광원 분류 체계
+#### 광원 분류 체계
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Private/LightSceneInfo.h
@@ -1381,7 +1379,7 @@ SortedLights[UnbatchedLightStart ~ MegaLightsLightStart]   // Unbatched: 개별 
 SortedLights[MegaLightsLightStart ~ Num]    // MegaLights 대상
 ```
 
-### RenderLights 전체 흐름
+#### RenderLights 전체 흐름
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Private/LightRendering.cpp:1520
@@ -1441,7 +1439,7 @@ void FDeferredShadingSceneRenderer::RenderLights(
 }
 ```
 
-### Clustered Deferred Shading 상세
+#### Clustered Deferred Shading 상세
 
 View Frustum을 3D 그리드(클러스터)로 분할하고, 각 클러스터에 영향을 미치는 광원 목록을 사전 계산합니다.
 
@@ -1517,7 +1515,7 @@ float3 CalculateClusteredLighting(float3 WorldPosition, ...)
 }
 ```
 
-### Standard Deferred Light Rendering
+#### Standard Deferred Light Rendering
 
 개별 광원을 Full-screen Quad 또는 Light Volume으로 렌더링:
 
@@ -1559,7 +1557,7 @@ void RenderLight(
 }
 ```
 
-### Stencil 볼륨 최적화
+#### Stencil 볼륨 최적화
 
 Point/Spot Light의 영향 범위를 Stencil로 마킹하여 불필요한 픽셀 셰이더 실행 방지:
 
@@ -1571,7 +1569,7 @@ Point/Spot Light의 영향 범위를 Stencil로 마킹하여 불필요한 픽셀
        → Stencil 통과한 픽셀만 PS 실행
 ```
 
-### MegaLights (UE5.5+)
+#### MegaLights (UE5.5+)
 
 수천 개의 광원을 효율적으로 처리하는 새로운 시스템:
 
@@ -1597,7 +1595,7 @@ void FDeferredShadingSceneRenderer::RenderMegaLights(FRDGBuilder& GraphBuilder, 
 }
 ```
 
-### Lighting Pass 성능 최적화
+#### Lighting Pass 성능 최적화
 
 | 최적화 | 설명 | 효과 |
 |--------|------|------|
@@ -1610,14 +1608,14 @@ void FDeferredShadingSceneRenderer::RenderMegaLights(FRDGBuilder& GraphBuilder, 
 
 ---
 
-## Post Processing
+### Post Processing
 
 최종 이미지 품질 향상을 위한 후처리 파이프라인입니다. UE5의 포스트 프로세싱은 RDG 기반으로 구현되어 있으며, TOverridePassSequence를 통해 패스 순서와 활성화 여부를 관리합니다.
 
-### Post Processing 파이프라인 아키텍처
+#### Post Processing 파이프라인 아키텍처
 ![ImagesPostProcessingPipeline](/post_images/unreal-rendering-pipeline-analysis/PostProcessingPipeline.png)
 
-### AddPostProcessingPasses 메인 엔트리 포인트
+#### AddPostProcessingPasses 메인 엔트리 포인트
 
 ```cpp
 // Engine/Source/Runtime/Renderer/Private/PostProcess/PostProcessing.cpp:347
@@ -1674,7 +1672,7 @@ void AddPostProcessingPasses(
 }
 ```
 
-### Motion Blur
+#### Motion Blur
 
 카메라 및 오브젝트 움직임에 의한 블러 효과를 시뮬레이션합니다.
 
@@ -1728,7 +1726,7 @@ bool IsMotionBlurScatterRequired(const FViewInfo& View, const FScreenPassTexture
 }
 ```
 
-### TSR (Temporal Super Resolution)
+#### TSR (Temporal Super Resolution)
 
 UE5의 핵심 업스케일링 기술로, 낮은 렌더링 해상도에서 고품질 출력을 생성합니다.
 
@@ -1780,7 +1778,7 @@ TAutoConsoleVariable<float> CVarTSRFlickeringPeriod(
     TEXT("Frame frequency threshold for flickering detection"));
 ```
 
-### Eye Adaptation (자동 노출)
+#### Eye Adaptation (자동 노출)
 
 씬의 밝기에 따라 카메라 노출을 자동으로 조정합니다.
 
@@ -1829,7 +1827,7 @@ EyeAdaptationBuffer = AddBasicEyeAdaptationPass(
     bLocalExposureEnabled);
 ```
 
-### Bloom
+#### Bloom
 
 밝은 영역에서 발산되는 빛 번짐 효과를 구현합니다.
 
@@ -1881,7 +1879,7 @@ FScreenPassTexture AddGaussianBloomPasses(
 **Bloom 타입 비교:**  
 ![ImagesBloomMethod](/post_images/unreal-rendering-pipeline-analysis/BloomMethod.png)
 
-### Tonemapping
+#### Tonemapping
 
 HDR 씬 컬러를 디스플레이 가능한 LDR로 변환합니다.
 
@@ -1964,7 +1962,7 @@ namespace TonemapperPermutation
 }
 ```
 
-### Downsample Chain
+#### Downsample Chain
 
 Eye Adaptation과 Bloom을 위한 다운샘플 체인을 생성합니다.
 
@@ -1989,7 +1987,7 @@ if (bProduceSceneColorChain)
 **다운샘플 체인 구조:**  
 ![Downsample Chain](/post_images/unreal-rendering-pipeline-analysis/Downsample.png)
 
-### Post Processing 성능 최적화
+#### Post Processing 성능 최적화
 
 | 최적화 기법 | 설명 | 효과 |
 |-------------|------|------|
@@ -2000,7 +1998,7 @@ if (bProduceSceneColorChain)
 | **Compute Shaders** | PS 대신 CS 사용 | 캐시 효율성 향상 |
 | **Quarter/Eighth Res** | Eye Adaptation용 저해상도 처리 | 대역폭 75% 감소 |
 
-### Post Processing CVar 제어
+#### Post Processing CVar 제어
 
 ```cpp
 // 주요 품질/성능 제어 CVar
@@ -2015,7 +2013,7 @@ r.PostProcessing.PropagateAlpha // 알파 채널 전파 (VFX 합성용)
 
 ---
 
-## 4.7 리소스 의존성 요약
+### 리소스 의존성 요약
 
 각 패스 간의 리소스 읽기/쓰기 의존성:
 
