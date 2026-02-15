@@ -52,7 +52,7 @@ Nvidia의 Geforce 256은 GPU라는 용어를 만들어냈습니다. 해당 제�
 기하 프로세서 API는 변환 행렬들(`float4x4`), 빛의 위치나 색상을 위한 유니폼 데이터 입력을 특징으로 합니다. 이에 대한 GPU의 구현 방식은 제조사들마다 다양했으나, 많은 제조사가 기하 엔진 내부에 작은 상수 메모리 블록을 내장하는 방식을 택했습니다. 물론 이것이 유일한 방법은 아니었습니다. OpenGL API에선 각 셰이더가 자신만의 전용 유니폼 데이터를 가질 수 있습니다. 이러한 설계는 드라이버가 상수를 셰이더 연산 스트림 안에 곧바로 임베드하는것이 가능하게 만들었으며, 이는 오늘날 OpenGL 4.6 및 OpenGL ES 3.2에도 여전히 남아 있는 API 특이점입니다.
 
 그 당시 GPU들은 범용 읽기/쓰기 캐시가 없었습니다. 래스터라이저는 블렌딩과 깊이값 저장(Depth Buffering)을 위한 스크린 로컬 캐시를 가지고 있었고, 텍스쳐 샘플러는 데이터 프리페치를 위해 선형 보간된 정점 UV에 의존했습니다. DirectX 8 셰이더 모델 1.0에서 셰이더가 도입되었을 때, 픽셀 셰이더에서 텍스쳐의 UV를 계산하는 것은 지원되지 않았습니다. UV는 정점 단위로 계산되었으며, 하드웨어를 통해 보간되고 텍스쳐 샘플러로 곧장 전달되었습니다.  
-  
+
 DirectX 9는 셰이더 명령어 제한을 크게 증가시켰지만, 셰이더 모델 2.0은 여전히 새로운 데이터 경로를 노출시키지 않았습니다. 정점/픽셀 셰이더 모두는 여전히 1:1 입/출력 방식으로 동작했으며, 사용자는 정점 및 속성(attributes)의 변환 계산과 픽셀 색상만 정의할 수 있었습니다. 프로그래머블한(**역주. '프로그래머블-Programmable'은 코드 단위로 통제 가능함을 의미합니다*) load/store 연산도 지원되지 않았고, 정점 페치, 유니폼(상수) 메모리와 텍스쳐 샘플러라는 고정 기능(fixed-function) 입력 블록이 그대로 유지되었습니다.
 정점 셰이더는 분리된 연산 단위였습니다. 인덱스 상수(`float4` 배열로 제한되었지만)와 같은 새로운 기능들을 얻었지만 여전히 텍스쳐 샘플링 지원은 미진했습니다.  
 
@@ -137,4 +137,162 @@ CUDA malloc과 CPU 매핑된 GPU 메로리를 결합하면 우리는 최소한�
 ## 최신(Modern) 데이터
 CUDA, Metal, 그리고 OpenCL은 64비트 포인터 의미론을 갖춘 C/C++ 셰이더 언어를 활용합니다. 이러한 언어는 적절하게 정렬된 GPU 메모리 위치에서 구조체를 로드하고 저장하는 것을 지원합니다. 컴파일러는 와이드 로드(병합), 레지스터 매핑, 비트 추출 등 백그라운드 최적화를 처리합니다. 많은 현대 GPU는 레지스터의 8비트/16비트 부분을 추출하기 위한 무료 명령어 한정자(Modifier)를 제공하여, 컴파일러가 8비트 및 16비트 값을 단일 레지스터에 패킹할 수 있게 합니다. 이로 인해 셰이더 코드가 깔끔하고 효율적으로 유지됩니다.
 
+32비트 값 8개로 이루어진 구조체를 로드하면, 컴파일러는 대개 128비트 폭의 로드 명령어 두 개(각각 레지스터 4개를 채움)를 생성하여 로드 명령어 수를 4분의 1로 줄입니다. 넓은 폭의 로드는 특히 구조체에 좁은 8비트 및 16비트 필드가 포함된 경우 훨씬 빠릅니다. GPU는 ALU 밀도가 높고 큰 레지스터 파일을 갖추고 있지만, CPU에 비해 메모리 경로는 상대적으로 느립니다. CPU는 종종 사이클마다 하나의 로드를 수행하는 로드 포트 두 개를 갖추고 있는 경우가 많습니다. 현대적인 GPU에서는 4사이클마다 하나의 SIMD 로드를 달성할 수 있습니다. 셰이더에서 넓은 폭의 로드와 언팩(Unpack)을 조합하는 것이 데이터를 처리하는 가장 효율적인 방법인 경우가 많습니다.
+
+컴팩트한 8~16비트 데이터는 전통적으로 DirectX 게임에서 텍셀 버퍼(Buffer<T>)에 저장되었습니다. 최신 GPU는 컴퓨트 워크로드에 최적화되어 있습니다. 오늘날 원시 버퍼 로드 명령어는 텍셀 버퍼보다 최대 2배 더 높은 처리량과 최대 3배 더 낮은 대기 시간을 제공합니다. 텍셀 버퍼는 더 이상 최신 GPU에서 최적의 선택이 아닙니다. 텍셀 버퍼는 구조화된 데이터를 지원하지 않으므로, 사용자는 여러 텍셀 버퍼에 데이터를 SoA 레이아웃으로 분리해야 합니다. 각 텍셀 버퍼는 고유한 디스크립터를 가지며, 데이터에 접근하기 전에 이를 로드해야 합니다. 단일 64비트 원시 포인터를 사용하는 것에 비해 리소스(SGPR-*Scalar General Purpose Registers*, 디스크립터 캐시 슬롯)를 소비하고 초기 대기 시간을 추가합니다. 또한 SoA 데이터 레이아웃은 비선형 인덱스 조회(예: 머티리얼, 텍스처, 삼각형, 인스턴스, 본 ID)에서 캐시 미스를 상당히 더 많이 유발합니다. 텍셀 버퍼는 정규화된([0,1] 및 [-1,1]) 타입을 부동 소수점 레지스터로 변환하는 기능을 무료로 제공합니다. ALU 비용은 들지 않는 것이 사실이지만, 와이드 로드 지원(로드 결합)을 잃게 되며 명령어는 느린 텍스처 샘플러 하드웨어 경로를 통과하게 됩니다. 좁은 텍셀 버퍼 로드는 또한 레지스터 부풀림을 유발합니다. `RGBA8_UNORM`을 `vec4`로 로드하면 즉시 4개의 벡터 레지스터를 할당합니다. 샘플러 하드웨어는 이 레지스터들에 값을 최종적으로 기록합니다. 컴파일러는 로드 명령어를 셰이더 시작 부분으로 이동시켜 로드→사용 거리를 최대화하려고 합니다. 이는 ALU를 통해 로드 대기 시간을 숨기고 여러 로드를 겹치게 만듭니다. 대신 와이드 원시 로드를 사용하면 `uint8x4` 데이터는 단 하나의 32비트 레지스터만 차지합니다. 사용 시점에 8비트 채널을 언팩합니다. 레지스터 수명은 훨씬 짧아집니다. 현대 GPU는 언팩 없이 레지스터의 16비트 하위/상위 절반에 직접 접근할 수 있으며, 일부는 8비트 접근도 가능합니다(AMD SDWA 수정자). 팩(Pack) 처리된 2배 속도 연산은 2x16비트 변환 명령어를 더 빠르게 만듭니다. 일부 GPU 아키텍처(Nvidia, AMD)는 VRAM에서 그룹공유 메모리(groupshared memory)로 64비트 포인터 원시 로드를 직접 수행할 수 있어, 대기 시간 숨김에 필요한 레지스터 낭비를 더욱 줄여줍니다. 64비트 포인터를 사용함으로써 게임 엔진은 AI 하드웨어 최적화의 혜택을 받습니다.
+
+포인터 기반 시스템은 메모리 정렬을 명시적으로 만듭니다. DirectX나 Vulkan에서 버퍼 객체를 할당할 때는 API에 정렬 방식을 쿼리해야 합니다. 버퍼 바인딩 오프셋도 올바르게 정렬되어야 합니다. Vulkan은 바인딩 오프셋 정렬을 쿼리하는 API를 제공하고, DirectX는 고정된 정렬 규칙을 가지고 있습니다. 정렬 규칙을 계약(Contract)함으로써 저수준 셰이더 컴파일러는 최적의 코드(예: 정렬된 4x32바이트 너비 로드 등)를 생성할 수 있습니다. DirectX의 `ByteAddressBuffer` 추상화에는 설계상 결함이 있습니다: load2, load3, load4 명령어는 4바이트 정렬만 요구합니다. 새로운 SM 6.2 `load<T>` 역시 요소 단위 정렬(`half4` = 2, `float4` = 4)만 요구합니다. 일부 GPU 벤더(Nvidia 등)는 ByteAddressBuffer.load4를 네 개의 개별 로드 명령어로 분해해야 합니다. 버퍼 추상화가 항상 사용자를 나쁜 코드 생성으로부터 보호해 주지는 못합니다. 오히려 생성된 나쁜 코드를 수정하기 어렵게 만듭니다. C/C++ 기반 언어(CUDA, Metal)는 alignas 속성을 사용해 사용자가 구조체 정렬을 명시적으로 선언할 수 있게 합니다. 우리는 모든 예제 코드의 루트 구조체에 `alignas(16)`를 사용합니다.
+
+기본적으로 GPU의 쓰기 작업은 같은 스레드 그룹(= 컴퓨트 유닛) 내의 스레드에만 보입니다. 이로 인해 비일관적(non-coherent) L1 캐시 설계가 가능합니다. 일반적으로 배리어(barrier)를 통해 가시성을 제공합니다. 사용자가 단일 디스패치 내 그룹 간의 메모리 가시성이 필요한 경우 버퍼 바인딩에 `[globallycoherent]` 속성을 지정합니다. 셰이더 컴파일러는 해당 버퍼에 대한 접근에 일관성(coherent) 있는 로드/저장 명령을 생성합니다. 우리는 버퍼 객체 대신 64비트 포인터를 사용하므로, 명시적인 일관적 로드/저장 명령을 제공합니다. 문법은 원자적 로드/저장과 유사합니다. 마찬가지로 캐시 계층 전체를 우회하는 비일시적(non-temporal) 로드/저장 명령도 제공할 수 있습니다.
+
+Vulkan은 64비트 포인터를 (2019년) [VK_KHR_buffer_device_address](https://docs.vulkan.org/samples/latest/samples/extensions/buffer_device_address/README.html) 확장을 통해 지원합니다. 버퍼 디바이스 주소 확장은 모든 GPU 벤더(모바일 포함)에서 폭넓게 지원되지만, Vulkan 1.4 코어의 일부는 아닙니다. BDA(Buffer Device Address)의 주요 문제는 GLSL 및 HLSL 셰이더 언어에서 포인터 지원이 부족하다는 점입니다. 사용자는 대신 원시 64비트 정수를 사용해야 합니다. 64비트 정수는 구조체로 캐스팅할 수 있습니다. 구조체는 사용자 정의 BDA 구문으로 정의됩니다. 사용자가 컴파일러가 인덱스 주소 지정 연산을 생성하도록 하려면 배열 인덱싱에 배열이 포함된 추가 BDA 구조체 타입을 선언해야 합니다. 현재 디버깅 지원은 제한적입니다. 사용성은 매우 중요하며, HLSL과 GLSL이 포인터를 기본적으로 지원할 때까지 BDA는 틈새 시장에 머물 것입니다. 이는 기본 포인터 지원이 언어의 핵심 요소이며 디버깅이 완벽하게 작동하는 CUDA, OpenCL 및 Metal과는 현격한 대조를 이룹니다.
+
+DirectX 12은 셰이더에서 포인터를 지원하지 않습니다. 그 결과, HLSL은 함수 매개변수로 배열을 전달하는 것을 허용하지 않습니다. UBO/SSBO 내부에 머티리얼 배열을 두는 것과 같은 간단한 작업도 매크로를 사용해 우회해야 합니다. 그룹 공유 메모리 배열을 함수 간에 전달할 수 없기 때문에 리덕션(누적 합, 정렬 등)을 위한 재사용 가능한 함수를 만드는 것은 불가능합니다. 물론 각 유틸리티 헤더나 라이브러리마다 별도의 전역 배열을 선언할 수는 있지만, 컴파일러는 이들 각각에 대해 그룹 공유 메모리를 별도로 할당하므로 점유율이 감소합니다. 그룹 공유 메모리를 별칭으로 사용하는 쉬운 방법이 없습니다. GLSL도 동일한 문제를 안고 있습니다. CUDA와 Metal MSL과 같이 포인터 기반 언어는 배열에 있어 이러한 문제가 없습니다. CUDA는 방대한 제3자 라이브러리 생태계를 보유하고 있으며, 이러한 생태계는 Nvidia를 지구상에서 가장 가치 있는 기업으로 만들었습니다. 그래픽 셰이딩 언어도 현대적인 표준을 맞추기 위해 발전해야 합니다. 우리에게도 라이브러리 생태계가 필요합니다.
+
+제 예제에서는 CUDA와 Metal MSL과 유사한 C/C++ 스타일의 셰이딩 언어를 사용하겠으며, 그래픽에 특화된 부분에는 HLSL 스타일의 시스템 값(SV) 시맨틱을 일부 혼합하여 사용할 것입니다.
+
+## Root arguments 루트 인수(Root arguments)
+
+운영 체제의 스레딩 API는 일반적으로 스레드 함수에 64비트 void 포인터를 하나만 제공합니다. 운영 체제는 사용자의 데이터 입력 레이아웃에 관여하지 않습니다. GPU 커널 데이터 입력에도 동일한 개념을 적용해 보겠습니다. 셰이더 커널은 하나의 64비트 포인터를 받으며, 이를 커널 함수 시그니처에 따라 원하는 구조체로 캐스팅합니다. 덕분에 개발자는 CPU와 GPU 양쪽에서 동일한 공유 C/C++ 헤더를 사용할 수 있습니다.
+
+```c++
+// Common header...
+struct alignas(16) Data
+{
+    // Uniform data
+    float16x4 color; // 16-bit float vector
+    uint16x2 offset; // 16-bit integer vector
+    const uint8* lut; // pointer to 8-bit data array
+
+    // Pointers to in/out data arrays
+    const uint32* input;
+    uint32* output;
+};
+
+// CPU code...
+gpuSetPipeline(commandBuffer, computePipeline);
+
+auto data = myBumpAllocator.allocate<Data>(); // Custom bump allocator (wraps gpuMalloc ptr, see appendix)
+data.cpu->color = {1.0f, 0.0f, 0.0f, 1.0f};
+data.cpu->offset = {16, 0};
+data.cpu->lut = luts.gpu + 64; // GPU pointers support pointer math (no need for offset API)
+data.cpu->input = input.gpu;
+data.cpu->output = output.gpu;
+
+gpuDispatch(commandBuffer, data.gpu, uvec3(128, 1, 1));
+
+// GPU kernel...
+[groupsize = (64, 1, 1)]
+void main(uint32x3 threadId : SV_ThreadID, const Data* data)
+{
+    uint32 value = data->input[threadId.x]; 
+    // TODO: Code using color, offset, lut, etc...
+    data->output[threadId.x] = value;
+}
+```
+
+예제 코드에서는 GPU 인자를 할당하기 위해 간단한 선형 범프 할당자(myBumpAllocator)를 사용합니다(구현 방법은 부록 참조). 이 함수는 구조체 `struct {void* cpu, void *gpu}`를 반환합니다. CPU 포인터는 영구 매핑된 GPU 메모리에 직접 쓰는 데 사용되며, GPU 포인터는 GPU 데이터 구조체에 저장하거나 디스패치 명령 인자로 전달할 수 있습니다.
+
+대부분의 GPU는 웨이브(또는 워프-*Warp*)를 실행하기 직전에 루트 유니폼(64비트 포인터 포함)을 상수 또는 스칼라 레지스터로 미리 로드합니다. 이 최적화는 여전히 유효합니다. 드로우/디스패치 명령은 기본 데이터 포인터를 전달하며, 모든 입력 유니폼(다른 데이터에 대한 포인터 포함)은 기본 포인터로부터 작은 고정 오프셋에서 찾을 수 있습니다. 셰이더는 미리 컴파일되며 PSO 생성 중에 장치별 마이크로코드로 추가 최적화되므로, 드라이버는 레지스터 사전 로드 및 유사한 루트 데이터 최적화를 설정할 충분한 기회를 갖습니다. 일부 아키텍처에서는 루트 데이터 크기가 제한되어 있으므로 사용자는 가장 중요한 데이터를 루트 구조체의 시작 부분에 배치해야 합니다. 우리의 루트 구조체는 엄격한 크기 제한이 없습니다. 셰이더 컴파일러는 나머지 필드에 대해 표준(스칼라/유니폼) 메모리 로드를 생성합니다. 셰이더에 제공되는 루트 데이터 포인터는 `const`입니다. 즉 셰이더는 루트 입력 데이터를 수정할 수 없습니다. 이는 명령 프로세서가 새로운 웨이브에 데이터를 미리 로드하는 데 여전히 사용될 수 있기 때문입니다. 출력은 비 `const` 포인터를 통해 수행됩니다(위 예제의 Data::output 참조). 루트 데이터를 `const`로 강제함으로써, 우리는 GPU 드라이버가 특수 유니폼 데이터 경로 최적화를 수행할 수 있도록 허용합니다.
+
+특별한 유니폼 버퍼 타입이 필요할까요? 최신 셰이더 컴파일러는 자동적인 균일성(uniformity) 분석을 수행합니다. 명령어의 모든 입력이 균일(uniform)하면 출력도 균일합니다. 균일성은 셰이더 전체로 전파됩니다. 모든 최신 아키텍처는 스칼라 레지스터/로드 또는 이와 유사한 구성(Intel의 SIMD1 등)을 갖추고 있습니다. 균일성 분석은 벡터 로드를 스칼라 로드로 변환하는 데 사용되며, 이로써 레지스터를 절약하고 지연 시간을 줄입니다. 균일성 분석은 버퍼 타입(`UBO` vs `SSBO`)에 관계없이 동작합니다. 리소스는 읽기 전용이어야 합니다(그래서 GLSL에서는 항상 `SSBO`에 `readonly` 속성을 지정하고, DirectX 12에서는 `UAV`보다는 `SRV`를 선호하는 것입니다). 또한 컴파일러가 해당 포인터가 별칭(alias)이 아님을 증명할 수 있어야 합니다. C/C++의 const 키워드는 이 포인터를 통해 데이터를 수정할 수 없다는 뜻이지, 다른 읽기-쓰기 포인터가 동일한 메모리 영역을 별칭으로 사용하지 않음을 보장하지는 않습니다. C99는 이를 위해 restrict 키워드를 추가했으며, CUDA 커널에서도 이를 자주 사용합니다. Metal의 루트 포인터는 기본적으로 별칭이 없는(restrict) 상태이며, Vulkan과 DirectX 12의 버퍼 오브젝트도 마찬가지입니다. 우리도 컴파일러가 최적화를 더 자유롭게 수행할 수 있도록 동일한 규칙을 따라야 합니다.
+
+(**역주, 균일성(Uniformity)이란 워프 내의 모든 스레드가 같은 값을 참조/사용함이 보장되었음을 의미합니다. 마찬가지로 GLSL에서 `uniform` 키워드를 사용하는 리소스 역시 쉐이더를 실행하는 임의의 스레드에 대해 해당 리소스가 항상 같은 값임이 보장된다는 걸 의미합니다*)
+
+셰이더 컴파일러가 컴파일 타임에 주소(포인터)의 균일성을 항상 증명할 수 있는 것은 아닙니다. 최신 GPU는 동적인 균일 주소 로드를 기회에 따라 최적화합니다. 메모리 컨트롤러가 벡터 로드 명령어의 모든 레인(Lane, SIMD에서의 각 데이터를 담는 경로)이 균일한 주소를 가지고 있음을 감지하면 SIMD 와이드 대신 단일 레인 로드를 수행합니다. 결과는 모든 레인으로 복제됩니다. 이 최적화는 투명하게 이루어지며, 셰이더 코드 생성이나 레지스터 할당에 영향을 주지 않습니다. 특히 새로운 빠른 원시 로드 경로와 결합하면, 동적으로 균일한 데이터로 인한 성능 저하는 과거에 비해 훨씬 작습니다.
+
+일부 GPU 벤더(ARM Mali 및 Qualcomm Adreno)는 균일성 분석을 한 단계 더 심화시킵니다. 셰이더 컴파일러는 균일 로드(uniform load)와 균일 연산을 추출합니다. 셰이더 실행 전에 스칼라 사전 연산(Preamble)이 실행되며, 드로우/디스패치 전체에 대해 균일 메모리 로드와 연산이 한 번만 수행되고 그 결과는 특수 하드웨어 상수 레지스터(root constants가 사용하는 동일한 레지스터)에 저장됩니다.
+
+위의 모든 최적화를 결합하면 고전적인 16KB/64KB 균일/상수 버퍼 추상화보다 균일 데이터를 처리하는 더 나은 방법을 제공합니다. 많은 GPU가 여전히 root constants, 시스템 값, 프리앰블(위의 단락 참조)을 위해 특수한 균일 레지스터를 가지고 있습니다.
+
+## Texture bindings 텍스처 바인딩
+
+이상적으로는 텍스처 디스크립터가 GPU 메모리의 다른 데이터와 동일하게 동작함으로써, 다른 데이터와 함께 구조체(struct)에서 자유롭게 혼합될 수 있어야 합니다. 하지만 이러한 수준의 유연성을 모든 최신 GPU가 지원하지는 않습니다. 다행히 지난 10년 동안 바인드리스(bindless) 텍스처 샘플러 설계는 256비트 원시 디스크립터와 인덱싱된 디스크립터 힙이라는 두 가지 주요 방식으로 통합되었습니다.
+
+AMD의 원시 디스크립터 방식은 GPU 메모리에서 256비트 디스크립터를 직접 컴퓨트 유닛의 스칼라 레지스터로 로드합니다. 8개의 연속된 32비트 스칼라 레지스터에 단일 디스크립터가 포함됩니다. SIMD 텍스처 샘플 명령어 실행 중, 셰이더 코어는 256비트 텍스처 디스크립터와 레인별 UV 좌표를 샘플러 유닛으로 전송합니다. 이를 통해 샘플러는 어떤 간접 참조도 없이 텍셀을 주소 지정하고 로드하는 데 필요한 모든 데이터를 얻게 됩니다. 단점은 256비트 디스크립터가 많은 레지스터 공간을 차지하며, 각 샘플 명령어마다 샘플러로 다시 전송해야 한다는 점입니다.
+
+인덱스 기반 디스크립터 힙 방식은 32비트 인덱스를 사용합니다(구형 Intel 내장 GPU에서는 20비트). 32비트 인덱스는 구조체에 저장하기 쉽고 표준 SIMD 레지스터에 로드하기 좋으며 전달하기에도 효율적입니다. SIMD 샘플 명령어를 수행하는 동안 쉐이더 코어는 텍스처 인덱스와 레인별 UV를 샘플러 유닛으로 보냅니다. 샘플러는 `힙 베이스 주소 + 텍스처 인덱스 * 스트라이드(현대 GPU에서는 256비트)` 연산을 통해 얻어낸 디스크립터 힙 주소에서 디스크립터를 가져옵니다. 텍스처 힙 베이스 주소는 드라이버에 의해 추상화되거나(Vulkan 및 Metal), 사용자가 제공할 수 있습니다(DirectX 12의 SetDescriptorHeaps). 텍스처 힙 베이스 주소를 변경하면 내부 파이프라인 배리어가 발생할 수 있습니다(구형 하드웨어의 경우). 현대 GPU에서는 텍스처 힙의 64비트 베이스 주소가 종종 각 샘플 명령어 데이터의 일부로 포함되어 있어, 여러 힙에서 원활하게 샘플링이 가능합니다(레인별로 64비트 베이스 + 32비트 오프셋). 샘플러 유닛은 첫 번째 접근 후 간접 읽기를 피하기 위해 아주 작은 내부 디스크립터 캐시를 가지고 있습니다. 이러한 디스크립터 캐시는 디스크립터 힙이 수정될 때마다 무효화해야 합니다.
+
+몇 년 전만 해도 AMD의 스칼라 레지스터 기반 텍스처 디스크립터가 장기적으로 승리할 공식처럼 보였습니다. 스칼라 레지스터는 디스크립터 힙보다 유연하여 디스크립터를 GPU 데이터 구조 내에 직접 포함할 수 있게 합니다. 하지만 단점도 있습니다. 레이 트레이싱과 지연 텍스처링(Nanite) 같은 현대 GPU 워크로드는 균일하지 않은(non-uniform) 텍스처 인덱스에 의존합니다. 텍스처 힙 인덱스가 SIMD 웨이브(워프)에서 균일하지 않은 경우가 많습니다. 32비트 힙 인덱스는 4바이트에 불과하므로 레인(lane)별로 전송할 수 있습니다. 반면 256비트 디스크립터는 32바이트입니다. 레인마다 완전한 256비트 디스크립터를 가져와서 전송하는 것은 현실적으로 불가능합니다. 현대의 Nvidia, Apple, Qualcomm GPU는 샘플 명령어에서 레인별 디스크립터 인덱스 모드를 지원하여 균일하지 않은 경우의 효율성을 높입니다. 샘플러 유닛은 필요하다면 내부 루프를 수행합니다. 샘플러 유닛의 입력/출력은 힙 인덱스의 일관성 여부와 상관없이 한 번만 전송됩니다. AMD의 스칼라 레지스터 기반 디스크립터 아키텍처는 셰이더 컴파일러가 텍스처 샘플 명령어 주변에 스칼라화(scalarization) 루프를 생성하도록 요구합니다. 이는 추가 ALU 사이클을 소모하고 (부분적으로 마스크된) 샘플러 데이터를 여러 번 전송하고 수신해야 합니다. 이것이 Nvidia가 AMD보다 레이 트레이싱에서 더 빠른 이유 중 하나입니다. ARM과 Intel도 32비트 힙 인덱스를 사용하지만(Nvidia, Qualcomm, Apple처럼), 최신 아키텍처에는 아직 레인별 힙 인덱스 모드가 없습니다. 비균일 인덱스(non-uniform index)의 경우 AMD와 유사한 스칼라화 루프를 생성합니다.
+
+All of these differences can be wrapped under an unified texture descriptor heap abstraction. The de-facto texture descriptor size is 256 bits (192 bits on Apple for a separate texture descriptor, sampler is the remaining 32 bits). The texture heap can be presented as a homogeneous array of 256-bit descriptor blobs. Indexing is trivial. DirectX 12 shader model 6.6 provides a texture heap abstraction like this, but doesn’t allow direct CPU or compute shader write access to the descriptor heap memory. A set of APIs are used for creating descriptors and copying descriptors from the CPU to the GPU. The GPU is not allowed to write the descriptors. Today, we can remove this API abstraction completely by allowing direct CPU and GPU write to the descriptor heap. All we need is a simple (user-land) driver helper function for creating a 256-bit (uint64[4]) hardware specific descriptor blob. Modern GPUs have UMA or PCIe ReBAR. The CPU can directly write descriptor blobs into GPU memory. Users can also use compute shaders to copy or generate descriptors. The shader language has a descriptor creation intrinsic too. It returns a hardware specific uint64x4 descriptor blob (analogous to the CPU API). This approach cuts the API complexity drastically and is both faster and more flexible than the DirectX 12 descriptor update model. Vulkan’s VK_EXT_descriptor_buffer (https://www.khronos.org/blog/vk-ext-descriptor-buffer) extension (2022) is similar to my proposal, allowing direct CPU and GPU write. It is supported by most vendors, but unfortunately is not part of the Vulkan 1.4 core spec.
+이러한 모든 차이는 통합된 텍스처 디스크립터 힙 추상화로 감쌀 수 있습니다. 사실상의 텍스처 디스크립터 크기는 256비트(Apple에서는 텍스처를 위해 디스크립터의 192비트를 사용한 후, 나머지 32비트에 샘플러 저장)입니다. 텍스처 힙은 256비트 디스크립터 블롭(Blob)의 균질한 배열로 제시될 수 있습니다. 인덱싱은 단순합니다. DirectX 12 셰이더 모델 6.6은 이와 같은 텍스처 힙 추상화를 제공하지만, 디스크립터 힙 메모리에 대한 직접적인 CPU 또는 컴퓨트 셰이더 쓰기 액세스를 허용하지 않습니다. 디스크립터를 생성하고 CPU에서 GPU로 디스크립터를 복사하기 위해 일련의 API가 사용됩니다. GPU는 디스크립터를 쓸 수 없습니다. 오늘날 우리는 디스크립터 힙에 대한 직접적인 CPU와 GPU 쓰기를 허용함으로써 이 API 추상화를 완전히 제거할 수 있습니다. 우리에게 필요한 것은 256비트(uint64[4]) 하드웨어 특정 디스크립터 블롭을 생성하는 간단한(사용자 공간) 드라이버 도우미 함수뿐입니다. 최신 GPU는 UMA 또는 PCIe ReBAR를 갖추고 있습니다. CPU는 GPU 메모리에 디스크립터 블롭을 직접 쓸 수 있습니다. 사용자는 컴퓨트 셰이더를 사용하여 디스크립터를 복사하거나 생성할 수도 있습니다. 셰이더 언어에도 디스크립터 생성 내장 함수가 있습니다. 하드웨어별 uint64x4 디스크립터 블롭(blob)을 반환합니다(CPU API와 유사). 이 접근 방식은 API 복잡성을 획기적으로 줄여주며, DirectX 12 디스크립터 업데이트 모델보다 더 빠르고 유연합니다. Vulkan의 [VK_EXT_descriptor_buffer](https://www.khronos.org/blog/vk-ext-descriptor-buffer) 확장(2022년)은 제안과 유사하며, CPU와 GPU의 직접 쓰기를 허용합니다. 대부든 벤더가 지원하지만, 안타깝게도 Vulkan 1.4 코어 사양의 일부는 아닙니다.
+
+```c++
+// App startup: Allocate a texture descriptor heap (for example 65536 descriptors)
+GpuTextureDescriptor *textureHeap = gpuMalloc<GpuTextureDescriptor>(65536);
+
+// Load an image using a 3rd party library
+auto pngImage = pngLoad("cat.png");
+auto uploadMemory = uploadBumpAllocator.allocate(pngImage.byteSize); // Custom bump allocator (wraps gpuMalloc ptr)
+pngImage.load(uploadMemory.cpu);
+
+// Allocate GPU memory for our texture (optimal layout with metadata)
+GpuTextureDesc textureDesc { .dimensions = pngImage.dimensions, .format = FORMAT_RGBA8_UNORM, .usage = SAMPLED };
+GpuTextureSizeAlign textureSizeAlign = gpuTextureSizeAlign(textureDesc);
+void *texturePtr = gpuMalloc(textureSizeAlign.size, textureSizeAlign.align, MEMORY_GPU);
+GpuTexture texture = gpuCreateTexture(textureDesc, texturePtr);
+
+// Create a 256-bit texture view descriptor and store it
+textureHeap[0] = gpuTextureViewDescriptor(texture, { .format = FORMAT_RGBA8_UNORM });
+
+// Batched upload: begin
+GpuCommandBuffer uploadCommandBuffer = gpuStartCommandRecording(queue);
+
+// Copy all textures here!
+gpuCopyToTexture(uploadCommandBuffer, texturePtr, uploadMemory.gpu, texture);
+// TODO other textures...
+
+// Batched upload: end
+gpuBarrier(uploadCommandBuffer, STAGE_TRANSFER, STAGE_ALL, HAZARD_DESCRIPTORS);
+gpuSubmit(queue, { uploadCommandBuffer });
+
+// Later during rendering...
+gpuSetActiveTextureHeapPtr(commandBuffer, gpuHostToDevicePointer(textureHeap));
+```
+
+
+
+
+
 -작성중-
+
+------
+
+## QnA
+
+Q. Lane? 
+
+A. 병렬 실행되는 워프 내의 개별 스레드
+
+
+
+Q. A 32-bit heap index is just 4 bytes, we can send it per lane. In contrast, a 256-bit descriptor is 32 bytes. It is not feasible to fetch and send a full 256-bit descriptor per lane. >> 32비트(4바이트) 인덱스를 사용하는 이유?
+
+A. 
+
+* 32-bit 인덱스:
+
+  - 작음 (4바이트)
+
+  - 32개 레인 = 128바이트 (한 번에 전송 가능)
+
+  - 충분한 용량(2^32개 텍스쳐)
+
+  - non-uniform 한 인덱싱에 최적
+
+* 256-bit 디스크립터:
+  * 큼 (32바이트)
+  * 32개 레인 = 1024바이트(현실적으로 불가)
+  * 균일 인덱싱에서만 사용 가능(모든 레인이 서로 같은 디스크립터 세팅으로 이루어질 때)
+
+GPU는 워프 내 레인들이 개별 스택 메모리를 가지지 않고(로컬 메모리를 가질 수 있지만 VRAM에 할당하므로 느림) 공유 레지스터 집합을 사용함. 이 공유 레지스터 파일은 총 512바이트.
+
+만약 모든 레인에서 서로 다른 디스크립터를 사용해야 한다면? ex) 레이 트레이싱으로 32개 픽셀에서 광선을 쐈는데 모두가 다른 머티리얼의 오브젝트와 Intersect하는 경우
+
+-> 디스크립터 인덱싱 -> 4Byte(32-bits) * 32 = 128 Bytes >> 레지스터에 전부 올릴 수 있음
+
+-> 디스크립터 데이터 -> 32Byte(256-bits) * 32 = 1024 Bytes >> 레지스터 전체 용량 초과
+
+따라서 디스크립터 데이터를 사용할 경우 워프 내 모든 스레드가 SIMT(Parallel)하게 동작이 불가능해져서 병목이 발생함.
+
