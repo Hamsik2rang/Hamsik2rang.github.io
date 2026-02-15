@@ -205,7 +205,7 @@ Metal은 어떤 경우든 항상 분리된다. 따라서 **Slang에서 `Sampler2
 
 
 
---- 
+---
 # 참고자료
 * [AMD - "RDNA3" Instruction Set Architecture: Reference Guide](https://docs.amd.com/v/u/en-US/rdna3-shader-instruction-set-architecture-feb-2023_0) - Chapter 10.1 Image Instructions
 * [Nvidia - Tips and Tricks: Vulkan Dos and Don'ts](https://developer.nvidia.com/blog/vulkan-dos-donts/)
@@ -215,3 +215,5 @@ Metal은 어떤 경우든 항상 분리된다. 따라서 **Slang에서 `Sampler2
 * [ARM - Application best practice for Vulkan](https://developer.arm.com/community/arm-community-blogs/b/mobile-graphics-and-gaming-blog/posts/mali-bifrost-usage-recommendations-for-texture-and-sampler-descriptors)
 * [Arm Mali Best Practices](https://armkeil.blob.core.windows.net/developer/Arm%20Developer%20Community/PDF/Arm%20Mali%20GPU%20Best%20Practices.pdf)
 * [Qualcomm - Mobile GPU approaches to power efficiency](https://www.highperformancegraphics.org/wp-content/uploads/2019/hot3d/mobile_gpu_power_and_performance.pdf)
+
+* [Samsung Developer - Vulkan Usage Recommendations](https://developer.samsung.com/galaxy-gamedev/resources/articles/usage.html)
