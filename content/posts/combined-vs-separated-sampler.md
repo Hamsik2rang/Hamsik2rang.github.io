@@ -89,9 +89,9 @@ Combined Image Sampler 디스크립터에 Immutable Sampler를 적용할 때, �
 
 결국, Android 디바이스에서 **OpenGL ES을 함께 지원해야 하는 크로스 플랫폼 어플리케이션의 경우라면 디바이스 커버리지에 따라 Combined Image Sampler를 지원**하거나, 지원해야만 하는 상황이 있을 수 있지만, Vulkan/Metal 과 같은 **모던 API들로 모바일 디바이스를 모두 지원할 수 있다면 굳이 Combined Image Sampler를 사용할 필요가 없어 보인다**. 오히려 **Combined타입의 지원을 위한 추상화 코드가 렌더링 백엔드(와 쉐이더 트랜스컴파일 워크플로)의 복잡도를 증가**시키는 결과로 이어지게 될 것이며, 상대적으로 더 최신 디바이스들(혹은 Desktop Only)만을 지원하고자 한다면 **Bindless 렌더링 시스템을 구축**하는 것을 고려하는 게 바람직해 보인다.
 
-## 부록 1. 셰이더 선언 비교
-
-### GLSL
+## 부록
+### 셰이더 지원 현황
+#### GLSL
 
 ```glsl
 // === Combined Image Sampler ===
@@ -119,7 +119,7 @@ void main() {
 | Image만 | `texture2D` | `SAMPLED_IMAGE` |
 | Sampler만 | `sampler` | `SAMPLER` |
 
-### HLSL
+#### HLSL
 
 HLSL에는 `sampler2D` 같은 combined 타입이 네이티브로 없다. `Texture2D` + `SamplerState`가 기본이며, Vulkan에서 combined으로 매핑하려면 별도 어트리뷰트가 필요하다.
 
@@ -152,7 +152,7 @@ float4 main(float2 uv) : SV_Target {
 | Separated | `Texture2D` + `SamplerState` (각각 다른 register) | DX12/Vulkan 공통 |
 | Combined | `Texture2D` + `SamplerState` + `[[vk::combinedImageSampler]]` | Vulkan 전용 어트리뷰트 |
 
-### Slang
+#### Slang
 
 ```slang
 // === Combined (Sampler2D 타입) ===
@@ -194,7 +194,7 @@ Metal은 어떤 경우든 항상 분리된다. 따라서 **Slang에서 `Sampler2
 
 이것이 이 프로젝트에서 sampler 바인딩 누락 버그의 원인이었다. `Sampler2D`의 `DescriptorTableSlot` 케이스에서 Metal 타겟일 때 sampler 바인딩을 별도로 추출해야 한다.
 
-### 부록 2. API별 지원 현황
+### API별 지원 현황
 
 | API | Combined 지원 | 이유 |
 |---|---|---|
