@@ -1,3 +1,20 @@
+---
+title: "[Memo] Real-Time Rendering Ch.9"
+author: "Yongsik Im"
+authorAvatarPath: "/images/profile.jpg"
+date: "2026-04-05"
+summary: "독서 메모 - Real-Time Rendering"
+description: "독서 후 배운 점들을 메모합니다."
+toc: true
+readTime: true
+autonumber: true
+math: true
+tags: ["Graphics", "Book"]
+showTags: false
+hideBackToTop: false
+draft: false
+---
+
 # Chapter 9. Physically Based Shading
 
 ## 9.1. Physics of Light
