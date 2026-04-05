@@ -10,7 +10,7 @@ readTime: true
 autonumber: true
 math: true
 tags: ["Graphics", "GPU", "AI"]
-showTags: false
+showTags: true
 hideBackToTop: false
 ---
 

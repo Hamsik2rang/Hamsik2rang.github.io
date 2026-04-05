@@ -10,7 +10,7 @@ readTime: true
 autonumber: true
 math: true
 tags: ["blog", "markdown"]
-showTags: false
+showTags: true
 hideBackToTop: false
 draft: true
 ---

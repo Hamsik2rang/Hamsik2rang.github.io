@@ -10,7 +10,7 @@ readTime: true
 autonumber: true
 math: true
 tags: ["Graphics", "Book"]
-showTags: false
+showTags: true
 hideBackToTop: false
 draft: false
 ---
