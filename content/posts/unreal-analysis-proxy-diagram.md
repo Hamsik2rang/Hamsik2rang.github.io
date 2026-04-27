@@ -1,4 +1,20 @@
-﻿## Proxy 생성 도식
+﻿---
+title: "Unreal Engine 5 분석 - Proxy (다이어그램)"
+author: "Yongsik Im"
+authorAvatarPath: "/images/profile.jpg"
+date: "2026-04-26"
+summary: "언리얼 엔진 5.7 소스 코드 분석"
+description: ""
+toc: true
+readTime: true
+autonumber: true
+math: true
+tags: ["Graphics", "GPU", "AI"]
+showTags: true
+hideBackToTop: false
+draft: true
+---
+## Proxy 생성 도식
 
 `UPrimitiveComponent`의 초기 Proxy 생성 흐름을 최대한 단순화하면 다음과 같다.
 
