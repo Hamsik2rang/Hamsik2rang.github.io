@@ -23,7 +23,7 @@ homeIntroTitle = 'Hello!'
 profileImage = "images/profile.jpg"
 homeIntroContent = """
 안녕하세요. 방문해주셔서 감사합니다.\n
-현재 [컴투스](https://com2us.com/)에서 엔진 프로그래머로 일하며 게임 엔진을 개발하고 있습니다.  
+현재 게임 엔진 프로그래머로 일하며 게임 엔진 개발 및 최적화 업무를 진행하고 있습니다.  
 게임 엔진 아키텍쳐, 실시간 렌더링, GPGPU 등의 주제를 탐구하며, 블로그를 통해 다양한 기술과 경험을 공유하고 싶습니다.  
 """
 

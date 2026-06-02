@@ -215,7 +215,6 @@ AMD의 원시 디스크립터 방식은 GPU 메모리에서 256비트 디스크�
 
 몇 년 전만 해도 AMD의 스칼라 레지스터 기반 텍스처 디스크립터가 장기적으로 승리할 공식처럼 보였습니다. 스칼라 레지스터는 디스크립터 힙보다 유연하여 디스크립터를 GPU 데이터 구조 내에 직접 포함할 수 있게 합니다. 하지만 단점도 있습니다. 레이 트레이싱과 지연 텍스처링(Nanite) 같은 현대 GPU 워크로드는 균일하지 않은(non-uniform) 텍스처 인덱스에 의존합니다. 텍스처 힙 인덱스가 SIMD 웨이브(워프)에서 균일하지 않은 경우가 많습니다. 32비트 힙 인덱스는 4바이트에 불과하므로 레인(lane)별로 전송할 수 있습니다. 반면 256비트 디스크립터는 32바이트입니다. 레인마다 완전한 256비트 디스크립터를 가져와서 전송하는 것은 현실적으로 불가능합니다. 현대의 Nvidia, Apple, Qualcomm GPU는 샘플 명령어에서 레인별 디스크립터 인덱스 모드를 지원하여 균일하지 않은 경우의 효율성을 높입니다. 샘플러 유닛은 필요하다면 내부 루프를 수행합니다. 샘플러 유닛의 입력/출력은 힙 인덱스의 일관성 여부와 상관없이 한 번만 전송됩니다. AMD의 스칼라 레지스터 기반 디스크립터 아키텍처는 셰이더 컴파일러가 텍스처 샘플 명령어 주변에 스칼라화(scalarization) 루프를 생성하도록 요구합니다. 이는 추가 ALU 사이클을 소모하고 (부분적으로 마스크된) 샘플러 데이터를 여러 번 전송하고 수신해야 합니다. 이것이 Nvidia가 AMD보다 레이 트레이싱에서 더 빠른 이유 중 하나입니다. ARM과 Intel도 32비트 힙 인덱스를 사용하지만(Nvidia, Qualcomm, Apple처럼), 최신 아키텍처에는 아직 레인별 힙 인덱스 모드가 없습니다. 비균일 인덱스(non-uniform index)의 경우 AMD와 유사한 스칼라화 루프를 생성합니다.
 
-All of these differences can be wrapped under an unified texture descriptor heap abstraction. The de-facto texture descriptor size is 256 bits (192 bits on Apple for a separate texture descriptor, sampler is the remaining 32 bits). The texture heap can be presented as a homogeneous array of 256-bit descriptor blobs. Indexing is trivial. DirectX 12 shader model 6.6 provides a texture heap abstraction like this, but doesn’t allow direct CPU or compute shader write access to the descriptor heap memory. A set of APIs are used for creating descriptors and copying descriptors from the CPU to the GPU. The GPU is not allowed to write the descriptors. Today, we can remove this API abstraction completely by allowing direct CPU and GPU write to the descriptor heap. All we need is a simple (user-land) driver helper function for creating a 256-bit (uint64[4]) hardware specific descriptor blob. Modern GPUs have UMA or PCIe ReBAR. The CPU can directly write descriptor blobs into GPU memory. Users can also use compute shaders to copy or generate descriptors. The shader language has a descriptor creation intrinsic too. It returns a hardware specific uint64x4 descriptor blob (analogous to the CPU API). This approach cuts the API complexity drastically and is both faster and more flexible than the DirectX 12 descriptor update model. Vulkan’s VK_EXT_descriptor_buffer (https://www.khronos.org/blog/vk-ext-descriptor-buffer) extension (2022) is similar to my proposal, allowing direct CPU and GPU write. It is supported by most vendors, but unfortunately is not part of the Vulkan 1.4 core spec.
 이러한 모든 차이는 통합된 텍스처 디스크립터 힙 추상화로 감쌀 수 있습니다. 사실상의 텍스처 디스크립터 크기는 256비트(Apple에서는 텍스처를 위해 디스크립터의 192비트를 사용한 후, 나머지 32비트에 샘플러 저장)입니다. 텍스처 힙은 256비트 디스크립터 블롭(Blob)의 균질한 배열로 제시될 수 있습니다. 인덱싱은 단순합니다. DirectX 12 셰이더 모델 6.6은 이와 같은 텍스처 힙 추상화를 제공하지만, 디스크립터 힙 메모리에 대한 직접적인 CPU 또는 컴퓨트 셰이더 쓰기 액세스를 허용하지 않습니다. 디스크립터를 생성하고 CPU에서 GPU로 디스크립터를 복사하기 위해 일련의 API가 사용됩니다. GPU는 디스크립터를 쓸 수 없습니다. 오늘날 우리는 디스크립터 힙에 대한 직접적인 CPU와 GPU 쓰기를 허용함으로써 이 API 추상화를 완전히 제거할 수 있습니다. 우리에게 필요한 것은 256비트(uint64[4]) 하드웨어 특정 디스크립터 블롭을 생성하는 간단한(사용자 공간) 드라이버 도우미 함수뿐입니다. 최신 GPU는 UMA 또는 PCIe ReBAR를 갖추고 있습니다. CPU는 GPU 메모리에 디스크립터 블롭을 직접 쓸 수 있습니다. 사용자는 컴퓨트 셰이더를 사용하여 디스크립터를 복사하거나 생성할 수도 있습니다. 셰이더 언어에도 디스크립터 생성 내장 함수가 있습니다. 하드웨어별 uint64x4 디스크립터 블롭(blob)을 반환합니다(CPU API와 유사). 이 접근 방식은 API 복잡성을 획기적으로 줄여주며, DirectX 12 디스크립터 업데이트 모델보다 더 빠르고 유연합니다. Vulkan의 [VK_EXT_descriptor_buffer](https://www.khronos.org/blog/vk-ext-descriptor-buffer) 확장(2022년)은 제안과 유사하며, CPU와 GPU의 직접 쓰기를 허용합니다. 대부든 벤더가 지원하지만, 안타깝게도 Vulkan 1.4 코어 사양의 일부는 아닙니다.
 
 ```c++
@@ -251,11 +250,168 @@ gpuSubmit(queue, { uploadCommandBuffer });
 gpuSetActiveTextureHeapPtr(commandBuffer, gpuHostToDevicePointer(textureHeap));
 ```
 
+CPU 측 텍스처 객체(GpuTexture)를 완전히 제거하는 것이 거의 가능해졌습니다. 불행히도 모든 현대적 GPU의 삼각형 래스터라이저 유닛은 아직 바인드리스(bindless) 방식이 아닙니다. CPU 드라이버는 렌더 타겟, 뎁스 스텐실 버퍼를 바인딩하고, Clear 및 Resolve를 수행하기 위해 커맨드 패킷을 준비해야 합니다. 이러한 API들은 256비트 GPU 텍스처 디스크립터를 사용하지 않습니다. 따라서 (GpuTexture 객체에 저장되는) 드라이버 전용의 추가적인 CPU 데이터가 필요합니다.
+
+셰이더에서 텍스처를 참조하는 가장 간단한 방법은 32비트 인덱스를 사용하는 것입니다. 단일 인덱스는 디스크립터 범위의 시작 오프셋을 나타낼 수도 있습니다. 이는 API 없이도 DirectX 12의 디스크립터 테이블(descriptor table) 추상화와 Vulkan의 디스크립터 세트(descriptor set) 추상화를 구현할 수 있는 직관적인 방법을 제공합니다. 또한 빠른 머티리얼 전환(material switch) 사용 사례에 대해서도 우아한 해결책을 얻을 수 있습니다. 재질 데이터 구조체(재질 속성 + 32비트 텍스처 힙 시작 인덱스 포함)를 가리키는 단일 64비트 GPU 포인터만 있으면 됩니다. Vulkan의 `vkCmdBindDescriptorSets와` DirectX 12의 `SetGraphicsRootDescriptorTable`은 비교적 빠른 API 호출이지만, 영구적으로 매핑된(persistently mapped) GPU 메모리에 단일 64비트 포인터를 쓰는 것만큼 빠르지는 않습니다. 리소스 바인딩 API 객체를 생성, 업데이트 및 삭제할 필요가 없으므로 많은 복잡성이 제거됩니다. 또한 사용자가 게임 엔진에서 Immadiate mode와 Retained mode 간의 불일치를 해결하기 위해 흔히 사용하는 방식인 디스크립터 세트의 해시 맵을 더 이상 유지 관리할 필요가 없으므로 CPU 시간도 절약됩니다.
+```hlsl
+// Common header...
+struct alignas(16) Data
+{
+    uint32 srcTextureBase;
+    uint32 dstTexture;
+    float32x2 invDimensions;
+};
+
+// GPU kernel...
+const Texture textureHeap[];
+
+[groupsize = (8, 8, 1)]
+void main(uint32x3 threadId : SV_ThreadID, const Data* data)
+{
+    Texture textureColor = textureHeap[data->srcTextureBase + 0];
+    Texture textureNormal = textureHeap[data->srcTextureBase + 1];
+    Texture texturePBR = textureHeap[data->srcTextureBase + 2];
+
+    Sampler sampler = {.minFilter = LINEAR, .magFilter = LINEAR}; // Embedded sampler (Metal-style)
+
+    float32x2 uv = float32x2(threadId.xy) * data->invDimensions;
+
+    float32x4 color = sample(textureColor, sampler, uv);
+    float32x4 normal = sample(textureNormal, sampler, uv);
+    float32x4 pbr = sample(texturePBR, sampler, uv);
+
+    float32x4 lit = calculateLighting(color, normal, pbr);
+
+    TextureRW dstTexture = TextureRW(textureHeap[data->dstTexture]);
+    dstTexture[threadId.xy] = lit;
+}
+
+```
+Metal 4는 텍스처 디스크립터 힙을 자동으로 관리합니다. 텍스처 객체는 64비트 힙 인덱스인 `.gpuResourceID`를 가집니다 (Xcode GPU 디버거를 통해 0x3과 같은 작은 값을 확인할 수 있습니다). DirectX SM 6.6 및 Vulkan(디스크립터 버퍼 확장)에서 텍스처 인덱스를 사용하는 것과 마찬가지로, GPU 구조체에 텍스처 ID를 직접 기록할 수 있습니다. Metal의 힙 관리는 자동이기 때문에 사용자가 연속된 범위에 텍스처 디스크립터를 할당할 수 없습니다. 일반적으로 범위 내 첫 번째 텍스처의 32비트 인덱스를 저장하고 세트 내 다른 텍스처의 인덱스를 계산하는 방식(위 코드 예시 참조)이 널리 쓰이지만, Metal은 이를 지원하지 않습니다. 사용자는 각 텍스처에 대해 64비트 텍스처 핸들을 개별적으로 기록해야 합니다. 5개의 텍스처 세트를 참조하려면 Metal에서는 40바이트(5 * 64비트)가 필요한 반면, Vulkan과 DirectX 12는 4바이트(1 * 32비트)만 있으면 됩니다. Apple GPU 하드웨어는 SM 6.6 텍스처 힙을 구현할 능력이 있지만, 한계는 Metal API(소프트웨어)에 있습니다.
+
+텍셀 버퍼(Texel buffers)는 하위 호환성을 위해 여전히 지원될 수 있습니다. DirectX 12는 텍셀 버퍼 디스크립터를 텍스처 디스크립터와 동일한 힙에 저장합니다. 텍셀 버퍼는 1D 텍스처(필터링되지 않은 `tfetch` 경로)와 유사하게 작동합니다. 텍셀 버퍼는 주로 하위 호환성을 위해 사용되므로, 드라이버 제조사가 이를 배후에서 원시 메모리 로드(raw memory loads)와 같은 더 빠른 코드 경로로 교체하기 위해 무리하게 애쓸 필요는 없을 것입니다. 저는 드라이버의 백그라운드 스레드나 셰이더 교체 방식을 그리 선호하지 않습니다.
+
+Non-uniform texture index needs to use NonUniformResourceIndex notation similar to GLSL and HLSL. This tells the low level GPU shader compiler to emit a special texture instruction with per-lane heap index, or a scalarization loop for GPUs that only support uniform descriptors. Since buffers are not descriptors, we never need NonUniformResourceIndex for buffers. We simply pass a 64-bit pointer per lane. It works on all modern GPUs. No scalarization loop, no mess. Additionally, the language should natively support ptr[index] notation for memory loads, where the index is 32-bits. Some GPUs support raw memory load instructions with 32-bit per lane offset. It reduces the register pressure. Feedback to GPU vendors: Please add the missing 64-bit shared base + 32-bit per lane offset raw load instruction and 16-bit uv(w) texture load instructions, if your architecture is still missing them.
+
+비균일(Non-uniform) 텍스처 인덱스는 GLSL 및 HLSL과 유사하게 `NonUniformResourceIndex` 표기법을 사용해야 합니다. 이는 저수준 GPU 셰이더 컴파일러가 레인별 힙 인덱스를 갖는 특수 텍스처 명령어를 생성하거나, 균일(Uniform) 디스크립터만 지원하는 GPU의 경우 스칼라화 루프(scalarization loop)를 생성하도록 지시합니다. 버퍼는 디스크립터가 아니기 때문에 버퍼에 대해서는 `NonUniformResourceIndex`가 전혀 필요하지 않습니다. 단순히 레인당 64비트 포인터를 전달하기만 하면 됩니다. 이는 모든 최신 GPU에서 작동하며, 스칼라화 루프도 없고 복잡함도 없습니다. 또한, 언어 차원에서 인덱스가 32비트인 메모리 로드를 위한 `ptr[index]` 표기법을 기본적으로 지원해야 합니다. 일부 GPU는 레인당 32비트 오프셋을 갖는 원시 메모리 로드(raw memory load) 명령어를 지원하여 레지스터 압박을 줄여줍니다. GPU 벤더들에게 피드백을 드리자면, 귀사의 아키텍처에 아직 해당 기능이 없다면 누락된 '64비트 공유 베이스 + 레인당 32비트 오프셋' 원시 로드 명령어와 16비트 `uv(w)` 텍스처 로드 명령어를 추가해 주시기 바랍니다.
+
+```hlsl
+const Texture textureHeap[];
+
+[groupsize = (8, 8, 1)]
+void main(uint32x3 threadId : SV_ThreadID, const Data* data)
+{
+    // Non-uniform "buffer data" is not an issue with pointer semantics! 
+    Material* material = data->materialMap[threadId.xy];
+
+    // Non-uniform texture heap index
+    uint32 textureBase = NonUniformResourceIndex(material.textureBase);
+
+    Texture textureColor = textureHeap[textureBase + 0];
+    Texture textureNormal = textureHeap[textureBase + 1];
+    Texture texturePBR = textureHeap[textureBase + 2];
+
+    Sampler sampler = {.minFilter = LINEAR, .magFilter = LINEAR};
+
+    float32x2 uv = float32x2(threadId.xy) * data->invDimensions;
+
+    float32x4 color = sample(textureColor, sampler, uv);
+    float32x4 normal = sample(textureNormal, sampler, uv);
+    float32x4 pbr = sample(texturePBR, sampler, uv);
+    
+    color *= material.color;
+    pbr *= material.pbr;
+
+    // Rest of the shader
+}
+
+```
+현대의 바인드리스 텍스처링(bindless texturing)을 사용하면 모든 텍스처 바인딩 API를 제거할 수 있습니다. 전역적으로 인덱싱 가능한 텍스처 힙(texture heap)을 통해 모든 텍스처를 모든 셰이더에서 참조할 수 있게 됩니다. 텍스처 데이터는 (DCC 및 Morton swizzle을 활성화하기 위해) 여전히 복사 명령을 통해 GPU 메모리로 로드되어야 합니다. 텍스처 디스크립터 생성에는 여전히 GPU 전용의 얇은 유저 영역 API가 필요합니다. 텍스처 힙은 CPU와 GPU 모두에 가공되지 않은 GPU 메모리 배열로 직접 노출될 수 있으며, 이를 통해 DirectX 12 SM 6.6과 비교했을 때 텍스처 힙 API 복잡성을 대부분 제거할 수 있습니다.
+
+## Shader Pipeline 셰이더 파이프라인  
+
+Since our shader root data is just a single 64-bit pointer and our textures are just 32-bit indices, the shader pipeline creation becomes dead simple. There’s no need to define texture bindings, buffer bindings, bind groups (descriptor sets, argument buffers) or the root signature.
+셰이더 루트 데이터는 단일 64비트 포인터일 뿐이고 텍스처는 32비트 인덱스에 불과하므로, 셰이더 파이프라인 생성은 매우 단순해집니다. 루트 시그니쳐, 텍스처 바인딩, 버퍼 바인딩, 또는 디스크립터 세트나 인수 버퍼(argument buffer)와 같은 바인드 그룹 정의할 필요가 없습니다.
+
+```cpp
+auto shaderIR = loadFile("computeShader.ir");
+GpuPipeline computePipeline = gpuCreateComputePipeline(shaderIR);
+```
+DirectX 12와 Vulkan은 루트 시그니처(root signatures), 푸시 디스크립터(push descriptors), 푸시 상수(push constants), 그리고 디스크립터 세트(descriptor sets)를 바인딩하고 설정하기 위해 복잡한 API를 활용합니다. 현대의 GPU 드라이버는 본질적으로 GPU 메모리에 단일 구조체(struct)를 구성하고 그 포인터를 커맨드 프로세서에 전달합니다. 우리는 이러한 API의 복잡성이 불필요하다는 것을 보여주었습니다. 사용자는 단순히 루트 구조체를 영구 매핑된(persistently mapped) GPU 메모리에 쓰고, 64비트 GPU 포인터를 Draw/Dispatch 함수에 직접 전달하기만 하면 됩니다. 또한 사용자는 구조체 내부에 64비트 포인터와 32비트 텍스처 힙 인덱스를 포함시켜 필요에 맞는 어떠한 간접 데이터 레이아웃도 구축할 수 있습니다. 루트 바인딩 API와 DX12의 복잡한 버퍼 관리 체계 전체를 64비트 포인터로 효율적으로 대체할 수 있는 것입니다. 이는 셰이더 파이프라인 생성을 획기적으로 단순화합니다. 데이터 레이아웃을 전혀 정의할 필요가 없기 때문입니다. 우리는 사용자에게 더 많은 유연성을 제공하는 동시에 API 복잡성의 거대한 부분을 성공적으로 제거했습니다.
+
+## Static Constants 정적 상수
+
+Vulkan, Metal, 그리고 WebGPU는 셰이더 파이프라인 생성 시점에 고정되는 정적(특수화) 상수 개념을 가지고 있습니다. 드라이버 내부의 셰이더 컴파일러는 이러한 상수들을 입력 셰이더 IR에 리터럴(literal)로 적용한 후, 상수 전파(constant propagation) 및 데드 코드 제거(dead code elimination) 과정을 거칩니다. 이를 통해 파이프라인 생성 시 동일한 셰이더의 여러 변형(permutation)을 생성할 수 있으며, 모든 셰이더 변형을 오프라인에서 컴파일하는 데 필요한 시간과 저장 공간을 줄일 수 있습니다.
+
+Vulkan과 Metal은 셰이더 특수화 상수와 그 값을 기술하기 위한 일련의 API와 특별한 셰이더 구문을 가지고 있습니다. 셰이더 측에 정의된 상수 구조체와 일치하는 C 구조체를 단순히 제공하는 방식이 더 나을 것입니다. 이는 API 노출을 최소화하면서도 중요한 개선 사항들을 가져다줄 것입니다.
+
+Vulkan의 specialization constants(특수화 상수)에는 설계상의 결함이 있습니다. 특수화 상수는 디스크립터 세트 레이아웃(descriptor set layouts)을 수정할 수 없습니다. 데이터 입력과 출력은 고정되어 있습니다. 사용자는 모든 잠재적 입출력을 포함하는 우버 레이아웃(uber-layout, *역주: `거대한` 이라는 뜻의 `über` 에서 유래했습니다*)을 구현하고 사용하지 않는 디스크립터의 업데이트를 건너뛰는 방식으로 이 제한을 우회할 수 있지만, 이는 번거롭고 최적화되지 않은 방식입니다.  
+우리가 제안하는 설계에는 이러한 문제가 없습니다. 상수를 통해 분기 처리를 하면 반대편은 데드 코드 제거(dead code elimination)되므로 셰이더 데이터 입력 포인터를 다른 구조체로 간단히 재해석할 수 있습니다. C++ 상속 데이터 레이아웃을 모방할 수도 있습니다. 입력 구조체의 시작 부분에는 공통 레이아웃을 사용하고 끝부분에 특수화된 데이터를 배치하는 식입니다. 이를 통해 정적 다형성(static polymorphism)을 깔끔하게 구현할 수 있습니다. 런타임 성능은 수동으로 최적화된 셰이더와 동일합니다. 또한 특수화 구조체에 GPU 포인터를 포함할 수 있어, 사용자가 런타임 메모리 위치를 하드코딩함으로써 간접 참조(indirection)를 피할 수 있습니다. 이는 이전의 셰이더 언어에서는 불가능했던 일입니다. 대신 GPU 벤더들은 런타임에 유사한 셰이더 교체 최적화를 수행하기 위해 백그라운드 스레드를 사용하여 셰이더를 분석해야 했으며, 이는 CPU 비용과 드라이버 복잡성을 크게 증가시켰습니다.
+
+```hlsl
+// Common header...
+struct alignas(16) Constants
+{
+    int32 qualityLevel;
+    uint8* blueNoiseLUT;
+};
+
+// CPU code...
+Constants constants { .qualityLevel = 2, blueNoiseLUT = blueNoiseLUT.gpu };
+
+auto shaderIR = loadFile("computeShader.ir");
+GpuPipeline computePipeline = gpuCreateComputePipeline(shaderIR, &constants);
+
+// GPU kernel...
+[groupsize = (8, 8, 1)]
+void main(uint32x3 threadId : SV_ThreadID, const Data* data, const Constants constants)
+{
+    if (constants.qualityLevel == 3)
+    {
+        // Dead code eliminated
+    }
+}
+
+```
+
+셰이더 순열(shader permutation) 지옥은 오늘날 현대 그래픽스에서 가장 큰 문제 중 하나입니다. 게이머들은 스터터링(끊김 현상)에 대해 불평하고, 개발자들은 오프라인 셰이더 컴파일에 수 시간이 걸리는 것에 대해 불평합니다. 이 새로운 설계는 사용자에게 추가적인 유연성을 제공합니다. 셰이더 내부에서 정적 동작과 동적 동작 사이를 전환할 수 있어, 일반적인 폴백(fallback)을 유지하면서 필요에 따라 특수화를 적용하기가 쉽습니다. 이 설계는 셰이더 순열의 수를 줄이고 파이프라인 생성으로 인한 런타임 지연을 감소시킵니다.
+
+## Barriers and Fences 배리어와 펜스
+현대 그래픽스 API에서 가장 기피되는 기능은 단연 배리어일 것입니다. 배리어는 두 가지 목적을 수행합니다. 생산자-소비자(producer-to-consumer) 간의 실행 의존성을 강제하는 것과 레이아웃 간의 텍스처 전이(transition)를 처리하는 것입니다.  
+
+많은 그래픽 프로그래머들이 GPU 동기화에 대해 잘못된 멘탈 모델을 가지고 있습니다. 흔히 GPU 동기화가 세밀한 텍스처 및 버퍼 의존성을 기반으로 이루어진다고 믿곤 합니다. 하지만 실제로 현대 GPU 하드웨어는 개별 리소스에 크게 신경 쓰지 않습니다. 우리는 사용자 영역(user-land)에서 개별 리소스 목록과 레이아웃 변경 사항을 준비하는 데 수많은 CPU 사이클을 소비하지만, 현대 GPU 드라이버는 사실상 그 목록을 버립니다. 추상화가 현실과 일치하지 않는 것입니다.  
+
+현대의 바인드리스(bindless) 아키텍처는 GPU에 많은 자유를 부여합니다. 셰이더는 임의의 64비트 포인터나 전역 디스크립터 힙(global descriptor heap)에 있는 모든 텍스처에 쓸 수 있습니다. CPU는 GPU가 어떤 결정을 내릴지 알 수 없습니다. 그런데 어떻게 영향을 받는 각 리소스에 대해 전이 배리어(transition barrier)를 내보낼 수 있을까요? 이는 오늘날의 바인드리스 아키텍처와 고전적인 CPU 중심 렌더링 API 사이의 명백한 불일치입니다. 왜 10년 전에는 API가 이렇게 설계되었는지 조사해 봅시다.
+
+AMD GCN은 현대 그래픽 API 설계에 큰 영향을 미쳤습니다. GCN은 비동기 컴퓨트(async compute)와 바인드리스 텍스처링(스칼라 레지스터를 사용하여 디스크립터 저장)을 통해 시대를 앞서갔지만, 델타 컬러 압축(DCC) 및 캐시 설계에는 결정적인 한계가 있었습니다. 이러한 한계는 오늘날 우리가 사용하는 배리어 모델이 왜 이토록 복잡한지를 보여주는 훌륭한 예시입니다. GCN에는 일관성 있는(coherent) 최하위 레벨 캐시가 없었습니다. ROP(래스터 연산 = 픽셀 셰이더 출력)는 VRAM에 직접 연결된 특수한 비일관성 캐시를 가지고 있었습니다. 드라이버는 픽셀 셰이더의 쓰기 내용을 셰이더와 샘플러에서 볼 수 있도록 먼저 ROP 캐시를 메모리로 플러시(flush)한 다음 L2 캐시를 무효화(invalidate)해야 했습니다. 커맨드 프로세서 또한 L2 캐시의 클라이언트가 아니었습니다. 컴퓨트 셰이더에서 작성된 간접 인자(indirect arguments)는 L2 캐시 전체를 무효화하고 모든 더티 라인(dirty lines)을 VRAM으로 플러시하지 않으면 커맨드 프로세서에서 볼 수 없었습니다. GCN 3에서 ROP를 위한 델타 컬러 압축(DCC)이 도입되었지만, AMD의 텍스처 샘플러는 DCC 압축 텍스처나 압축된 깊이 버퍼를 직접 읽을 수 없었습니다. 드라이버는 압축을 해제하기 위해 내부적으로 디컴프레스(decompress) 컴퓨트 셰이더를 실행해야 했습니다. 디스플레이 엔진 또한 DCC 압축 텍스처를 읽을 수 없었습니다. 렌더 타겟을 샘플링하는 일반적인 경우에도 두 개의 내부 배리어와 모든 캐시 플러시(ROP 대기, ROP 캐시 및 L2 캐시 플러시, 디컴프레스 컴퓨트 셰이더 실행, 컴퓨트 대기)가 필요했습니다.
+
+AMD의 새로운 RDNA 아키텍처에는 몇 가지 중요한 개선 사항이 있습니다. 모든 메모리 작업을 포괄하는 일관된(coherent) L2 캐시를 갖추고 있으며, ROP와 커맨드 프로세서가 이 L2 캐시의 클라이언트가 됩니다. 유일한 비일관성 캐시는 연산 유닛(CU) 내부의 아주 작은 L0 캐시와 K 캐시(스칼라 캐시)뿐입니다. 이제 배리어(barrier)는 이 작은 캐시들에 남아 있는 쓰기 작업을 상위 레벨 캐시로 플러시(flush)하기만 하면 됩니다. 드라이버가 더 이상 최하위 레벨(L2) 캐시를 VRAM으로 플러시할 필요가 없어져 배리어 속도가 현저히 빨라졌습니다. RDNA의 개선된 디스플레이 엔진은 DCC 압축 텍스처를 읽을 수 있으며, L2 캐시와 L0 텍스처 캐시 사이에 (압축/해제) 장치가 위치합니다. 샘플링 전에 VRAM에서 텍스처 압축을 해제할 필요가 없으므로, 텍스처 레이아웃 전환(압축/비압축) 과정이 생략됩니다. 모든 데스크톱 및 모바일 GPU 벤더들은 유사한 결론에 도달했습니다. 오늘날의 병목 현상은 대역폭이며, 리소스를 VRAM에 디코딩하며 대역폭을 낭비해서는 안 된다는 것입니다. 이제 레이아웃 전환은 더 이상 필요하지 않습니다.
+
+![AMD_RDAN_Multi_level_cache_hierarchy](/post_images/no-graphics-api-translation/1.png)
+*AMD RDNA (2019): RDNA 아키텍처에서 개선된 캐시 계층 구조, DCC 및 디스플레이 엔진. L2 캐시는 DCC 압축 데이터를 포함합니다. (압축)해제기는 L2 캐시와 하위 레벨 사이에 위치합니다. L0 캐시(텍스처)는 압축이 해제된 상태입니다. 이미지 © AMD.*
+
+리소스 목록은 DirectX 12와 Vulkan의 배리어(barrier)에서 가장 번거로운 요소입니다. 사용자는 각 리소스의 상태를 개별적으로 추적하고, 각 배리어마다 해당 리소스의 이전 상태와 다음 상태를 그래픽 API에 알려주어야 합니다. 이는 10년 전 GPU에서 벤더들이 배리어 API 아래에 다양한 압축 해제(decompress) 명령을 숨겨두었기 때문에 필요했던 방식입니다. 배리어 명령이 압축 해제 명령의 역할을 겸했으므로, 어떤 리소스에 압축 해제가 필요한지 알아야만 했습니다. 오늘날의 하드웨어는 텍스처 레이아웃이나 압축 해제 단계가 필요하지 않습니다. Vulkan은 최근 [VK_KHR_unified_image_layouts](https://www.khronos.org/blog/so-long-image-layouts-simplifying-vulkan-synchronisation) 확장(2025년)을 도입하여 배리어 명령에서 이미지 레이아웃 전환을 제거했습니다. 하지만 여전히 사용자가 개별 텍스처와 버퍼를 목록화하도록 요구합니다. 왜 그럴까요?
+
+주된 이유는 레거시 API 및 툴링과의 호환성 때문입니다. 사람들은 리소스 의존성 관점에서 생각하는 데 익숙하며, 기존의 Vulkan 및 DirectX 12 검증 레이어(validation layers)도 그렇게 설계되어 있습니다. 그러나 GPU가 실제로 실행하는 배리어 명령에는 텍스처나 버퍼에 대한 정보가 전혀 포함되어 있지 않습니다. 리소스 목록은 오직 드라이버에 의해서만 소비됩니다.
+
+현대의 드라이버는 리소스 목록을 루프 돌며 일련의 플래그를 채웁니다. 드라이버는 더 이상 리소스 레이아웃이나 마지막 레벨 캐시(LLC)의 일관성을 걱정할 필요가 없지만, 특수한 경우에 플러시(flush)가 필요한 아주 작은 비일관성 캐시들이 여전히 존재합니다. 현대의 GPU는 모든 배리어에서 대부분의 비일관성 캐시를 자동으로 플러시합니다. 예를 들어, AMD의 L0 캐시와 K 캐시(스칼라 캐시)는 항상 플러시되는데, 모든 패스가 일부 출력을 기록하고 이러한 출력들이 해당 캐시들에 머물기 때문입니다. 모든 쓰기 주소를 세밀하게 추적하는 것은 비용이 너무 많이 듭니다. 작은 비일관성 캐시들은 대개 포함적(inclusive)인 특성을 가집니다. 수정된 라인은 다음 캐시 레벨로 플러시됩니다. 이는 빠르며 VRAM 트래픽을 발생시키지 않습니다. 일부 아키텍처에는 자동으로 플러시되지 않는 특수 캐시가 있습니다. 예: 텍스처 샘플러의 디스크립터 캐시(위 챕터 참조), 래스터라이저 ROP 캐시, HiZ 캐시 등입니다. 커맨드 프로세서는 일반적으로 웨이브 생성 지연을 줄이기 위해 미리 실행(run ahead)됩니다. 셰이더에서 간접 인자(indirect arguments)를 쓰는 경우, 레이스 컨디션을 피하기 위해 커맨드 프로세서 프리페처(prefetcher)를 중단(stall)하도록 GPU에 알려야 합니다. GPU는 실제로 컴퓨트 셰이더가 간접 인자 버퍼에 쓰고 있는지 여부를 알지 못합니다. DirectX 12에서는 버퍼가 D3D12_RESOURCE_STATE_INDIRECT_ARGUMENT 상태로 전환되고, Vulkan에서는 소비자 의존성에 특수한 단계인 VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT가 포함됩니다. 배리어에 이와 같은 리소스 전환이나 단계 의존성이 포함되면, 드라이버는 배리어에 커맨드 프로세서 프리페처 중단 플래그를 포함시킵니다.
+
+현대적인 배리어 설계는 리소스 목록을 이러한 특수한 비일관성 캐시(non-coherent caches)에서 발생하는 상황을 설명하는 단일 비트필드로 대체합니다. 특수한 사례로는 텍스처 디스크립터 무효화, 드로우 인자(draw arguments) 무효화, 뎁스 캐시 무효화 등이 있습니다. 이러한 플래그는 컴퓨트 셰이더를 통해 드로우 인자를 생성하거나, 디스크립터 힙에 쓰거나, 뎁스 버퍼에 쓸 때 필요합니다. 대부분의 배리어는 이러한 특수한 캐시 무효화 플래그를 필요로 하지 않습니다.
+
+일부 GPU는 여전히 특수한 경우에 데이터를 압축 해제해야 합니다. 예를 들어 복사(copy) 또는 소거(clear) 명령을 수행하는 동안(소거 색상이 변경된 경우 fast clear eliminate 발생)이 이에 해당합니다. 복사 및 소거 명령은 영향을 받는 리소스를 파라미터로 받습니다. 드라이버는 필요한 경우 데이터를 디코딩하기 위해 필요한 조치를 취할 수 있습니다. 이러한 특수한 경우를 위해 배리어(barrier)에 리소스 목록을 포함할 필요는 없습니다. 모든 포맷과 사용 플래그(usage flags)가 압축을 지원하는 것은 아닙니다. 드라이버는 이러한 경우 데이터를 앞뒤로 전환하며 대역폭을 낭비하는 대신, 압축되지 않은 상태로 유지합니다.
+
+표준 UAV 배리어(compute → compute)는 매우 간단합니다.
+
+```cpp
+gpuBarrier(commandBuffer, STAGE_COMPUTE, STAGE_COMPUTE);
+```
 
 
 
 
 -작성중-
+
+
 
 ------
 
