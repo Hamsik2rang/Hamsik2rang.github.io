@@ -5,8 +5,9 @@ layout: "about"
 ---
 
 ## Career
-* [2026.06 ~ ] Netmarble N2, Game Engine Programmer
-* [2023.02 ~ 2026.05] Com2us, Game Engine Programmer
+* [2026.06 ~ ] Netmarble N2, Engine Programmer
+* [2026.01 ~ 2026.05] Com2us, Client Programmer
+* [2023.02 ~ 2025.12] Com2us, Engine Programmer
 
 ## Skills
 - Real-time Rendering
