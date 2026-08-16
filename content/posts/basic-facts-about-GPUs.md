@@ -3,7 +3,7 @@ title: "GPU에 관한 기본적인 사실들"
 author: "Yongsik Im"
 authorAvatarPath: "/images/profile.jpg"
 date: "2025-07-04"
-summary: "[basic facts about gpus](https://damek.github.io/random/basic-facts-about-gpus/)를 번역한 글입니다"
+summary: ""
 description: ""
 toc: true
 readTime: true

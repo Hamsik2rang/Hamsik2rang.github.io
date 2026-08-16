@@ -3,7 +3,7 @@ title: "모바일 GPU 구조와 타일 기반 렌더링"
 author: "Yongsik Im"
 authorAvatarPath: "/images/profile.jpg"
 date: "2026-04-22"
-summary: "모바일 GPU의 구조와 TBDR 아키텍쳐를 살펴봅니다"
+summary: ""
 description: ""
 toc: true
 readTime: true

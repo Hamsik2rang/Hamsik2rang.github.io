@@ -3,7 +3,7 @@ title: "Unreal Engine 5 분석 - Proxy (다이어그램)"
 author: "Yongsik Im"
 authorAvatarPath: "/images/profile.jpg"
 date: "2026-04-26"
-summary: "언리얼 엔진 5.7 소스 코드 분석"
+summary: ""
 description: ""
 toc: true
 readTime: true

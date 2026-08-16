@@ -3,7 +3,7 @@ title: "실시간 렌더링에서의 색상"
 author: "Yongsik Im"
 authorAvatarPath: "/images/profile.jpg"
 date: "2025-08-16"
-summary: "빛과 색의 기본적인 지식들"
+summary: ""
 description: ""
 toc: true
 readTime: true

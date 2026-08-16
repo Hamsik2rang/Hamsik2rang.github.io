@@ -3,7 +3,7 @@ title: "Vulkan에서 Combined Image Sampler 타입을 지원하는 이유"
 author: "Yongsik Im"
 authorAvatarPath: "/images/profile.jpg"
 date: "2026-02-14"
-summary: " "
+summary: ""
 description: ""
 toc: true
 readTime: true

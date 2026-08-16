@@ -3,7 +3,7 @@ title: "Hello Blog"
 author: "Yongsik Im"
 authorAvatarPath: "/images/profile.jpg"
 date: "2023-11-12"
-summary: "Hugo test"
+summary: ""
 description: "An initial post"
 toc: true
 readTime: true

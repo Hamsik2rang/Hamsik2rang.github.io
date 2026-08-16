@@ -3,7 +3,7 @@ title: "Deferred Shading의 개념"
 author: "Yongsik Im"
 authorAvatarPath: "/images/profile.jpg"
 date: "2024-10-09"
-summary: "효율적인 렌더링을 위한 여러 가지 기법들에 대한 소개"
+summary: ""
 description: ""
 toc: true
 readTime: true

@@ -3,7 +3,7 @@ title: "Modern GPU에서 삼각형이 그려지는 과정"
 author: "Yongsik Im"
 authorAvatarPath: "/images/profile.jpg"
 date: "2023-01-05"
-summary: "[Life of a triangle - NVIDIA's logical pipeline](https://developer.nvidia.com/content/life-triangle-nvidias-logical-pipeline)를 번역한 글입니다"
+summary: ""
 description: ""
 toc: true
 readTime: true

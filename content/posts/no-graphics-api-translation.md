@@ -3,7 +3,7 @@ title: "No Graphics API"
 author: "Yongsik Im"
 authorAvatarPath: "/images/profile.jpg"
 date: "2025-12-25"
-summary: "[Sebastian Aaltonen - No Graphics API](https://www.sebastianaaltonen.com/blog/no-graphics-api)를 번역한 글입니다"
+summary: ""
 description: ""
 toc: true
 readTime: true

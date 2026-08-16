@@ -3,7 +3,7 @@ title: "[Memo] Real-Time Rendering Ch.9"
 author: "Yongsik Im"
 authorAvatarPath: "/images/profile.jpg"
 date: "2026-04-05"
-summary: "독서 메모 - Real-Time Rendering"
+summary: ""
 description: "독서 후 배운 점들을 메모합니다."
 toc: true
 readTime: true
